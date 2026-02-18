@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prime Bank Chatbot - AI Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            height: 90vh;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: #f8f9fa;
+        }
+
+        .chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            font-size: 14px;
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 18px 4px 12px 12px;
+        }
+
+        .message.bot .message-bubble {
+            background: #e9ecef;
+            color: #333;
+            border-radius: 4px 18px 12px 12px;
+        }
+
+        .message-bubble table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+
+        .message-bubble table th,
+        .message-bubble table td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .message-bubble table th {
+            background: #f0f0f0;
+            font-weight: 600;
+        }
+
+        .message-bubble code {
+            background: rgba(0, 0, 0, 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .message-bubble strong {
+            font-weight: 600;
+        }
+
+        .message-bubble a {
+            color: #667eea;
+            text-decoration: none;
+            border-bottom: 1px solid #667eea;
+        }
+
+        .message.user .message-bubble a {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        .sources {
+            font-size: 12px;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            color: #666;
+        }
+
+        .source-item {
+            margin: 4px 0;
+            padding: 4px 0;
+        }
+
+        .confidence-badge {
+            display: inline-block;
+            background: #ddd;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            margin-left: 4px;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #c33;
+        }
+
+        .input-area {
+            border-top: 2px solid #e0e0e0;
+            padding: 16px;
+            background: white;
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .input-wrapper input:disabled {
+            background: #f5f5f5;
+            color: #999;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            white-space: nowrap;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .send-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .info-bar {
+            background: #f0f0f0;
+            padding: 10px 16px;
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #28a745;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            color: #999;
+            height: 100%;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .example-queries {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .example-query {
+            background: #f9f9f9;
+            padding: 10px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #667eea;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s;
+        }
+
+        .example-query:hover {
+            background: #f0f0f0;
+            border-color: #667eea;
+        }
+
+        .timestamp {
+            font-size: 11px;
+            color: #999;
+            margin-top: 4px;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                height: 100vh;
+                border-radius: 0;
+            }
+
+            .message-bubble {
+                max-width: 90%;
+            }
+
+            .input-area {
+                flex-wrap: wrap;
+            }
+
+            .send-btn {
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏦 Prime Bank Chatbot</h1>
+            <p>Ask me about our credit cards and banking products</p>
+        </div>
+
+        <div class="info-bar">
+            <span>AI-powered customer support assistant</span>
+            <span class="status-indicator">
+                <span class="status-dot"></span>
+                <span id="status">Connecting...</span>
+            </span>
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="empty-state">
+                <div class="empty-state-icon">💬</div>
+                <div class="empty-state-text">Start a conversation</div>
+                <div class="example-queries">
+                    <div class="example-query" onclick="setQuery('Tell me about Visa Gold credit card')">
+                        📌 Visa Gold features
+                    </div>
+                    <div class="example-query" onclick="setQuery('What Islamic banking options do you have?')">
+                        📌 Islamic banking products
+                    </div>
+                    <div class="example-query" onclick="setQuery('Which card is best for international travel?')">
+                        📌 Best card for travel
+                    </div>
+                    <div class="example-query" onclick="setQuery('What are the eligibility requirements?')">
+                        📌 Eligibility requirements
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <div class="input-wrapper">
+                <input
+                    type="text"
+                    id="queryInput"
+                    placeholder="Ask me anything about Prime Bank products..."
+                    onkeypress="handleKeyPress(event)"
+                    disabled
+                />
+            </div>
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>Send</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:8000';
+        let isLoading = false;
+        let sessionId = 'session_' + Date.now();
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkHealth();
+        });
+
+        async function checkHealth() {
+            try {
+                const response = await fetch(`${API_URL}/health`);
+                if (response.ok) {
+                    document.getElementById('status').textContent = 'Ready';
+                    document.getElementById('queryInput').disabled = false;
+                    document.getElementById('sendBtn').disabled = false;
+                    addBotMessage('Hello! 👋 I\'m the Prime Bank AI assistant. How can I help you today?');
+                } else {
+                    showError('Backend service error');
+                }
+            } catch (error) {
+                showError('Cannot connect to backend. Make sure the server is running at http://localhost:8000');
+                console.error('Health check failed:', error);
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !isLoading) {
+                sendMessage();
+            }
+        }
+
+        function setQuery(query) {
+            document.getElementById('queryInput').value = query;
+            sendMessage();
+        }
+
+        async function sendMessage() {
+            const queryInput = document.getElementById('queryInput');
+            const query = queryInput.value.trim();
+
+            if (!query || isLoading) {
+                return;
+            }
+
+            // Disable input
+            isLoading = true;
+            queryInput.disabled = true;
+            document.getElementById('sendBtn').disabled = true;
+
+            // Add user message
+            addUserMessage(query);
+            queryInput.value = '';
+
+            // Add loading indicator
+            const loadingId = addLoadingMessage();
+
+            try {
+                // Send to backend
+                const response = await fetch(`${API_URL}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        query: query,
+                        session_id: sessionId
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Remove loading message
+                removeMessage(loadingId);
+
+                // Add bot response
+                addBotMessage(data.answer, data.sources, data.confidence);
+
+            } catch (error) {
+                console.error('Error:', error);
+                removeMessage(loadingId);
+                showError('Failed to get response. Please try again.');
+            } finally {
+                // Re-enable input
+                isLoading = false;
+                queryInput.disabled = false;
+                document.getElementById('sendBtn').disabled = false;
+                queryInput.focus();
+            }
+        }
+
+        function addUserMessage(text) {
+            const chatContainer = document.getElementById('chatContainer');
+            
+            // Clear empty state if present
+            if (chatContainer.innerHTML.includes('empty-state')) {
+                chatContainer.innerHTML = '';
+            }
+
+            const messageEl = document.createElement('div');
+            messageEl.className = 'message user';
+            messageEl.innerHTML = `<div class="message-bubble">${escapeHtml(text)}</div>`;
+            chatContainer.appendChild(messageEl);
+            scrollToBottom();
+        }
+
+        function addBotMessage(text, sources = [], confidence = 0) {
+            const chatContainer = document.getElementById('chatContainer');
+            
+            // Clear empty state if present
+            if (chatContainer.innerHTML.includes('empty-state')) {
+                chatContainer.innerHTML = '';
+            }
+
+            const messageEl = document.createElement('div');
+            messageEl.className = 'message bot';
+
+            let bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+
+            // Parse markdown-like formatting
+            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            text = text.replace(/\n/g, '<br>');
+
+            bubble.innerHTML = text;
+
+            // Add sources if available
+            if (sources && sources.length > 0) {
+                const sourcesDiv = document.createElement('div');
+                sourcesDiv.className = 'sources';
+                sourcesDiv.innerHTML = '<strong>Sources:</strong>';
+
+                sources.forEach(source => {
+                    const sourceItem = document.createElement('div');
+                    sourceItem.className = 'source-item';
+                    sourceItem.innerHTML = `• ${escapeHtml(source.product)} - ${escapeHtml(source.section)}`;
+                    if (source.confidence) {
+                        sourceItem.innerHTML += `<span class="confidence-badge">${source.confidence}</span>`;
+                    }
+                    sourcesDiv.appendChild(sourceItem);
+                });
+
+                bubble.appendChild(sourcesDiv);
+            }
+
+            messageEl.appendChild(bubble);
+            chatContainer.appendChild(messageEl);
+            scrollToBottom();
+        }
+
+        function addLoadingMessage() {
+            const chatContainer = document.getElementById('chatContainer');
+            const messageEl = document.createElement('div');
+            messageEl.className = 'message bot';
+            messageEl.id = 'loading-' + Date.now();
+
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble loading';
+            bubble.innerHTML = '<span class="spinner"></span> <span>Thinking...</span>';
+
+            messageEl.appendChild(bubble);
+            chatContainer.appendChild(messageEl);
+            scrollToBottom();
+
+            return messageEl.id;
+        }
+
+        function removeMessage(messageId) {
+            const messageEl = document.getElementById(messageId);
+            if (messageEl) {
+                messageEl.remove();
+            }
+        }
+
+        function showError(message) {
+            const chatContainer = document.getElementById('chatContainer');
+            const errorEl = document.createElement('div');
+            errorEl.className = 'error-message';
+            errorEl.textContent = '⚠️ ' + message;
+            chatContainer.appendChild(errorEl);
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            const chatContainer = document.getElementById('chatContainer');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+# Bank Chatbot Configuration
+
+# ============================================
+# CHUNKING & EMBEDDING SETTINGS
+# ============================================
+chunking:
+  chunk_size: 350  # tokens per chunk
+  chunk_overlap: 100  # token overlap between chunks (20% overlap)
+  separator: "\n\n"  # primary separator for chunks
+  
+# ============================================
+# VECTOR DB SETTINGS
+# ============================================
+vector_db:
+  provider: "chroma"  # Vector DB provider
+  persist_directory: "./data/vector_db"
+  collection_name: "bank_products"
+
+# ============================================
+# EMBEDDING MODEL SETTINGS
+# ============================================
+embeddings:
+  model_name: "sentence-transformers/all-MiniLM-L6-v2"
+  device: "cpu"  # Use CPU to save VRAM for LLM
+
+# ============================================
+# LLM SETTINGS (QWEN3-1.7B VIA OLLAMA)
+# ============================================
+llm:
+  provider: "ollama"
+  model_name: "qwen3:1.7b"  # Local Qwen3 1.7B model (no OpenAI fallback)
+  base_url: "http://ollama:11434"
+  max_tokens: 512  # Max tokens in response
+  temperature: 0.7  # Creativity level (0.7 = balanced)
+  top_p: 0.95
+  timeout: 120  # seconds - CPU inference takes time
+
+# ============================================
+# RAG SETTINGS
+# ============================================
+rag:
+  top_k: 5  # Number of chunks to retrieve
+  similarity_threshold: 0.7  # Minimum confidence score (0-1)
+  context_window: 2048  # Max tokens for context
+  
+# ============================================
+# SYSTEM PROMPT
+# ============================================
+system_prompt: |
+  You are a helpful bank customer support chatbot for Prime Bank Bangladesh.
+  
+  Your responsibilities:
+  1. Answer questions about credit cards, loans, and banking products
+  2. Provide accurate information from the knowledge base
+  3. Be honest about your limitations - if you don't know something, say "I don't know"
+  4. Format responses clearly using markdown when helpful
+  5. Always cite the source of your information (e.g., "Source: Visa Gold Section 2.3")
+  6. Refuse to answer unrelated questions politely
+  
+  Important guidelines:
+  - If asked about product eligibility, suggest the user verify with official documents
+  - If asked about applications, guide them to official channels or contact support
+  - Only discuss products available in your knowledge base
+  - Maintain a professional and helpful tone
+  - Use markdown tables for comparisons when appropriate
+
+# ============================================
+# FALLBACK RESPONSES
+# ============================================
+fallback:
+  low_confidence: |
+    I'm not confident about that answer. Here's what I suggest:
+    - Check our official website for the most up-to-date information
+    - Contact our customer support team at the bank
+    - Visit the nearest branch for personalized assistance
+    
+  out_of_scope: |
+    I'm specifically designed to answer questions about Prime Bank's banking products.
+    For other inquiries, please contact our customer support team directly.
+    
+  error: |
+    I encountered an issue while processing your question. Please try again or contact support.
+
+# ============================================
+# KNOWLEDGE BASE PATHS
+# ============================================
+knowledge_base:
+  root_path: "../knowledge_base"
+  conventional_path: "../knowledge_base/conventional"
+  islami_path: "../knowledge_base/islami"
+
+# ============================================
+# API SETTINGS
+# ============================================
+api:
+  host: "0.0.0.0"
+  port: 8000
+  debug: true
+  cors_origins: ["*"]  # Allow all origins for testing
+
+# ============================================
+# LOGGING
+# ============================================
+logging:
+  level: "INFO"
+  log_file: "./logs/chatbot.log"
