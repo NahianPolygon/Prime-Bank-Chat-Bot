@@ -69,30 +69,50 @@ class BankTasks:
         """
         return Task(
             description=dedent(f"""
-                Analyze whether the customer qualifies for the recommended products.
+                Analyze customer eligibility for the recommended products.
                 
                 Recommended Products: {products}
-                
                 Customer Profile: {customer_profile}
                 
-                Evaluation Criteria:
-                1. Employment Type Compatibility
-                2. Credit Score Requirements
-                3. Income Requirements
-                4. Document Requirements
-                5. Age and Residency Requirements (if applicable)
+                IMPORTANT: Ask the following specific eligibility questions to determine qualification:
                 
-                For each product, provide:
-                - Eligibility Status (Eligible / Likely Eligible / Not Eligible)
-                - Reasoning
-                - Required Documents
-                - Next Steps if not fully eligible
+                REQUIRED DOCUMENTS & INFORMATION:
+                1. Do you have a valid E-TIN (Electronically registered Taxpayer Identification Number)?
+                2. What is your current age?
+                3. What is your employment status?
+                   - If Salaried: How long have you been in your current job? (minimum 6 months required)
+                   - If Self-Employed: How long has your business been running? (minimum 3 years required)
+                   - If Business Owner: Years of business operation?
                 
-                Be honest but encouraging. If they don't qualify for premium products,
-                suggest alternatives they might be eligible for.
+                FINANCIAL INFORMATION:
+                4. What is your approximate monthly income (if salaried) or annual revenue (if self-employed)?
+                5. Do you have a good credit history? (Have you used credit cards/loans before without issues?)
+                6. Do you have regular transaction patterns? (Monthly salary deposits, business transactions)
+                
+                ASSESSMENT PROCESS:
+                1. Based on their answers, evaluate against product-specific requirements:
+                   - Age: 18-70 years (basic), 16-70 years (supplementary)
+                   - Employment: Minimum 6 months (salaried), 3 years (self-employed)
+                   - Income: Regular/demonstrated capability
+                   - Credit History: Preferred but may be waivable with guarantor
+                   - E-TIN: MANDATORY for all credit products
+                
+                2. Provide clear assessment:
+                   - Eligible: Customer meets all requirements
+                   - Likely Eligible: Minor gaps that can be addressed
+                   - Not Currently Eligible: Explain gaps and suggest timeline to reapply
+                
+                3. For each assessment level:
+                   - List what requirements they meet
+                   - Identify any gaps
+                   - Provide actionable next steps
+                   - Suggest documents needed for application
+                   - Recommend timeline if not eligible now
+                
+                Be encouraging and helpful. Focus on what they CAN do to become eligible if gaps exist.
             """),
             agent=agent,
-            expected_output="Eligibility assessment for each product with requirements and next steps"
+            expected_output="Detailed eligibility assessment asking specific questions, identifying gaps, and providing clear next steps"
         )
     
     def compare_features_task(self, agent: Any, products: str) -> Task:

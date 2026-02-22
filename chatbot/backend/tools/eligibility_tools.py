@@ -8,90 +8,181 @@ class EligibilityTools:
     """Tools for checking eligibility and requirements."""
     
     @tool("check_employment_eligibility")
-    def check_employment_eligibility(employment_type: str, product_name: str) -> str:
+    def check_employment_eligibility(employment_type: str, 
+                                     tenure_months: Optional[int] = None,
+                                     product_name: str = "Credit Card") -> str:
         """
-        Check if employment type is eligible for a product.
+        Check if employment type and tenure meet product requirements.
         
         Args:
-            employment_type: Type of employment (e.g., 'salaried', 'self-employed', 'student')
+            employment_type: Type of employment (e.g., 'salaried', 'self-employed', 'business_owner')
+            tenure_months: Months in current employment/business
             product_name: Name of the product
             
         Returns:
             Eligibility status and explanation
         """
-        # Employment compatibility matrix
-        compatibility = {
-            'salaried': ['credit', 'debit', 'savings'],
-            'self-employed': ['business', 'credit', 'debit'],
-            'student': ['student', 'savings', 'debit'],
-            'retired': ['senior', 'savings', 'debit'],
-            'business_owner': ['business', 'credit']
-        }
+        assessment = f"**Employment Eligibility for {product_name}**\n\n"
         
         employment_lower = employment_type.lower()
-        product_lower = product_name.lower()
         
-        eligible_types = compatibility.get(employment_lower, [])
+        # Standard requirements for credit products
+        if 'credit' in product_name.lower():
+            if 'salaried' in employment_lower:
+                required_tenure = 6  # 6 months for salaried
+                assessment += f"**Status:** Salaried Professional\n"
+                assessment += f"**Requirement:** Minimum {required_tenure} months in current job\n"
+                
+                if tenure_months:
+                    if tenure_months >= required_tenure:
+                        assessment += f"✓ **You have {tenure_months} months** - ELIGIBLE\n"
+                        return assessment
+                    else:
+                        gap = required_tenure - tenure_months
+                        assessment += f"✗ **You have {tenure_months} months** - Need {gap} more months\n"
+                        assessment += f"**Timeline:** You can apply after {gap} month(s)\n"
+                        return assessment
+                else:
+                    assessment += f"ℹ️ Please provide your tenure details\n"
+                    
+            elif 'self-employed' in employment_lower or 'business' in employment_lower:
+                required_tenure = 36  # 3 years for self-employed
+                assessment += f"**Status:** Self-Employed / Business Owner\n"
+                assessment += f"**Requirement:** Minimum {required_tenure} months (3 years) business tenure\n"
+                
+                if tenure_months:
+                    if tenure_months >= required_tenure:
+                        assessment += f"✓ **You have {tenure_months} months** - ELIGIBLE\n"
+                        return assessment
+                    else:
+                        gap = required_tenure - tenure_months
+                        assessment += f"✗ **You have {tenure_months} months** - Need {gap} more months\n"
+                        assessment += f"**Timeline:** You can apply in {int(gap/12)} year(s) and {gap%12} month(s)\n"
+                        return assessment
+                else:
+                    assessment += f"ℹ️ Please provide your business tenure details\n"
+            else:
+                assessment += f"**Status:** {employment_type}\n"
+                assessment += f"Please clarify your employment status for accurate assessment\n"
         
-        is_compatible = any(comp in product_lower for comp in eligible_types)
-        
-        if is_compatible:
-            return f"✓ {employment_type} is ELIGIBLE for {product_name}"
-        else:
-            return f"✗ {employment_type} may NOT be eligible for {product_name}. Recommend checking with bank."
+        return assessment
     
     @tool("check_credit_requirements")
-    def check_credit_requirements(credit_score: Optional[int] = None, 
+    def check_credit_requirements(has_etin: bool = None,
+                                  age: Optional[int] = None, 
+                                  has_credit_history: Optional[bool] = None,
                                   monthly_income: Optional[float] = None) -> str:
         """
-        Check credit and income requirements.
+        Check eligibility requirements for credit products.
         
         Args:
-            credit_score: Optional credit score (0-900)
-            monthly_income: Optional monthly income
+            has_etin: Do they have valid E-TIN?
+            age: Age in years
+            has_credit_history: Do they have good credit history?
+            monthly_income: Monthly income
             
         Returns:
             Eligibility assessment
         """
-        assessment = "Credit Requirements Assessment:\n"
+        assessment = "**Credit Product Requirements Assessment**\n\n"
         
-        if credit_score:
-            if credit_score >= 750:
-                assessment += f"✓ Credit Score {credit_score}: Excellent - Eligible for premium products\n"
-            elif credit_score >= 650:
-                assessment += f"✓ Credit Score {credit_score}: Good - Eligible for standard products\n"
+        # E-TIN Check (Mandatory)
+        assessment += "**1. E-TIN (Tax ID) - MANDATORY**\n"
+        if has_etin is not None:
+            if has_etin:
+                assessment += "✓ Have valid E-TIN\n\n"
             else:
-                assessment += f"✗ Credit Score {credit_score}: May need improvement\n"
+                assessment += "✗ Missing valid E-TIN - REQUIRED to apply\n"
+                assessment += "   Please register for E-TIN at tax office\n\n"
+        else:
+            assessment += "ℹ️ Please confirm if you have valid E-TIN\n\n"
         
+        # Age Check
+        assessment += "**2. Age - 18-70 years required**\n"
+        if age is not None:
+            if 18 <= age <= 70:
+                assessment += f"✓ Age {age} - ELIGIBLE\n\n"
+            else:
+                assessment += f"✗ Age {age} - Outside acceptable range (18-70)\n\n"
+        else:
+            assessment += "ℹ️ Please provide your age\n\n"
+        
+        # Credit History
+        assessment += "**3. Credit History - Preferred but may be waivable**\n"
+        if has_credit_history is not None:
+            if has_credit_history:
+                assessment += "✓ Good credit history\n\n"
+            else:
+                assessment += "⚠️ No/Limited credit history - Can still apply with guarantor\n\n"
+        else:
+            assessment += "ℹ️ Have you used credit cards or loans before?\n\n"
+        
+        # Income Check
+        assessment += "**4. Monthly Income - Regular income required**\n"
         if monthly_income:
-            if monthly_income >= 100000:
-                assessment += f"✓ Monthly Income: {monthly_income} - Eligible for high-limit cards\n"
-            elif monthly_income >= 30000:
-                assessment += f"✓ Monthly Income: {monthly_income} - Eligible for standard cards\n"
+            if monthly_income >= 30000:
+                if monthly_income >= 100000:
+                    assessment += f"✓ Monthly Income: BDT {monthly_income:,} - Eligible for high-limit products\n"
+                else:
+                    assessment += f"✓ Monthly Income: BDT {monthly_income:,} - Eligible for standard products\n"
             else:
-                assessment += f"✗ Monthly Income: {monthly_income} - May have lower limits\n"
+                assessment += f"⚠️ Monthly Income: BDT {monthly_income:,} - Low income, may get limited credit\n"
+        else:
+            assessment += "ℹ️ Please provide approximate monthly income\n"
         
         return assessment
     
     @tool("check_document_requirements")
-    def check_document_requirements(product_type: str) -> str:
+    def check_document_requirements(product_type: str = "Credit Card",
+                                    employment_type: str = "salaried") -> str:
         """
-        List required documents for a product.
+        List and check required documents for a product.
         
         Args:
-            product_type: Type of product (credit, debit, loan, etc.)
+            product_type: Type of product (e.g., 'Credit Card')
+            employment_type: Employment type ('salaried', 'self-employed', 'business_owner')
             
         Returns:
-            List of required documents
+            Required documents checklist
         """
-        requirements = {
-            'credit': ['ID', 'Proof of Income', 'Bank Statement', 'Address Proof'],
-            'debit': ['ID', 'Address Proof'],
-            'loan': ['ID', 'Proof of Income', '3 Months Bank Statements', 'Address Proof', 'Collateral docs'],
-            'savings': ['ID', 'Address Proof'],
-            'investment': ['ID', 'Proof of Income', 'Bank Account', 'KYC']
-        }
+        docs = "**Required Documents for " + product_type + "**\n\n"
         
-        docs = requirements.get(product_type.lower(), ['ID', 'Address Proof'])
+        docs += "**Identity & Address Proof:**\n"
+        docs += "- [ ] NID/Passport (copy, attested)\n"
+        docs += "- [ ] Driving License (if available)\n"
+        docs += "- [ ] Utility Bill (less than 2 months old)\n"
+        docs += "- [ ] Permanent Address Certificate\n\n"
         
-        return f"Required Documents for {product_type}:\n" + "\n".join(f"- {doc}" for doc in docs)
+        docs += "**Tax & Legal Documents:**\n"
+        docs += "- [ ] Valid E-TIN Certificate (MANDATORY)\n\n"
+        
+        # Employment-specific documents
+        if 'salaried' in employment_type.lower():
+            docs += "**Salaried-Specific Documents:**\n"
+            docs += "- [ ] Last 3 months salary slips\n"
+            docs += "- [ ] Employment letter from employer\n"
+            docs += "- [ ] Appointment letter (if recent)\n\n"
+        
+        elif 'self-employed' in employment_type.lower() or 'business' in employment_type.lower():
+            docs += "**Self-Employed/Business-Specific Documents:**\n"
+            docs += "- [ ] Latest Income Tax Return (ITR)\n"
+            docs += "- [ ] Business Registration Certificate\n"
+            docs += "- [ ] 3-year Audited Financial Statements\n"
+            docs += "- [ ] Trade License\n\n"
+        
+        docs += "**Financial Documents:**\n"
+        docs += "- [ ] Bank statements (6 months)\n"
+        docs += "- [ ] Income Tax Return\n\n"
+        
+        docs += "**Personal Documents:**\n"
+        docs += "- [ ] Passport-size photos (4 copies)\n"
+        docs += "- [ ] Nominee identity proof\n"
+        docs += "- [ ] Nominee relation certificate\n\n"
+        
+        docs += "**Processing Timeline:**\n"
+        docs += "- Days 1-2: Document submission and verification\n"
+        docs += "- Days 3-5: Background & credit verification\n"
+        docs += "- Day 6: Credit decision\n"
+        docs += "- Day 7+: Card issuance and activation\n"
+        
+        return docs

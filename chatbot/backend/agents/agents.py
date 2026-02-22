@@ -47,15 +47,29 @@ class BankAgents:
         )
     
     def eligibility_analyzer_agent(self) -> Agent:
-        """Agent 3: Analyzes customer eligibility for products."""
+        """Agent 3: Analyzes customer eligibility for products based on their pre-collected profile."""
         return Agent(
             role='Eligibility Analyst',
-            goal='Determine if customer meets requirements for each product',
-            backstory="""You are a compliance expert.""",
-            tools=[EligibilityTools.check_employment_eligibility, EligibilityTools.check_credit_requirements, EligibilityTools.check_document_requirements],
+            goal='Assess customer eligibility based on their provided profile against product requirements',
+            backstory="""You are a Prime Bank eligibility analyst. 
+The customer has ALREADY answered all eligibility questions. Their profile is provided to you.
+Your job is to:
+1. Call check_document_requirements ONCE to get required documents
+2. Compare the customer profile against these requirements:
+   - Age: 18-70 years required
+   - Employment: Salaried min 6 months tenure, Self-Employed min 3 years
+   - Income: BDT 12 lakh+ annually for Platinum, lower tiers less
+   - E-TIN: MANDATORY for all credit products
+3. Give a clear verdict: Eligible / Likely Eligible / Not Currently Eligible
+4. List exactly which documents they need to submit
+5. Give 2-3 clear next steps
+
+Do NOT ask the customer any questions. You already have their profile. Just assess and respond.""",
+            tools=[EligibilityTools.check_document_requirements],
             llm=self.llm,
             verbose=True,
             allow_delegation=False,
+            max_iter=2,
         )
     
     def feature_comparator_agent(self) -> Agent:

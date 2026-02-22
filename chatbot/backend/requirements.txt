@@ -1,5 +1,3 @@
-# Bank Chatbot Backend Requirements
-
 # Web Framework
 fastapi==0.128.0
 uvicorn[standard]==0.40.0
@@ -20,12 +18,15 @@ pyyaml==6.0.3
 
 # Multi-Agent Framework
 crewai==1.9.3
+openai==1.83.0          # pinned — crewai 1.9.3 requires exactly this
+litellm==1.57.4         # last version that works with openai 1.x
 langchain==1.2.10
 langchain-community==0.4.1
 langchain-ollama==1.0.1
 ollama==0.6.1
-# openai==1.83.0
-#apscheduler>=3.10.0
-# email-validator>=2.0.0
-# pydantic[email]>=2.0.0
-#fastapi-sso>=0.9.0
+
+# Missing deps
+apscheduler>=3.10.0
+email-validator>=2.0.0
+pydantic[email]>=2.0.0
+fastapi-sso>=0.9.0

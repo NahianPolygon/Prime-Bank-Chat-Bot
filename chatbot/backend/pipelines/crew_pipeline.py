@@ -7,6 +7,11 @@ from agents.agents import BankAgents, get_ollama_llm
 from agents.tasks import BankTasks
 
 
+# Eligibility conversation configuration
+ELIGIBILITY_REQUIRED = ['age', 'employment', 'tenure', 'income', 'etin']
+ELIGIBILITY_OPTIONAL = ['credit_history']  # Nice to have but not blocking
+
+
 class SessionState:
     """Tracks what has been done in a session."""
     def __init__(self):
@@ -15,6 +20,12 @@ class SessionState:
         self.comparison_done = False
         self.eligibility_done = False
         self.intent = {}                 # Last known intent (banking_type, tier, etc.)
+        
+        # Eligibility multi-turn state
+        self.eligibility_active = False          # Are we in eligibility flow?
+        self.eligibility_chat = []               # Conversation history for this flow
+        self.eligibility_collected = {}          # Extracted answers so far
+        self.eligibility_product = None          # Which product they're asking about
 
     def has_products(self):
         return bool(self.products_text)
@@ -25,6 +36,13 @@ class SessionState:
         self.product_names = []
         self.comparison_done = False
         self.eligibility_done = False
+
+    def reset_eligibility(self):
+        """Reset eligibility flow state after assessment."""
+        self.eligibility_active = False
+        self.eligibility_chat = []
+        self.eligibility_collected = {}
+        self.eligibility_product = None
 
 
 class BankChatbotCrew:
@@ -47,7 +65,9 @@ class BankChatbotCrew:
 
         needs_retrieval = (
             not state.has_products() or
-            intent_type == 'product_info'
+            intent_type == 'product_info' or
+            intent_type == 'eligibility_check' or
+            (intent_type == 'comparison' and not state.has_products())
         )
 
         needs_comparison = (
@@ -64,8 +84,12 @@ class BankChatbotCrew:
         # --- RETRIEVAL AGENT ---
         if needs_retrieval:
             retriever = self.agents_factory.product_retriever_agent()
+            # For comparisons, explicitly ask to retrieve multiple banking types
+            retrieval_context = query
+            if needs_comparison:
+                retrieval_context += "\n\n⚠️ COMPARISON REQUEST: User wants to compare products. Search for BOTH Islamic and Conventional versions if user mentions both, or explicitly request both variants."
             retrieval_task = self.tasks_factory.retrieve_products_task(
-                retriever, intent_type, query
+                retriever, intent_type, retrieval_context
             )
             agents.append(retriever)
             tasks.append(retrieval_task)
@@ -81,7 +105,10 @@ class BankChatbotCrew:
             tasks.append(comparison_task)
 
         # --- ELIGIBILITY AGENT ---
-        if needs_eligibility and state.has_products():
+        # Run if eligibility check is requested AND either:
+        # 1. Products already cached, OR
+        # 2. Retrieval is being triggered now (will have products after)
+        if needs_eligibility and (state.has_products() or needs_retrieval):
             eligibility = self.agents_factory.eligibility_analyzer_agent()
             products_input = state.products_text or query
             eligibility_task = self.tasks_factory.analyze_eligibility_task(
@@ -108,7 +135,7 @@ class BankChatbotCrew:
             agents=agents,
             tasks=tasks,
             verbose=True,
-            max_iter=1,
+            max_iter=3,  # Allow multiple tool calls for small models
             memory=False,
         )
         result = crew.kickoff()
@@ -136,6 +163,152 @@ class CrewPipeline:
             self.sessions[session_id] = SessionState()
         return self.sessions[session_id]
 
+    def _extract_eligibility_info(self, chat: list) -> dict:
+        """Extract structured eligibility info from conversation history."""
+        if not chat:
+            return {}
+        
+        history_text = "\n".join(
+            f"{m['role'].upper()}: {m['content']}" for m in chat
+        )
+        
+        raw = self._ollama_call(
+            system="Extract data from conversation. Output ONLY the exact format shown. No extra text.",
+            user=f"""Extract eligibility information from this conversation.
+
+CONVERSATION:
+{history_text}
+
+Output EXACTLY these lines (use "unknown" if not mentioned):
+AGE: [number only, e.g. 28, or unknown]
+EMPLOYMENT: [salaried/self_employed/business_owner/student or unknown]
+TENURE: [e.g. "2 years" / "8 months" or unknown]
+INCOME: [amount in BDT or unknown]
+ETIN: [yes/no or unknown]
+CREDIT_HISTORY: [yes/no or unknown]""",
+            temperature=0.0,
+            max_tokens=100
+        )
+        
+        result = {}
+        for line in raw.strip().split('\n'):
+            if ':' in line:
+                k, _, v = line.partition(':')
+                key = k.strip().upper()
+                val = v.strip().lower()
+                mapping = {
+                    'AGE': 'age', 'EMPLOYMENT': 'employment', 'TENURE': 'tenure',
+                    'INCOME': 'income', 'ETIN': 'etin', 'CREDIT_HISTORY': 'credit_history'
+                }
+                if key in mapping and val != 'unknown':
+                    result[mapping[key]] = val
+        
+        return result
+
+    def _get_missing_fields(self, collected: dict) -> list:
+        """Return list of required fields not yet collected."""
+        return [f for f in ELIGIBILITY_REQUIRED if f not in collected]
+
+    def _run_eligibility_conversation(self, query: str, state: SessionState) -> dict | None:
+        """
+        Conduct natural multi-turn eligibility conversation.
+        Returns response dict if still collecting, None if ready to assess.
+        """
+        # Add user message to eligibility chat
+        if query:
+            state.eligibility_chat.append({'role': 'user', 'content': query})
+        
+        # Extract what we know so far
+        state.eligibility_collected = self._extract_eligibility_info(state.eligibility_chat)
+        missing = self._get_missing_fields(state.eligibility_collected)
+        
+        print(f"Eligibility collected: {state.eligibility_collected}")
+        print(f"Missing fields: {missing}")
+        
+        if not missing:
+            # All required info collected — ready for agent assessment
+            return None
+        
+        # Build conversation history for context
+        history_text = "\n".join(
+            f"{m['role'].upper()}: {m['content']}" 
+            for m in state.eligibility_chat[-6:]
+        )
+        
+        # Map field names to human-readable questions
+        field_hints = {
+            'age': 'their age',
+            'employment': 'employment type (salaried, self-employed, or business owner)',
+            'tenure': 'how long they have been in their current job or business',
+            'income': 'approximate monthly income or annual revenue in BDT',
+            'etin': 'whether they have a valid E-TIN certificate (yes or no)',
+            'credit_history': 'whether they have prior credit history (loans or cards)',
+        }
+        
+        next_field = missing[0]  # Ask one at a time
+        hint = field_hints.get(next_field, next_field)
+        
+        response = self._ollama_call(
+            system=f"""You are a friendly Prime Bank eligibility assistant.
+You are collecting information to check if the customer qualifies for: {state.eligibility_product or 'a credit card'}.
+Be conversational and warm. Ask for ONE piece of information at a time. Keep it under 2 sentences.""",
+            user=f"""Conversation so far:
+{history_text}
+
+Now naturally ask for: {hint}
+Do not repeat questions already answered. Be friendly and brief.""",
+            temperature=0.5,
+            max_tokens=80
+        )
+        
+        if not response:
+            # Hardcoded fallback
+            fallbacks = {
+                'age': "Could you please tell me your age?",
+                'employment': "Are you salaried, self-employed, or a business owner?",
+                'tenure': "How long have you been in your current job or business?",
+                'income': "What's your approximate monthly income (or annual revenue if self-employed)?",
+                'etin': "Do you have a valid E-TIN certificate? (yes/no)",
+                'credit_history': "Do you have any prior credit card or loan history? (yes/no)",
+            }
+            response = fallbacks.get(next_field, f"Could you share your {next_field}?")
+        
+        state.eligibility_chat.append({'role': 'assistant', 'content': response})
+        
+        return {
+            'response': response,
+            'agent_chain': ['Eligibility Conversation'],
+            'products_found': [],
+            'needs_clarification': True,
+            'detected_intent': state.intent
+        }
+
+    def _format_eligibility_profile(self, collected: dict, intent: dict) -> str:
+        """Format collected answers into a profile string for the agent."""
+        parts = []
+        
+        label_map = {
+            'age': 'Age',
+            'employment': 'Employment Type',
+            'tenure': 'Job/Business Tenure', 
+            'income': 'Monthly Income',
+            'etin': 'Has E-TIN',
+            'credit_history': 'Credit History',
+        }
+        
+        for key, label in label_map.items():
+            val = collected.get(key)
+            if val:
+                parts.append(f"{label}: {val}")
+        
+        # Also include intent-detected info
+        if intent.get('banking_type') not in ('unknown', ''):
+            parts.append(f"Banking Preference: {intent['banking_type']}")
+        if intent.get('tier') not in ('unknown', ''):
+            parts.append(f"Preferred Tier: {intent['tier']}")
+        
+        return "; ".join(parts) if parts else "No profile data collected"
+
     def run(self, query: str, customer_info: dict = None,
             conversation_history: list = None, session_id: str = None) -> dict:
         """Run pipeline with dynamic agent selection and product caching."""
@@ -144,16 +317,106 @@ class CrewPipeline:
         session_id = session_id or "default"
         state = self._get_state(session_id)
 
-        # Step 1: Detect intent
-        intent = self._detect_intent(query, history)
+        # --- ELIGIBILITY FLOW: intercept BEFORE intent detection ---
+        if state.eligibility_active:
+            result = self._run_eligibility_conversation(query, state)
+            
+            if result:
+                # Still collecting info
+                return result
+            
+            # All info collected — run the agent
+            print(f"✅ Eligibility info complete: {state.eligibility_collected}")
+            profile = self._format_eligibility_profile(
+                state.eligibility_collected, state.intent
+            )
+            enriched_query = (
+                f"Customer Query: Check eligibility for {state.eligibility_product}\n"
+                f"Customer Profile: {profile}\n"
+                f"Product to check: {state.eligibility_product}"
+            )
+            
+            response, retrieved_products = self.crew.run_agents(
+                query=enriched_query,
+                intent_type='eligibility_check',
+                state=state,
+                customer_profile=profile
+            )
+            
+            if retrieved_products:
+                state.products_text = retrieved_products
+            state.eligibility_done = True
+            state.reset_eligibility()  # Clean up flow state
+            
+            return {
+                'response': response,
+                'agent_chain': ['Eligibility Conversation', 'Product Retriever', 
+                              'Eligibility Analyzer', 'Formatter'],
+                'products_found': state.product_names,
+                'needs_clarification': False,
+                'detected_intent': state.intent
+            }
 
-        # Step 2: Check if filters changed — if so, reset cached products
+        # --- NORMAL FLOW: intent detection ---
+        intent = self._detect_intent(query, history, previous_intent=state.intent)
+
+        # Handle greeting
+        if intent.get('intent_type') == 'greeting':
+            greeting_reply = self._ollama_call(
+                system="You are a friendly Prime Bank assistant. Give a warm, brief greeting.",
+                user=f'Customer said: "{query}". Greet them warmly and offer to help with banking products in 1-2 sentences.',
+                temperature=0.7,
+                max_tokens=80
+            )
+            return {
+                'response': greeting_reply or "Hello! 👋 Welcome to Prime Bank. How can I assist you today?",
+                'agent_chain': [],
+                'products_found': [],
+                'needs_clarification': False,
+                'detected_intent': intent
+            }
+
+        # Handle small talk
+        if intent.get('intent_type') == 'small_talk':
+            small_talk_reply = self._ollama_call(
+                system="You are a Prime Bank assistant. Respond briefly and redirect to banking help.",
+                user=f'Customer said: "{query}". Give a short friendly response and gently redirect to banking services.',
+                temperature=0.7,
+                max_tokens=100
+            )
+            return {
+                'response': small_talk_reply or "I'm here to help with your banking needs! Feel free to ask about our cards, loans, or accounts.",
+                'agent_chain': [],
+                'products_found': [],
+                'needs_clarification': False,
+                'detected_intent': intent
+            }
+
+        # Handle comparison clarification — need to know what to optimize for
+        if intent.get('intent_type') == 'comparison_needs_criteria':
+            criteria_reply = self._ollama_call(
+                system="Friendly bank assistant. 2 sentences max.",
+                user=f"""Customer wants to compare products.
+Ask them ONE question: what matters most — travel perks, dining benefits, international use, or insurance coverage?""",
+                temperature=0.7,
+                max_tokens=80
+            )
+            return {
+                'response': criteria_reply or "To find the best match, what matters most to you — travel perks, dining benefits, international use, or insurance coverage?",
+                'agent_chain': ['Intent Detector'],
+                'products_found': [],
+                'needs_clarification': True,
+                'detected_intent': intent
+            }
+
+        # Filter change check
         if state.has_products() and self._filters_changed(intent, state.intent):
             print("⚠️  Filters changed — resetting cached products")
             state.reset_products()
 
-        # Step 3: Clarification needed?
+        # Clarification needed?
         if intent.get('needs_clarification'):
+            state.intent = intent
             questions = self._generate_clarifying_questions(
                 detected_product=intent.get('product_type', 'general'),
                 detected_info=intent,
@@ -167,10 +430,40 @@ class CrewPipeline:
                 'detected_intent': intent
             }
 
-        # Step 4: Run dynamic agents
+        intent_type = intent.get('intent_type', 'product_info')
+
+        # --- START ELIGIBILITY FLOW ---
+        if intent_type == 'eligibility_check':
+            state.intent = intent
+            state.eligibility_active = True
+            state.eligibility_product = (
+                f"{intent.get('tier', '')} {intent.get('product_type', 'credit card')} "
+                f"({intent.get('banking_type', 'conventional')} banking)"
+            ).strip()
+            
+            # Start conversation with opening message
+            opening = self._ollama_call(
+                system="Friendly Prime Bank assistant. 1-2 sentences max.",
+                user=f"Customer wants to check eligibility for: {state.eligibility_product}. "
+                     f"Warmly acknowledge and ask their age to begin the eligibility check.",
+                temperature=0.6,
+                max_tokens=60
+            )
+            opening = opening or f"Happy to check your eligibility for the {state.eligibility_product}! Could you start by telling me your age?"
+            
+            state.eligibility_chat.append({'role': 'assistant', 'content': opening})
+            
+            return {
+                'response': opening,
+                'agent_chain': ['Eligibility Conversation'],
+                'products_found': [],
+                'needs_clarification': True,
+                'detected_intent': intent
+            }
+
+        # --- NON-ELIGIBILITY: run agents normally ---
         enriched_query = self._build_enriched_query(query, history, intent, state)
         profile = self._format_customer_profile(customer_info) if customer_info else ""
-        intent_type = intent.get('intent_type', 'product_info')
 
         response, retrieved_products = self.crew.run_agents(
             query=enriched_query,
@@ -179,18 +472,11 @@ class CrewPipeline:
             customer_profile=profile
         )
 
-        # Step 5: Update session state
         if retrieved_products:
             state.products_text = retrieved_products
         if intent_type == 'comparison':
             state.comparison_done = True
-        if intent_type == 'eligibility_check':
-            state.eligibility_done = True
         state.intent = intent
-
-        print(f"📦 Session state: products={'✅' if state.has_products() else '❌'} "
-              f"comparison={'✅' if state.comparison_done else '❌'} "
-              f"eligibility={'✅' if state.eligibility_done else '❌'}")
 
         return {
             'response': response,
@@ -207,7 +493,9 @@ class CrewPipeline:
         for key in ('product_type', 'banking_type', 'tier'):
             old_val = old_intent.get(key, 'unknown')
             new_val = new_intent.get(key, 'unknown')
-            if old_val != 'unknown' and new_val != 'unknown' and old_val != new_val:
+            # Only reset if BOTH are known AND they differ
+            both_known = old_val not in ('unknown', 'general', '') and new_val not in ('unknown', 'general', '')
+            if both_known and old_val != new_val:
                 print(f"Filter changed: {key}: {old_val} → {new_val}")
                 return True
         return False
@@ -277,59 +565,137 @@ class CrewPipeline:
             print(f"Ollama call error: {e}")
             return ""
 
-    def _detect_intent(self, query: str, history: list) -> dict:
-        """Detect intent with 5-line structured output."""
+    def _detect_intent(self, query: str, history: list, previous_intent: dict = None) -> dict:
+        """Single LLM call to classify and extract all intent fields."""
         history_text = ""
         if history:
-            history_text = "Previous conversation:\n"
             for msg in history[-6:]:
                 history_text += f"{msg['role'].upper()}: {msg['content']}\n"
 
+        # Get previously confirmed values for fallback
+        prev = previous_intent or {}
+        prev_product = prev.get('product_type', 'general')
+        prev_banking = prev.get('banking_type', 'unknown')
+        prev_tier = prev.get('tier', 'unknown')
+        prev_use_case = prev.get('use_case', 'unknown')
+        prev_employment = prev.get('employment', 'unknown')
+
         raw = self._ollama_call(
-            system="You are an intent parser. Output ONLY the 5 labeled lines. No assumptions or defaults. No prose. No thinking.",
-            user=f"""{history_text}Current message: "{query}"
+            system="You are an intent extraction parser. Extract user intent fields and output EXACTLY 7 lines. Be precise and literal with KEYWORD MATCHING.",
+            user=f"""TASK: Extract intent fields from this message using exact keyword matching.
 
-Output ONLY these 5 lines with detected values:
-PRODUCT_TYPE: credit_card
-BANKING_TYPE: unknown
-TIER: unknown
-USE_CASE: unknown
-EMPLOYMENT: unknown
+MESSAGE: "{query}"
+{f'CONVERSATION HISTORY:{chr(10)}{history_text}' if history_text else ''}
 
-Options:
-- PRODUCT_TYPE: credit_card | debit_card | loan | savings_account | general
-- BANKING_TYPE: conventional | islami | unknown (ONLY if explicitly mentioned)
-- TIER: gold | platinum | silver | unknown (ONLY if explicitly mentioned)
-- USE_CASE: shopping | travel | dining | business | lifestyle | rewards | unknown (ONLY if explicitly mentioned)
-- EMPLOYMENT: salaried | self_employed | business_owner | student | unknown (ONLY if explicitly mentioned)
+EXTRACTION RULES - Apply these in order, check the EXACT MESSAGE TEXT:
 
-CRITICAL RULES:
-1. BANKING_TYPE = unknown UNLESS user explicitly says "islamic", "shariah", "conventional", "non-islamic"
-2. TIER = unknown UNLESS user explicitly says "gold", "platinum", "silver"
-3. USE_CASE = unknown UNLESS user explicitly says their PURPOSE
-4. EMPLOYMENT = unknown UNLESS user explicitly states job type
-5. Do NOT assume defaults. Do NOT infer from keywords like "professional" or "business"
-6. Carry forward values from history ONLY if previously confirmed
+STEP 1: TIER - Search for these EXACT words in message:
+- If contains "gold" (including "gold card", "visa gold") → TIER: gold
+- Else if contains "platinum" (including "platinum card") → TIER: platinum  
+- Else if contains "silver" (including "silver card") → TIER: silver
+- Else → TIER: unknown
 
-Example: "I want a professional platinum credit card"
-→ PRODUCT_TYPE: credit_card (explicit)
-→ TIER: platinum (explicit)
-→ BANKING_TYPE: unknown (NOT stated explicitly)
-→ USE_CASE: unknown (NOT stated - "professional" is not a use case)
-→ EMPLOYMENT: unknown (NOT stated)
-""",
+STEP 2: BANKING_TYPE - Search for these EXACT words:
+- If contains "conventional" → BANKING_TYPE: conventional
+- Else if contains "islami" OR "islamic" → BANKING_TYPE: islami
+- Else → BANKING_TYPE: unknown
+
+STEP 3: PRODUCT_TYPE - Search for these EXACT words:
+- If contains "credit card" OR "credit" → PRODUCT_TYPE: credit_card
+- Else if contains "debit card" OR "debit" → PRODUCT_TYPE: debit_card
+- Else if contains "loan" → PRODUCT_TYPE: loan
+- Else if contains "savings" → PRODUCT_TYPE: savings_account
+- Else → PRODUCT_TYPE: general
+
+STEP 4: USE_CASE - Search for these EXACT words:
+- If contains "travel" → USE_CASE: travel
+- Else if contains "shopping" → USE_CASE: shopping
+- Else if contains "dining" → USE_CASE: dining
+- Else if contains "business" → USE_CASE: business
+- Else if contains "lifestyle" → USE_CASE: lifestyle
+- Else if contains "reward" → USE_CASE: rewards
+- Else → USE_CASE: unknown
+
+STEP 5: EMPLOYMENT - Search for EXACT job titles:
+- If contains "engineer", "developer", "consultant", "employee", "manager", "officer", "salaried" → EMPLOYMENT: salaried
+- Else if contains "freelancer", "contractor" → EMPLOYMENT: self_employed
+- Else if contains "business owner", "entrepreneur", "founder" → EMPLOYMENT: business_owner
+- Else if contains "student" → EMPLOYMENT: student
+- Else → EMPLOYMENT: unknown
+
+STEP 6: INTENT_TYPE - Search for EXACT intent keywords (check in this order):
+- If contains "eligible", "qualify", "qualify for", "requirements", "can i apply", "do i meet" → INTENT_TYPE: eligibility_check
+- Else if contains "compare", "versus", "vs", "which is better", "difference" → INTENT_TYPE: comparison
+- Else if contains "feature", "benefit", "how does", "tell me about" → INTENT_TYPE: feature_query
+- Else (contains "want", "need", "looking for", "recommend") → INTENT_TYPE: product_info
+
+OUTPUT - Exactly these 7 lines, one per line:
+QUERY_TYPE: banking
+PRODUCT_TYPE: [your extracted value]
+BANKING_TYPE: [your extracted value]
+TIER: [your extracted value]
+USE_CASE: [your extracted value]
+EMPLOYMENT: [your extracted value]
+INTENT_TYPE: [your extracted value]
+
+IMPORTANT: For message "{query}" extract ONLY what you find in the message text itself.""",
             temperature=0.0,
-            max_tokens=80
+            max_tokens=100
         )
 
         if not raw:
+            # Return previous intent on failure — don't lose context
             return {
-                'product_type': 'general', 'banking_type': 'unknown', 'tier': 'unknown',
-                'use_case': 'unknown', 'employment': 'unknown',
-                'intent_type': 'product_info', 'needs_clarification': True
+                'product_type': prev_product,
+                'banking_type': prev_banking,
+                'tier': prev_tier,
+                'use_case': prev_use_case,
+                'employment': prev_employment,
+                'intent_type': 'product_info',
+                'needs_clarification': False if prev_product != 'general' else True
             }
 
-        return self._parse_intent(raw, query)
+        # Parse extracted values
+        parsed = self._parse_intent(raw, query)
+        
+        # Now apply persistence: fill in missing values from previous intent
+        result = {
+            'product_type': parsed.get('product_type') if parsed.get('product_type') != 'unknown' else prev_product,
+            'banking_type': parsed.get('banking_type') if parsed.get('banking_type') != 'unknown' else prev_banking,
+            'tier': parsed.get('tier') if parsed.get('tier') != 'unknown' else prev_tier,
+            'use_case': parsed.get('use_case') if parsed.get('use_case') != 'unknown' else prev_use_case,
+            'employment': parsed.get('employment') if parsed.get('employment') != 'unknown' else prev_employment,
+            'intent_type': parsed.get('intent_type', 'product_info'),
+        }
+        
+        # Recalculate needs_clarification based on PERSISTED values
+        product_known = result['product_type'] not in ('general', 'unknown', '')
+        banking_known = result['banking_type'] not in ('unknown', '')
+        tier_known = result['tier'] not in ('unknown', '')
+        use_case_known = result['use_case'] not in ('unknown', '')
+        employment_known = result['employment'] not in ('unknown', '')
+        
+        # Different clarification requirements based on intent type
+        intent_type = result['intent_type']
+        
+        if intent_type == 'eligibility_check':
+            # Eligibility check only needs product type
+            # Tier, banking type, and employment will be asked by the eligibility agent
+            has_enough = product_known
+        elif intent_type == 'comparison':
+            # Comparison needs product, banking type, and tier
+            has_enough = product_known and banking_known and tier_known
+        elif result['product_type'] in ('credit_card', 'loan'):
+            has_enough = product_known and banking_known and tier_known and employment_known
+        else:
+            has_enough = product_known and banking_known and tier_known and use_case_known
+        
+        result['needs_clarification'] = not has_enough
+        
+        print(f"After persistence: product={result['product_type']} banking={result['banking_type']} tier={result['tier']} "
+              f"use_case={result['use_case']} employment={result['employment']} type={result['intent_type']} enough={has_enough}")
+        
+        return result
 
     def _parse_intent(self, raw: str, query: str = "") -> dict:
         """Parse structured intent response."""
@@ -339,38 +705,63 @@ Example: "I want a professional platinum credit card"
                 k, _, v = line.partition(':')
                 parsed[k.strip().upper()] = v.strip().lower()
 
+        query_type = parsed.get('QUERY_TYPE', 'banking')
         product_type = parsed.get('PRODUCT_TYPE', 'general')
         banking_type = parsed.get('BANKING_TYPE', 'unknown')
         if banking_type == 'islamic':
             banking_type = 'islami'  # Normalize to database spelling
         tier = parsed.get('TIER', 'unknown')
+        
+        # Validate extracted values — reject LLM hallucinations
+        VALID_BANKING_TYPES = ('conventional', 'islami', 'unknown', '')
+        if banking_type not in VALID_BANKING_TYPES:
+            banking_type = 'unknown'  # Reject garbage like "gold"
+        
+        VALID_TIERS = ('gold', 'platinum', 'silver', 'unknown', '')
+        if tier not in VALID_TIERS:
+            tier = 'unknown'
+        
+        VALID_PRODUCTS = ('credit_card', 'debit_card', 'loan', 'savings_account', 'general', 'unknown', '')
+        if product_type not in VALID_PRODUCTS:
+            product_type = 'general'
         use_case = parsed.get('USE_CASE', 'unknown')
         employment = parsed.get('EMPLOYMENT', 'unknown')
+        intent_type = parsed.get('INTENT_TYPE', 'product_info')
 
-        # Detect intent type from keywords
-        q = query.lower()
-        if any(w in q for w in ['compare', 'vs', 'versus', 'difference', 'which is better', 'which one', 'best for me']):
-            intent_type = 'comparison'
-        elif any(w in q for w in ['eligible', 'qualify', 'can i get', 'do i qualify', 'requirements', 'documents', 'eligibility']):
-            intent_type = 'eligibility_check'
-        elif any(w in q for w in ['feature', 'benefit', 'fee', 'rate', 'interest', 'limit', 'reward']):
-            intent_type = 'feature_query'
-        else:
+        # Validate intent_type
+        if intent_type not in ('product_info', 'comparison', 'eligibility_check', 'feature_query'):
             intent_type = 'product_info'
 
-        # Compute has_enough info — stricter requirements
+        # Handle greeting/small_talk from the same parse
+        if 'greeting' in query_type:
+            return {
+                'product_type': 'general', 'banking_type': 'unknown', 'tier': 'unknown',
+                'use_case': 'unknown', 'employment': 'unknown',
+                'intent_type': 'greeting', 'needs_clarification': False
+            }
+        if 'small_talk' in query_type or 'small' in query_type:
+            return {
+                'product_type': 'general', 'banking_type': 'unknown', 'tier': 'unknown',
+                'use_case': 'unknown', 'employment': 'unknown',
+                'intent_type': 'small_talk', 'needs_clarification': False
+            }
+
         product_known = product_type not in ('general', 'unknown', '')
         banking_known = banking_type not in ('unknown', '')
         tier_known = tier not in ('unknown', '')
         use_case_known = use_case not in ('unknown', '')
         employment_known = employment not in ('unknown', '')
 
-        # For credit_card/loan: require banking_type, tier, AND employment confirmation
-        # For other products: require banking_type, tier, use_case
         if product_type in ('credit_card', 'loan'):
             has_enough = product_known and banking_known and tier_known and employment_known
         else:
             has_enough = product_known and banking_known and tier_known and use_case_known
+
+        # For comparisons: need to know optimization criteria
+        comparison_criteria_known = use_case_known or employment_known
+        if intent_type == 'comparison' and not comparison_criteria_known:
+            intent_type = 'comparison_needs_criteria'
+            has_enough = False
 
         print(f"Intent: product={product_type} banking={banking_type} tier={tier} "
               f"use_case={use_case} employment={employment} type={intent_type} enough={has_enough}")
@@ -403,12 +794,10 @@ Example: "I want a professional platinum credit card"
         )
 
         raw = self._ollama_call(
-            system="You are a friendly bank assistant. Be warm and concise. No bullet points. No thinking.",
-            user=f"""{history_text}Customer wants: {detected_product.replace('_', ' ')}
-Ask naturally about ONLY these missing details: {', '.join(missing)}
-Write 2-3 friendly sentences maximum.""",
+            system="Friendly bank assistant. 2 sentences max. No lists.",
+            user=f'Ask customer for: {", ".join(missing)}. They want: {detected_product.replace("_", " ")}.',
             temperature=0.7,
-            max_tokens=150
+            max_tokens=80
         )
         return raw if raw else self._fallback_questions(detected_product, detected_info)
 

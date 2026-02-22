@@ -17,6 +17,7 @@ from contextlib import asynccontextmanager
 from vector_db import initialize_knowledge_base
 from pipelines import RAGPipeline, CrewPipeline
 from tools.search_tools import set_vector_db
+from tools.comparison_tools import set_vector_db_for_comparison
 
 
 # Request/Response models
@@ -91,6 +92,9 @@ async def lifespan(app: FastAPI):
         
         # Inject vector_db into search tools
         set_vector_db(vector_db)
+        
+        # Inject vector_db into comparison tools
+        set_vector_db_for_comparison(vector_db)
         print("✓ Search tools configured with vector DB")
         
         # Initialize RAG pipeline (for backward compatibility)
