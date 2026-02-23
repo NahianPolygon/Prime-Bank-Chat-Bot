@@ -1,0 +1,8 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Vector DB / Chroma
+chatbot/backend/data/vector_db/
+*.sqlite3
+*.bin
