@@ -19,7 +19,10 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 # Install Python dependencies
 RUN pip install --upgrade pip setuptools wheel && \
-    pip install -r requirements.txt
+    # Install PyTorch CPU wheel from official index to avoid building from source
+    pip install --no-cache-dir "torch==2.2.0+cpu" -f https://download.pytorch.org/whl/cpu/torch_stable.html && \
+    # Then install remaining requirements preferring binary wheels
+    pip install --no-cache-dir --prefer-binary -r requirements.txt
 
 # Final stage
 FROM python:3.11-slim

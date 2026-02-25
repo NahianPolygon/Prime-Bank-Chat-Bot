@@ -1,9 +1,9 @@
 """
 Pipelines Module.
-Contains RAG and CrewAI pipelines for processing queries.
+Contains RAG and simplified Pipeline for processing queries.
 """
 
-from .crew_pipeline import CrewPipeline
-from .rag_pipeline import RAGPipeline
+from .pipeline import Pipeline
 
-__all__ = ['CrewPipeline', 'RAGPipeline']
+__all__ = ['Pipeline']
+

@@ -1,6 +1,6 @@
 """
-FastAPI backend for bank chatbot with CrewAI multi-agent support.
-Serves both RAG and CrewAI pipelines via REST API.
+FastAPI backend for bank chatbot with simplified RAG pipeline.
+Serves chatbot via REST API without CrewAI agents.
 """
 
 import os
@@ -10,14 +10,13 @@ import uuid
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 from fastapi import FastAPI, HTTPException, BackgroundTasks, Query
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from contextlib import asynccontextmanager
 
 from vector_db import initialize_knowledge_base
-from pipelines import RAGPipeline, CrewPipeline
-from tools.search_tools import set_vector_db
-from tools.comparison_tools import set_vector_db_for_comparison
+from pipelines import Pipeline
 
 
 # Request/Response models
@@ -63,18 +62,17 @@ class ConversationHistoryResponse(BaseModel):
 
 
 # Global state
-rag_pipeline = None
-crew_pipeline = None
+pipeline = None
 vector_db = None
-session_history: dict = {}  # In-memory session store (replace with Redis for production)
+session_history: dict = {}
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initialize resources on startup, cleanup on shutdown."""
-    global rag_pipeline, crew_pipeline, vector_db
+    global pipeline, vector_db
     
-    print("🚀 Starting chatbot backend with CrewAI support...")
+    print("🚀 Starting chatbot backend...")
     
     # Load config
     config_path = "./config.yaml"
@@ -90,20 +88,9 @@ async def lifespan(app: FastAPI):
         vector_db = initialize_knowledge_base(config, force_reindex=False)
         print("✓ Vector DB initialized")
         
-        # Inject vector_db into search tools
-        set_vector_db(vector_db)
-        
-        # Inject vector_db into comparison tools
-        set_vector_db_for_comparison(vector_db)
-        print("✓ Search tools configured with vector DB")
-        
-        # Initialize RAG pipeline (for backward compatibility)
-        rag_pipeline = RAGPipeline(vector_db, config)
-        print("✓ RAG pipeline initialized")
-        
-        # Initialize CrewAI pipeline (new)
-        crew_pipeline = CrewPipeline()
-        print("✓ CrewAI pipeline initialized")
+        # Initialize simplified Pipeline (no CrewAI)
+        pipeline = Pipeline(vector_db=vector_db)
+        print("✓ Pipeline initialized")
         
     except Exception as e:
         print(f"✗ Failed to initialize: {e}")
@@ -117,8 +104,8 @@ async def lifespan(app: FastAPI):
 # Create FastAPI app with lifespan
 app = FastAPI(
     title="Prime Bank Chatbot API",
-    description="Multi-agent chatbot with RAG support",
-    version="2.0.0",
+    description="Bank chatbot with RAG and simplified LLM pipeline",
+    version="3.0.0",
     lifespan=lifespan
 )
 
@@ -137,7 +124,7 @@ app.add_middleware(
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
     """Health check endpoint."""
-    if not crew_pipeline or not vector_db:
+    if not pipeline or not vector_db:
         raise HTTPException(status_code=503, detail="Service not initialized")
     
     stats = vector_db.get_collection_stats()
@@ -146,17 +133,16 @@ async def health_check():
         status="healthy",
         vector_db_size=stats['total_chunks'],
         model="Qwen3-1.7B Q4 (via Ollama)",
-        pipeline_modes=["crew", "rag"]
+        pipeline_modes=["simplified"]
     )
 
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest) -> ChatResponse:
     """
-    Main chat endpoint - routes to appropriate pipeline.
-    Supports both RAG and CrewAI modes with session history.
+    Main chat endpoint - uses simplified pipeline with direct Ollama calls.
     """
-    if not crew_pipeline and not rag_pipeline:
+    if not pipeline:
         raise HTTPException(status_code=503, detail="Service not initialized")
     
     if not request.query or not request.query.strip():
@@ -169,69 +155,104 @@ async def chat(request: ChatRequest) -> ChatResponse:
     history = session_history.get(session_id, [])
     print(f"Session [{session_id[-8:]}]: {len(history)} messages in history")
     
-    mode = request.mode.lower()
-    
-    # Route to appropriate pipeline
+    # Use simplified Pipeline
     try:
-        if mode == "crew":
-            if not crew_pipeline:
-                raise HTTPException(status_code=503, detail="CrewAI pipeline not initialized")
-            
-            # Use CrewAI multi-agent pipeline with history and session tracking
-            result = crew_pipeline.run(
-                query=request.query,
-                customer_info={"employment": request.user_employment},
-                conversation_history=history,  # Pass history for context
-                session_id=session_id  # Pass session ID for product caching
-            )
-            
-            # Save to session
-            history.append({"role": "user", "content": request.query})
-            history.append({"role": "assistant", "content": result['response']})
-            session_history[session_id] = history[-20:]  # Keep last 10 exchanges
-            
-            return ChatResponse(
-                query=request.query,
-                answer=result['response'],
-                sources=None,
-                agent_chain=result.get('agent_chain', []),
-                products_found=result.get('products_found', []),
-                session_id=session_id,
-                timestamp=datetime.now().isoformat(),
-                success=True
-            )
+        result = pipeline.run(
+            query=request.query,
+            customer_info={"employment": request.user_employment},
+            conversation_history=history,
+            session_id=session_id
+        )
         
-        elif mode == "rag":
-            if not rag_pipeline:
-                raise HTTPException(status_code=503, detail="RAG pipeline not initialized")
-            
-            # Use traditional RAG pipeline
-            result = rag_pipeline.generate_response(request.query)
-            
-            # Save to session
-            history.append({"role": "user", "content": request.query})
-            history.append({"role": "assistant", "content": result['answer']})
-            session_history[session_id] = history[-20:]
-            
-            return ChatResponse(
-                query=request.query,
-                answer=result['answer'],
-                sources=result['sources'],
-                agent_chain=["RAG"],
-                products_found=[s.get('product_name', 'Unknown') for s in result['sources']],
-                session_id=session_id,
-                timestamp=datetime.now().isoformat(),
-                success=result['success']
-            )
+        # Save to session
+        history.append({"role": "user", "content": request.query})
+        history.append({"role": "assistant", "content": result['response']})
+        session_history[session_id] = history[-20:]
         
-        else:
-            raise HTTPException(status_code=400, detail=f"Unknown mode: {mode}. Use 'crew' or 'rag'")
+        return ChatResponse(
+            query=request.query,
+            answer=result['response'],
+            sources=None,
+            agent_chain=result.get('agent_chain', []),
+            products_found=result.get('products_found', []),
+            session_id=session_id,
+            timestamp=datetime.now().isoformat(),
+            success=True
+        )
     
     except HTTPException:
         raise
     except Exception as e:
         import traceback
-        traceback.print_exc()  # prints full stack to docker logs
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Chat failed: {str(e)}")
+
+
+@app.post("/chat/stream")
+async def chat_stream(request: ChatRequest):
+    """Stream LLM responses (SSE) for RAG-style answers.
+
+    Frontend should connect with EventSource and read `data:` events.
+    """
+    if not pipeline:
+        raise HTTPException(status_code=503, detail="Service not initialized")
+
+    if not request.query or not request.query.strip():
+        raise HTTPException(status_code=400, detail="Query cannot be empty")
+
+    session_id = request.session_id or str(uuid.uuid4())
+    history = session_history.get(session_id, [])
+
+    try:
+        result = pipeline.run(
+            query=request.query,
+            customer_info={"employment": request.user_employment},
+            conversation_history=history,
+            session_id=session_id,
+            stream=True
+        )
+
+        # If pipeline returned a streaming wrapper
+        if isinstance(result, dict) and 'stream_generator' in result:
+            gen = result['stream_generator']
+
+            def event_stream():
+                try:
+                    for chunk in gen:
+                        # simple SSE data event
+                        yield f"data: {chunk}\n\n"
+                    # send finalization event with products metadata
+                    payload = {
+                        'products_text': result.get('products_text', ''),
+                        'product_names': getattr(pipeline._get_state(session_id), 'product_names', [])
+                    }
+                    yield f"event: done\ndata: {json.dumps(payload)}\n\n"
+                except Exception as e:
+                    yield f"event: error\ndata: {json.dumps({'error': str(e)})}\n\n"
+
+            # append first user/assistant messages to history asynchronously
+            history.append({"role": "user", "content": request.query})
+            session_history[session_id] = history[-20:]
+
+            return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+        # non-streaming fallback
+        return ChatResponse(
+            query=request.query,
+            answer=result.get('response', ''),
+            sources=None,
+            agent_chain=result.get('agent_chain', []),
+            products_found=result.get('products_found', []),
+            session_id=session_id,
+            timestamp=datetime.now().isoformat(),
+            success=True
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Chat failed: {str(e)}")
 
 
@@ -249,8 +270,7 @@ async def get_stats():
         'embedding_model': 'all-MiniLM-L6-v2',
         'llm_model': 'Qwen3-1.7B Q4 (via Ollama)',
         'vector_db': 'Chroma',
-        'pipeline_modes': ['crew', 'rag'],
-        'description': 'Multi-agent system with 5 specialized agents'
+        'description': 'Simplified pipeline with 3 focused LLM calls'
     }
 
 
@@ -260,7 +280,7 @@ async def reindex(request: ReindexRequest):
     Reindex knowledge base.
     Warning: This operation may take several minutes.
     """
-    global vector_db, rag_pipeline, crew_pipeline
+    global vector_db, pipeline
     
     if not vector_db:
         raise HTTPException(status_code=503, detail="Service not initialized")
@@ -272,8 +292,7 @@ async def reindex(request: ReindexRequest):
         
         # Reinitialize
         vector_db = initialize_knowledge_base(config, force_reindex=request.force)
-        rag_pipeline = RAGPipeline(vector_db, config)
-        crew_pipeline = CrewPipeline()
+        pipeline = Pipeline(vector_db=vector_db)
         
         stats = vector_db.get_collection_stats()
         
@@ -294,23 +313,19 @@ async def reindex(request: ReindexRequest):
 async def root():
     """Root endpoint with API documentation."""
     return {
-        "message": "Prime Bank Chatbot API v2",
+        "message": "Prime Bank Chatbot API",
         "version": "2.0.0",
-        "description": "CrewAI multi-agent + RAG chatbot",
+        "description": "Simplified pipeline: direct Ollama + Vector DB",
         "endpoints": {
-            "POST /chat": "Send query (supports 'crew' or 'rag' mode)",
+            "POST /chat": "Send query",
             "GET /health": "Health check",
             "GET /stats": "System statistics",
             "POST /reindex": "Reindex knowledge base (admin)",
         },
         "examples": {
-            "crew_mode": {
+            "basic": {
                 "url": "POST /chat",
-                "body": {"query": "Tell me about Visa Gold", "mode": "crew"}
-            },
-            "rag_mode": {
-                "url": "POST /chat",
-                "body": {"query": "Tell me about Visa Gold", "mode": "rag"}
+                "body": {"query": "Tell me about Visa Gold"}
             }
         },
         "docs": "/docs",
@@ -330,7 +345,7 @@ if __name__ == "__main__":
         
         print(f"Starting server at http://{api_config['host']}:{api_config['port']}")
         print("API docs available at http://localhost:8000/docs")
-        print("Mode: CrewAI + RAG (multi-pipeline)")
+        print("Mode: simplified pipeline (Ollama + Vector DB)")
         
         uvicorn.run(
             app,

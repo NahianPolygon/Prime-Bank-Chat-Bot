@@ -500,35 +500,80 @@
             // Add loading indicator
             const loadingId = addLoadingMessage();
 
+            // Create a streaming bot bubble to update progressively
+            const streamMsgId = addStreamingBotMessage('');
+
             try {
-                // Send to backend
-                const response = await fetch(`${API_URL}/chat`, {
+                const res = await fetch(`${API_URL}/chat/stream`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        query: query,
-                        session_id: sessionId
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: query, session_id: sessionId })
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                if (!res.ok) {
+                    throw new Error(`HTTP error! status: ${res.status}`);
                 }
 
-                const data = await response.json();
+                const reader = res.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
 
-                // Remove loading message
+                // simple SSE parser for `text/event-stream` style chunks
+                while (true) {
+                    const { value, done } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+
+                    // handle received events separated by double-newline
+                    let parts = buffer.split('\n\n');
+                    buffer = parts.pop();
+
+                    for (const part of parts) {
+                        const lines = part.split('\n');
+                        let event = '';
+                        let dataLines = [];
+                        for (const line of lines) {
+                            if (line.startsWith('event:')) {
+                                event = line.slice(6).trim();
+                            } else if (line.startsWith('data:')) {
+                                dataLines.push(line.slice(5));
+                            }
+                        }
+
+                        const data = dataLines.join('\n').trim();
+
+                        if (event === 'done') {
+                            // final payload (JSON)
+                            try {
+                                const payload = JSON.parse(data || '{}');
+                                // optionally show products summary
+                                if (payload.products_text) {
+                                    appendToStreamingBot(streamMsgId, '\n\n' + payload.products_text);
+                                }
+                            } catch (e) {
+                                // ignore parse errors
+                            }
+                        } else if (event === 'error') {
+                            appendToStreamingBot(streamMsgId, '\n\n[Error] ' + data);
+                        } else {
+                            // regular data chunk
+                            appendToStreamingBot(streamMsgId, data);
+                        }
+                    }
+                }
+
+                // drain remaining buffer (if any plain text)
+                if (buffer.trim()) {
+                    appendToStreamingBot(streamMsgId, buffer);
+                }
+
+                // remove loading indicator
                 removeMessage(loadingId);
-
-                // Add bot response
-                addBotMessage(data.answer, data.sources, data.confidence);
 
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Streaming error:', error);
                 removeMessage(loadingId);
-                showError('Failed to get response. Please try again.');
+                appendToStreamingBot(streamMsgId, '\n\n[Failed to stream response]');
             } finally {
                 // Re-enable input
                 isLoading = false;
@@ -536,6 +581,46 @@
                 document.getElementById('sendBtn').disabled = false;
                 queryInput.focus();
             }
+        }
+
+        // --- Streaming helpers ---
+        function addStreamingBotMessage(initialText) {
+            const chatContainer = document.getElementById('chatContainer');
+            if (chatContainer.innerHTML.includes('empty-state')) {
+                chatContainer.innerHTML = '';
+            }
+            const messageEl = document.createElement('div');
+            messageEl.className = 'message bot';
+            messageEl.id = 'stream-' + Date.now();
+
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            bubble.innerHTML = escapeAndFormat(initialText || '');
+
+            messageEl.appendChild(bubble);
+            chatContainer.appendChild(messageEl);
+            scrollToBottom();
+            return messageEl.id;
+        }
+
+        function appendToStreamingBot(messageId, textChunk) {
+            const el = document.getElementById(messageId);
+            if (!el) return;
+            const bubble = el.querySelector('.message-bubble');
+            if (!bubble) return;
+
+            // Append and re-render markdown/newlines
+            const current = bubble.textContent || '';
+            const updated = current + textChunk;
+            bubble.innerHTML = escapeAndFormat(updated);
+            scrollToBottom();
+        }
+
+        function escapeAndFormat(text) {
+            // escape then apply simple formatting
+            const esc = escapeHtml(text);
+            const md = esc.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            return md.replace(/\n/g, '<br>');
         }
 
         function addUserMessage(text) {
