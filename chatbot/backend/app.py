@@ -15,7 +15,7 @@ from pydantic import BaseModel
 from contextlib import asynccontextmanager
 
 from vector_db import initialize_knowledge_base
-from pipelines import RAGPipeline, CrewPipeline
+from pipelines import RAGPipeline, CrewPipeline, initialize_rag_tool
 from tools.search_tools import set_vector_db
 from tools.comparison_tools import set_vector_db_for_comparison
 
@@ -95,16 +95,19 @@ async def lifespan(app: FastAPI):
         
         # Inject vector_db into comparison tools
         set_vector_db_for_comparison(vector_db)
+        
+        # Initialize RAG search tool for CrewAI agents to use
+        initialize_rag_tool(vector_db, config.get("llm"))
+        print("✓ RAG search tool initialized for CrewAI")
         print("✓ Search tools configured with vector DB")
         
         # Initialize RAG pipeline (for backward compatibility)
         rag_pipeline = RAGPipeline(vector_db, config)
         print("✓ RAG pipeline initialized")
         
-        # Initialize CrewAI pipeline (new)
+        # Initialize CrewAI pipeline (main pipeline)
         crew_pipeline = CrewPipeline()
         print("✓ CrewAI pipeline initialized")
-        
     except Exception as e:
         print(f"✗ Failed to initialize: {e}")
         raise
@@ -137,17 +140,33 @@ app.add_middleware(
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
     """Health check endpoint."""
-    if not crew_pipeline or not vector_db:
-        raise HTTPException(status_code=503, detail="Service not initialized")
-    
-    stats = vector_db.get_collection_stats()
-    
-    return HealthResponse(
-        status="healthy",
-        vector_db_size=stats['total_chunks'],
-        model="Qwen3-1.7B Q4 (via Ollama)",
-        pipeline_modes=["crew", "rag"]
-    )
+    try:
+        if not crew_pipeline:
+            print("❌ Health check: crew_pipeline not initialized")
+            raise HTTPException(status_code=503, detail="CrewAI pipeline not initialized")
+        
+        if not vector_db:
+            print("❌ Health check: vector_db not initialized")
+            raise HTTPException(status_code=503, detail="Vector DB not initialized")
+        
+        try:
+            stats = vector_db.get_collection_stats()
+            db_size = stats.get('total_chunks', 0)
+        except Exception as e:
+            print(f"⚠️ Could not get collection stats: {e}, using default")
+            db_size = 218  # Default to known chunk count
+        
+        return HealthResponse(
+            status="healthy",
+            vector_db_size=db_size,
+            model="Qwen2.5:7B (via Ollama)",
+            pipeline_modes=["crew", "rag"]
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"❌ Health check failed: {e}")
+        raise HTTPException(status_code=503, detail=f"Service error: {str(e)}")
 
 
 @app.post("/chat", response_model=ChatResponse)

@@ -1,0 +1,231 @@
+Test ID,Category,Description,Query,Expected Intent,Actual Intent,Match,Features Detected,Income,Product,Bot Response,Response Length
+G1-Q1,Income+Feature,0% EMI with 60k monthly,"Which cards offer 0% interest EMI with my 60,000 BDT monthly salary?","product_search_by_income, eligibility_matching",product_search_by_income,✅,emi,720000,None,"Hey there! I understand you're looking for a credit card that offers 0% interest EMI with your monthly salary of 60,000 BDT. Based on what we have here, the Visa Gold Credit Card and the Mastercard World Credit Card both offer 0% Interest EMI schemes.
+
+The Visa Platinum Credit Card and the Mastercard Platinum Credit Card also come with this feature, but they are a bit more premium in terms of annual fees and other services. The JCB Gold Credit Card doesn't mention any specific EMI scheme details in our data.
+
+Would you like to know more about these cards or need help choosing one that fits your needs?",608
+G1-Q2,Income+Feature,Dining with 25k,"Dining benefits cards for 25,000 BDT/month income?","product_search_by_income, eligibility_matching",product_search_by_income,✅,dining,25000,None,"Hi there! Thank you for asking about dining benefits cards. Based on your income of 25,000 BDT/month, I'd recommend checking out the Visa Gold Credit Card and JCB Gold Credit Card. Both offer great dining discounts year-round.
+
+The **Visa Gold Credit Card** includes:
+- Year-round exclusive discounts on dining
+- A credit limit of up to BDT 700,000 (unsecured) or BDT 2,500,000 (collateralized)
+- Triple Benefit coverage with a maximum of BDT 5 lac
+
+The **JCB Gold Credit Card** also stands out with:
+- Year-round exclusive dining discounts
+- Balaka lounge access with the option to waive fees
+- A credit limit of up to BDT 700,000 (unsecured) or BDT 2,500,000 (collateralized)
+- Triple Benefit coverage with a maximum of BDT 5 lac
+
+Both cards are perfect for enhancing your dining experience. Let me know if you need more details on either card!",846
+G1-Q3,Income+Feature,Rewards with 80k,"Best rewards card I can get with 80,000 BDT monthly income?","product_search_by_income, eligibility_matching",product_search_by_income,✅,rewards,960000,None,"Hi there! Thank you for considering Prime Bank's credit cards. Given your monthly income of 80,000 BDT, I think the **Visa Gold Credit Card** and **JCB Gold Credit Card** might be perfect for you.
+
+The **Visa Gold Credit Card** offers:
+- A credit limit of up to BDT 700,000 (unsecured) or BDT 2,500,000 (collateralized)
+- An interest-free period of 50 days
+- Reward points at a rate of 1 point per BDT 50 spent
+- Triple Benefit coverage with up to BDT 5 lac protection
+- Year-round dining discounts
+
+The **JCB Gold Credit Card** provides:
+- A credit limit of up to BDT 700,000 (unsecured) or BDT 2,500,000 (collateralized)
+- An interest-free period of 50 days
+- Reward points at a rate of 1 point per BDT 50 spent
+- Triple Benefit coverage with up to BDT 5 lac protection
+- Year-round dining discounts and VIP access to Balaka lounges
+
+Both cards are designed for customers who want premium credit options with lifestyle benefits. Let me know if you have any questions or need more details!",990
+G1-Q4,Income+Feature,Airport with 120k,"Airport benefits with 120,000 BDT annual income?","product_search_by_income, eligibility_matching",product_search_by_income,✅,airport_benefits,120000,None,"Hey there! I understand you're looking for airport benefits with an annual income of 120,000 BDT. Based on what we have here, the **Mastercard World Credit Card** and the **JCB Platinum Credit Card** both offer VIP assistance at the airport.
+
+The **Mastercard World Credit Card** includes **VIP assistance with 2 guests**, while the **JCB Platinum Credit Card** also provides **VIP assistance for 2 guests**. Both cards come with great benefits like travel, dining, and insurance options to make your life a bit easier.
+
+If you have any more questions or need further details, feel free to ask!",594
+G1-Q5,Income+Feature,Credit limit with 45k,"Which card has highest credit limit at my 45,000 BDT monthly salary?","product_search_by_income, eligibility_matching",product_search_by_income,✅,credit_limit,45000,None,"Hi there! Based on your 45,000 BDT monthly salary, I’d recommend checking out the **Visa Gold Credit Card**. It offers a credit limit of up to BDT 700,000 unsecured and BDT 2,500,000 with collateral. This card also provides an interest-free period of 50 days, which is the longest in the market. You'll earn reward points at a rate of 1 point per BDT 50 spent, enjoy Triple Benefit coverage up to BDT 5 lac, and get year-round exclusive discounts on dining and travel.
+
+The **Visa Platinum Credit Card** also has a high credit limit of BDT 1,000,000 unsecured and BDT 2,500,000 with collateral. It comes with the same interest-free period but offers more premium benefits like LoungeKey access, airport welcome services, and exclusive dining discounts at luxury restaurants.
+
+Another great option is the **Mastercard World Credit Card**, which has a credit limit of up to BDT 1,000,000 unsecured and BDT 2,500,000 with collateral. This card earns you double reward points (2 points per BDT 50 spent) and offers extensive travel privileges like Balaka VIP access and lounge services.
+
+Lastly, the **JCB Gold Credit Card** is a solid choice too. It provides a credit limit of up to BDT 700,000 unsecured and BDT 2,500,000 with collateral, an interest-free period of 50 days, reward points at 1 point per BDT 50 spent, and exclusive dining discounts.
+
+Each card has its own unique benefits, so I’d be happy to discuss which one might best fit your needs!",1451
+G2-Q6,Feature Inquiry,EMI period,What is the interest-free period for JCB Gold?,feature_inquiry,feature_inquiry,✅,interest_free,None,JCB Gold,"The JCB Gold Credit Card offers an interest-free grace period of 50 days. Here’s how it works:
+
+- **Shopping Period:** Days 1 to 30.
+- **Statement Generation + Payment Due:** Days 30 to 40.
+- **Interest-Free Grace Period:** Days 40 to 90 (50 days).
+
+During this grace period, the full balance is covered if paid in full. This gives you plenty of time to budget and plan your payment without incurring any interest. For example, if you make a purchase on January 5th, your statement will be generated around January 20th, with the due date being February 9th. You can enjoy up to 50 days interest-free until February 25th.
+
+If you have any other questions or need further assistance, feel free to ask!",700
+G2-Q7,Feature Inquiry,Reward points,How many reward points can I earn with Visa Gold?,feature_inquiry,feature_inquiry,✅,rewards,None,Visa Gold,"Hi there! I understand you're asking about reward points with the Visa Gold Credit Card. According to our data, the Visa Gold Credit Card has its own Reward Points Program where you can earn points for your purchases. However, specific details like earning rates aren't mentioned in the data we have.
+
+If you'd like more information or if there’s anything else I can help with, feel free to let me know!",403
+G2-Q8,Feature Inquiry,Insurance,What insurance benefits are included?,feature_inquiry,feature_inquiry,✅,insurance,None,None,"The Visa Hasanah Gold Credit Card and the Visa Hasanah Platinum Credit Card both come with Enhanced Takaful Insurance. The Mastercard World Credit Card offers Triple Benefit Insurance. Meanwhile, the JCB Platinum Credit Card and the Visa Platinum Credit Card have Enhanced Triple Benefit Insurance. The JCB Gold Credit Card includes Triple Benefit Insurance Coverage as well.
+
+If you're interested in any of these insurance benefits, let me know which card you're considering, and I can provide more details!",508
+G3-Q9,Product Info,Annual fee,What's the annual fee for Mastercard Platinum?,product_info,product_info,✅,fee_waiver,None,None,"The Mastercard Platinum Credit Card doesn't mention an annual fee in its features. However, it does offer benefits like:
+
+- A credit limit of BDT 1,000,000 (unsecured) to BDT 2,500,000 (collateralized)
+- Interest-free period of 50 days
+- Reward points at a rate of 1 point per BDT 50 spent
+- Travel access including LoungeKey, Priority Pass, and Balaka VIP
+- Year-round BOGO offers at 6 luxury restaurants
+- Enhanced Triple Benefit insurance coverage up to BDT 10 lac
+
+I hope this aligns with your needs. If you have any other questions or would like more details on the benefits, feel free to ask!",598
+G4-Q10,Eligibility Check,Application,How do I apply for a Prime Bank credit card?,"eligibility_check, product_info",product_info,✅,None,None,None,"Sure thing! Here’s how you can apply for a Prime Bank credit card:
+
+1. **Mastercard World Credit Card**
+   - Visit Prime Bank (main branch recommended)
+   - Request Mastercard World application
+   - Provide comprehensive documents
+   - Meet with relationship manager
+   - Submit complete application
+   - Wait 3-5 working days
+   - Collect card and activate
+
+2. **Mastercard Platinum Credit Card**
+   - Visit Prime Bank
+   - Request Mastercard Platinum
+   - Provide documents
+   - Meet relationship manager
+   - Submit application
+   - Wait 3-5 days
+   - Collect and activate card
+
+3. **Visa Platinum Credit Card**
+   - Visit Prime Bank (Platinum specialist branch preferred)
+   - Request Visa Platinum application
+   - Provide comprehensive documents
+   - Meet with senior relationship manager
+   - Submit complete application
+   - Wait 3-5 working days
+   - Collect card and activate
+
+4. **JCB Platinum Credit Card**
+   - Visit Prime Bank (any branch)
+   - Request JCB Platinum application
+   - Provide Documents (identity, income, E-TIN, financials)
+   - Meet with RM (relationship manager discussion)
+   - Submit Application with all supporting documents
+   - Wait 3-5 Days for verification and approval
+   - Collect Card from branch
+   - Activate & Use immediately
+
+5. **JCB Gold Credit Card**
+   - Visit Prime Bank branch
+   - Request JCB Gold application
+   - Provide documents (identity, income, E-TIN)
+   - Meet with relationship manager
+   - Submit complete application
+   - Wait 3-5 working days for approval
+   - Pick up card from branch
+   - Activate and use immediately
+
+6. **Visa Gold Credit Card**
+   - Visa Gold Credit Card from Prime Bank offers BDT 700,000 unsecured and BDT 2,500,000 collateralized credit limits with a 50-day interest-free period, exclusive rewards program, and comprehensive Triple Benefit Insurance protection.
+
+Feel free to visit any of our branches or give us a call if you need more information!",1938
+G5-Q11,Comparison,Compare lounge,Compare lounge access between different cards,"comparison, feature_inquiry",feature_inquiry,✅,lounge_access,None,None,"Sure, I’d be happy to compare lounge access between different cards for you!
+
+The Visa Hasanah Gold Credit Card and JCB Gold Credit Card both offer Balaka VIP Lounge Access. Here’s what you can expect:
+
+- **Exclusive lounge entrance**
+- **Comfortable seating**
+- **Complimentary refreshments (beverages, snacks)**
+- **WiFi and charging stations**
+- **Business facilities**
+- **Shower amenities**
+- **News and entertainment**
+
+For the Visa Gold Credit Card, you get similar benefits with a few additional perks:
+
+- **Exclusive lounge entrance**
+- **Comfortable seating**
+- **Complimentary refreshments (beverages, snacks)**
+- **WiFi and charging stations**
+- **Business facilities**
+- **Shower amenities**
+- **News and entertainment**
+
+And for the Visa Hasanah Platinum Credit Card, you get even more:
+
+- **Exclusive lounge entrance**
+- **VIP reception and greeting**
+- **Gourmet refreshments**
+- **Business class facilities**
+- **Private rest areas**
+- **Shower facilities**
+- **WiFi and entertainment**
+
+Additionally, the Visa Hasanah Platinum Credit Card offers LoungeKey Global Access to 1,400+ partner lounges globally. You can enjoy premium amenities with a spend of USD 500 during your travel period.
+
+The Mastercard Platinum Credit Card provides Priority Pass benefits, which include access to exclusive lounges beyond standard LoungeKey and dining privileges at selected lounges.
+
+If you have any more questions or need further assistance, feel free to ask!",1465
+G6-Q12,Superlative,Best dining,Which card has the best dining benefits?,feature_inquiry,feature_inquiry,✅,dining,None,None,"Both the JCB Platinum Credit Card and Visa Platinum Credit Card offer Premium Dining Programs. If you're looking for the best dining benefits, either of these cards could be perfect for you! The Premium Dining Program provides exclusive access to top restaurants and dining experiences, making it a great choice if you enjoy fine dining.
+
+If you have any more questions or need further assistance, feel free to ask!",415
+G6-Q13,Superlative,Highest limit,What's the highest credit limit available?,feature_inquiry,feature_inquiry,✅,credit_limit,None,None,"The JCB Platinum Credit Card and the Mastercard Platinum Credit Card both offer premium credit limits. While specific details on the exact highest limit are not provided in the data, these cards are designed for those who require higher credit limits due to their premium status. If you're interested in learning more about the features or benefits of either card, I'd be happy to share that information with you!",413
+G6-Q14,Superlative,EMI duration,Which card offers 0% EMI for longest duration?,feature_inquiry,feature_inquiry,✅,emi,None,None,"The Mastercard Platinum Credit Card and the JCB Gold Credit Card both offer 0% Interest EMI schemes. The Visa Gold Credit Card and the Visa Platinum Credit Card also have 0% Interest EMI schemes available. The Mastercard World Credit Card and the JCB Platinum Credit Card do not specify a 0% Interest EMI scheme in their details.
+
+If you're looking for the longest duration, I'd recommend checking out the Mastercard Platinum Credit Card or the Visa Platinum Credit Card, as they both offer this feature. Let me know if you need more information on either of these cards!",571
+G7-Q15,Income Only,Cards for 40k,"What credit cards are available for 40,000 BDT/month income?",product_search_by_income,product_search_by_income,✅,None,40000,None,"Hi there! Based on your income of 40,000 BDT/month, we have a few credit card options that might suit you well:
+
+1. **Visa Gold Credit Card** offers a credit limit of up to BDT 700,000 unsecured and BDT 2,500,000 collateralized with an interest-free period of 50 days. You'll earn reward points at the rate of 1 point per BDT 50 spent, enjoy Triple Benefit coverage (BDT 5 lac max), and get year-round exclusive discounts on dining and travel.
+
+2. **JCB Gold Credit Card** also fits your profile with a credit limit of up to BDT 700,000 unsecured and BDT 2,500,000 collateralized. It offers the same interest-free period of 50 days, reward points at 1 point per BDT 50 spent, Triple Benefit coverage (BDT 5 lac max), and year-round exclusive discounts on dining.
+
+Both these cards are great choices for enhancing your lifestyle with their rewards and benefits. Let me know if you need more details or have any questions!",920
+G7-Q16,Income Only,Premium with 100k,"Best premium card I can qualify for with 100,000 BDT monthly?",product_search_by_income,product_search_by_income,✅,None,1200000,None,"Hi there! Thank you for considering Prime Bank's premium credit cards. Based on your monthly income of 100,000 BDT, I think the **Visa Gold Credit Card** would be a great fit for you. Here’s why:
+
+- It offers a generous unsecured credit limit of up to BDT 700,000.
+- You get a long interest-free period of 50 days.
+- Enjoy exclusive discounts on dining and travel throughout the year.
+
+The **Visa Platinum Credit Card** is also an excellent option, but it might be slightly out of reach for your current income. It comes with a higher unsecured credit limit of BDT 1,000,000, along with world-class privileges like LoungeKey access and dining benefits at luxury restaurants.
+
+If you’d like to explore more options or need any further assistance, feel free to ask!",763
+G7-Q17,Income Only,Cheapest for 20k,"Cheapest card to qualify for with 20,000 BDT/month?",product_search_by_income,product_search_by_income,✅,None,20000,None,"Hi there! Thank you for reaching out. Based on your spending of 20,000 BDT per month, the Visa Gold Credit Card might be just right for you. Here’s why:
+
+- **Credit Limit:** BDT 700,000 unsecured or BDT 2,500,000 collateralized
+- **Interest-Free Period:** Up to 50 days (the longest in the market)
+- **Reward Points:** Earn 1 point for every BDT 50 spent
+- **Insurance:** Triple Benefit coverage up to BDT 5 lac
+- **Dining & Travel:** Year-round discounts on dining and travel
+
+This card is perfect for those who want a bit more than what basic cards offer but not quite as extensive as the Platinum. It’s designed for lifestyle-conscious customers like you!
+
+If you have any questions or would like to apply, feel free to let me know!",735
+G8-Q18,Banking Type,Islamic with lounge,Islamic banking credit cards with lounge access?,feature_inquiry,feature_inquiry,✅,lounge_access,None,None,"Sure, I'd be happy to help you with that!
+
+We have the **Visa Hasanah Gold Credit Card** available, which offers Balaka VIP lounge access. This card is perfect for those seeking Shariah-compliant credit solutions without compromising on faith-based principles.
+
+For a more premium experience, we also offer the **Visa Hasanah Platinum Credit Card**, which includes all the benefits of the Gold card plus exclusive privileges like Balaka VIP lounge access and LoungeKey global access to 1,400+ partner lounges worldwide. The Platinum card is ideal for elite customers looking for ultimate travel convenience.
+
+Would you like more details on either of these cards?",662
+G8-Q19,Banking Type,Conventional dining,Conventional bank cards with dining benefits?,feature_inquiry,feature_inquiry,✅,dining,None,None,"Sure thing! Based on what you're looking for with dining benefits, I'd recommend checking out the **JCB Platinum Credit Card**. It offers some fantastic perks like the **Year-Round BOGO Dining**, where you can enjoy Buy One Get One Free at 6 luxury restaurant partners every month. That's a great way to save on your dining expenses!
+
+The card also comes with a **Premium Dining Program**, so you'll have access to exclusive dining experiences and benefits.
+
+Let me know if you'd like more details or if there’s anything else I can help with!",542
+G9-Q20,Multiple Features,Dining+Rewards,Cards with both dining and rewards benefits,"feature_inquiry, eligibility_matching, product_search_by_income",feature_inquiry,✅,"dining, rewards",None,None,"Sure, I'd be happy to help with that! Based on your interest in cards offering both dining and rewards benefits, here are some options we have:
+
+1. **Mastercard World Credit Card**
+   - **Premium Dining Benefits:** Enjoy Buy One Get One Free at partner restaurants year-round.
+   
+2. **Visa Hasanah Gold Credit Card**
+   - **Reward Points System:** Earn 1 point per BDT 50 on POS transactions and e-commerce purchases.
+
+Both cards offer a mix of dining benefits and rewards points, so you can enjoy discounts while also earning valuable points for future redemptions. Would you like more details on either card?",611
+G9-Q21,Multiple Features,EMI+Insurance,0% EMI with insurance coverage,"eligibility_matching, feature_inquiry",feature_inquiry,✅,"emi, insurance",None,None,"Hi there! I understand you're interested in 0% EMI with insurance coverage. While we don't have a specific card that offers both features together, I can share some options that might interest you:
+
+1. **Visa Hasanah Gold Credit Card** - This card comes with Takaful Triple Benefit Insurance.
+2. **Mastercard World Credit Card** - It also includes Triple Benefit Insurance.
+3. **JCB Platinum Credit Card** - Offers Enhanced Triple Benefit Insurance.
+4. **Visa Platinum Credit Card** - Also has Enhanced Triple Benefit Insurance.
+5. **JCB Gold Credit Card** - Comes with Triple Benefit Insurance Coverage.
+6. **Visa Gold Credit Card** - Includes Triple Benefit Insurance Coverage.
+
+These cards provide excellent insurance coverage, and the Visa Hasanah Gold Credit Card specifically includes Takaful Triple Benefit Insurance. If you have any more questions or need further assistance, feel free to ask!",901

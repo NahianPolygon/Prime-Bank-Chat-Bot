@@ -2,14 +2,14 @@ services:
   # Backend API Service
   backend:
     build:
-      context: ..
+      context: ../
       dockerfile: chatbot/Dockerfile
     container_name: primebot-backend
     ports:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
-      - OLLAMA_HOST=http://ollama:11434
+      - OLLAMA_HOST=http://192.168.12.41:11434
       - CHROMA_DB_PATH=/app/data/chroma
       - OPENAI_API_KEY=none
     volumes:
@@ -17,26 +17,10 @@ services:
       - ../knowledge_base:/app/knowledge_base
       - chroma_data:/app/data/chroma
       - ./prompts:/app/backend/prompts
-    depends_on:
-      - ollama
     networks:
       - primebot-network
     restart: unless-stopped
     command: uvicorn app:app --host 0.0.0.0 --port 8000 --reload
-
-  # Ollama Service (Local LLM)
-  ollama:
-    image: ollama/ollama:latest
-    container_name: primebot-ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_data:/root/.ollama
-    networks:
-      - primebot-network
-    restart: unless-stopped
-    environment:
-      - OLLAMA_HOST=0.0.0.0:11434
 
   # Frontend Service (Optional - if needed)
   frontend:
@@ -55,7 +39,7 @@ services:
       - primebot-network
     restart: unless-stopped
     environment:
-      - VITE_API_URL=http://localhost:8000
+      - VITE_API_URL=http://192.168.12.41:8000
 
 volumes:
   ollama_data:
