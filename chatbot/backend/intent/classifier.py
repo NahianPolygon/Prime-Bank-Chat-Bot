@@ -72,6 +72,18 @@ MAIN INTENT CLASSIFICATION (for customers looking to GET/BUY products):
 8. DEFAULT (anything else product-related):
    → intent_type: "product_info" (Generic product search via RAG)
 
+OFF-TOPIC DETECTION:
+RELEVANCE SCORE (0-100):
+  - 95-100: Crystal clear banking query (e.g., "Tell me about JCB Platinum rewards")
+  - 85-94: Clear banking, maybe some context (e.g., "I want a card with lounge access")
+  - 75-84: Somewhat clear but vague (e.g., "which card is best?")
+  - 65-74: Minimal banking context (e.g., "I have 50k salary")
+  - 55-64: Very vague or mostly off-topic (e.g., "i like shopping", "tell me a joke")
+  - 0-54: Clearly off-topic (e.g., "what's the weather?", "how are you?", "i like pizza")
+
+RULE: If relevance_score < 70 in context, consider it potentially off-topic.
+If score < 55, definitely off-topic.
+
 OUTPUT FIELDS (JSON):
 1. category: "banking" | "greeting" | "small_talk"
 2. intent_type: "existing_cardholder" | "eligibility_matching" | "product_search_by_income" | "feature_inquiry" | "comparison" | "eligibility_check" | "product_info"
@@ -85,15 +97,30 @@ OUTPUT FIELDS (JSON):
      "I prefer conventional" → banking_type: "conventional"
      "Give me an Islamic card" → banking_type: "islamic"
      "Which is best for me?" → banking_type: "unknown" (NOT "conventional"!)
-5. specific_product: product name if named (e.g., "Visa Gold", "JCB Platinum"), else ""
-6. specific_features: ARRAY of detected features ONLY if explicitly mentioned (e.g., ["dining", "rewards"]), or empty array []. 
+5. preferred_tier: "gold" | "platinum" | "silver" | "unknown"
+   ONLY output explicitly mentioned tier keywords from customer query.
+   Examples:
+     "I want a mastercard platinum" → preferred_tier: "platinum"
+     "Give me a gold card" → preferred_tier: "gold"
+     "I want a card" → preferred_tier: "unknown" (NOT guessing!)
+   DO NOT INVENT - only explicit mentions count.
+6. card_brand: "visa" | "mastercard" | "jcb" | "unknown"
+   ONLY extract if customer explicitly names the card network.
+   Examples:
+     "I want a mastercard" → card_brand: "mastercard"
+     "Visa card with lounge" → card_brand: "visa"
+     "Show me cards" → card_brand: "unknown" (NOT inventing!)
+7. specific_product: product name if named (e.g., "Visa Gold", "JCB Platinum"), else ""
+8. specific_features: ARRAY of detected features ONLY if explicitly mentioned (e.g., ["dining", "rewards"]), or empty array []. 
    NOTE: ONLY include features with explicit keywords. "business" is NOT a feature keyword (it describes use case, not feature)
-7. customer_income: ONLY if explicitly mentioned with number AND income keyword. Otherwise null. DO NOT INVENT.
-8. customer_age: number if mentioned, else null
-9. customer_tenure_months: number if mentioned, else null
-10. search_dimension: if superlative query ("highest credit limit", "lowest fee"), what to rank by, else "relevance"
-11. needs_clarification: true ONLY if query is vague and needs profiling. false otherwise.
-12. clarification_question: ""
+9. customer_income: ONLY if explicitly mentioned with number AND income keyword. Otherwise null. DO NOT INVENT.
+10. customer_age: number if mentioned, else null
+11. customer_tenure_months: number if mentioned, else null
+12. search_dimension: if superlative query ("highest credit limit", "lowest fee"), what to rank by, else "relevance"
+13. needs_clarification: true ONLY if query is vague and needs profiling. false otherwise.
+14. clarification_question: ""
+15. relevance_score: 0-100 score for how banking-relevant this query is
+16. is_off_topic: true if relevance_score < 55, false otherwise
 
 FEATURE DETECTION - STRICT, EXPLICIT ONLY:
 Only return features that are EXPLICITLY MENTIONED in the query text.
@@ -170,6 +197,8 @@ JSON:"""
 
         intent_type = str(parsed.get("intent_type", "product_info")).strip().lower()
         banking_type = str(parsed.get("banking_type", "unknown")).strip().lower()
+        preferred_tier = str(parsed.get("preferred_tier", "unknown")).strip().lower()
+        card_brand = str(parsed.get("card_brand", "unknown")).strip().lower()
         specific_product = str(parsed.get("specific_product") or "").strip()
         specific_features = parsed.get("specific_features") or []
         
@@ -177,6 +206,14 @@ JSON:"""
         # If LLM outputs "conventional|islamic" or similar, treat as "unknown"
         if "|" in banking_type or "," in banking_type:
             banking_type = "unknown"
+        
+        # VALIDATION: tier and brand must be valid values
+        valid_tiers = {"gold", "platinum", "silver", "unknown"}
+        valid_brands = {"visa", "mastercard", "jcb", "unknown"}
+        if preferred_tier not in valid_tiers:
+            preferred_tier = "unknown"
+        if card_brand not in valid_brands:
+            card_brand = "unknown"
         
         # VALIDATION: feature_inquiry requires BOTH specific_product AND specific_features
         # If LLM classified as feature_inquiry but missing either → reclass as product_info (vague) + DON'T mark as needs_clarification
@@ -216,6 +253,8 @@ JSON:"""
             "intent_type": intent_type,
             "product_type": "credit_card" if not is_social else "general",
             "banking_type": banking_type,
+            "preferred_tier": "" if is_social else preferred_tier,
+            "card_brand": "" if is_social else card_brand,
             "specific_product": "" if is_social else str(parsed.get("specific_product") or specific_product or "").strip(),
             "specific_features": [] if is_social else (parsed.get("specific_features") or []),  # Array of features
             "search_dimension": "" if is_social else str(parsed.get("search_dimension") or "relevance").strip(),
@@ -224,6 +263,9 @@ JSON:"""
             "customer_age": None if is_social else parsed.get("customer_age"),
             "customer_income": None if is_social else parsed.get("customer_income"),
             "customer_tenure_months": None if is_social else parsed.get("customer_tenure_months"),
+            # Off-topic detection
+            "relevance_score": parsed.get("relevance_score", 50) if not is_social else 100,
+            "is_off_topic": parsed.get("is_off_topic", False) if not is_social else False,
         }
 
         return intent
@@ -235,6 +277,8 @@ JSON:"""
             "intent_type": "product_info",
             "product_type": "credit_card",
             "banking_type": "unknown",
+            "preferred_tier": "unknown",
+            "card_brand": "unknown",
             "specific_product": "",
             "specific_features": [],
             "search_dimension": "relevance",
@@ -243,4 +287,6 @@ JSON:"""
             "customer_age": None,
             "customer_income": None,
             "customer_tenure_months": None,
+            "relevance_score": 50,
+            "is_off_topic": False,
         }

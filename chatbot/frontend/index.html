@@ -128,20 +128,40 @@
         .message-bubble table {
             width: 100%;
             border-collapse: collapse;
-            margin: 10px 0;
+            margin: 12px 0;
             font-size: 13px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .message-bubble table th,
         .message-bubble table td {
-            padding: 8px;
+            padding: 12px;
             text-align: left;
-            border: 1px solid #ddd;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .message-bubble table th {
-            background: #f0f0f0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             font-weight: 600;
+            border: none;
+        }
+
+        .message-bubble table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .message-bubble table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .message-bubble table td strong {
+            color: #333;
+            display: block;
+            margin-bottom: 2px;
         }
 
         .message-bubble code {

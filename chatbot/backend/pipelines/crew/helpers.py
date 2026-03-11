@@ -28,25 +28,49 @@ def greet(query: str, history: list) -> str:
     )
 
 
-def chat(query: str, history: list) -> str:
-    """Handle small talk and steer back to banking help."""
+def chat(query: str, history: list, state=None) -> str:
+    """
+    Handle small talk and steer back to banking help with context awareness.
+    Tracks off-topic interactions and offers escalation if confused.
+    """
+    # Track confusion if enabled
+    if state:
+        state.increment_confusion()
+    
+    # Extract context from recent conversation
     recent = "\n".join(f"{m['role'].upper()}: {m['content']}" for m in history[-3:])
     prefix = ("Recent:\n" + recent + "\n") if recent else ""
-    return (
+    
+    # Generate context-aware response
+    response = (
         ollama_chat(
             system=(
                 "You are a Prime Bank assistant. "
-                "Reply briefly to small talk then naturally steer back to banking help. "
-                "2 sentences maximum."
+                "Reply briefly to small talk, reference their banking interest if mentioned, "
+                "then naturally steer back to banking help. 2 sentences maximum. "
+                "Be warm, not robotic."
             ),
             user=(
-                prefix + f'Customer: "{query}"\n' "Give a brief human reply, then offer banking help."
+                prefix + 
+                f'Customer: "{query}"\n' 
+                "Give a brief human reply acknowledging their comment, then offer relevant banking help. "
+                "If they seem confused or we're going in circles, suggest speaking with support."
             ),
             temperature=0.7,
             max_tokens=100,
         )
         or "Happy to chat! Is there anything I can help you with at Prime Bank today?"
     )
+    
+    # Check if we should offer escalation due to repeated off-topic
+    if state and state.confusion_counter > 3 and not state.escalation_offered:
+        response += (
+            "\n\nI notice we're having fun with other topics! 😊 "
+            "Would it help to speak with one of our support specialists? They can guide you better."
+        )
+        state.escalation_offered = True
+    
+    return response
 
 
 def build_context_block(

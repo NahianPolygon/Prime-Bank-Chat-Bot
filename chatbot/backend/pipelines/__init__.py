@@ -3,7 +3,9 @@ Pipelines Module.
 Contains RAG and CrewAI pipelines for processing queries.
 """
 
-from .rag import RAGPipeline, initialize_rag_tool, rag_search_tool
+from .rag import DynamicRAGPipeline, initialize_rag_tool, rag_search_tool
 from .crew import CrewPipeline
 
-__all__ = ['CrewPipeline', 'RAGPipeline', 'initialize_rag_tool', 'rag_search_tool']
+RAGPipeline = DynamicRAGPipeline
+
+__all__ = ['CrewPipeline', 'RAGPipeline', 'DynamicRAGPipeline', 'initialize_rag_tool', 'rag_search_tool']

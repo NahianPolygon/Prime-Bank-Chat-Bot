@@ -1,7 +1,8 @@
 from core import SessionState
 from intent import IntentClassifier
 from pipelines.crew.orchestrator import BankChatbotCrew
-from pipelines.crew.clarification import ClarificationBuilder
+from pipelines.crew.clarification import DynamicClarificationBuilder
+from pipelines.crew.comparator import ProductComparator
 from pipelines.crew.eligibility import (
     start_eligibility_collection,
     check_eligibility_completeness,
@@ -13,12 +14,16 @@ from pipelines.crew.eligibility_matching import run_eligibility_matching
 from pipelines.rag.search import rag_search_impl
 from utils.ollama import ollama_chat, parse_json
 
+_clarification_builder = DynamicClarificationBuilder()
+_comparator = ProductComparator()
+
 
 class CrewPipeline:
 
     def __init__(self):
         self.crew = BankChatbotCrew()
         self.sessions: dict[str, SessionState] = {}
+        self.clarification_builder = _clarification_builder
 
     def _get_state(self, session_id: str) -> SessionState:
         if session_id not in self.sessions:
@@ -47,11 +52,12 @@ class CrewPipeline:
             # Check if all profile fields are now collected
             if not state.missing_profile_fields:
                 # All profile info collected - use it for smart search
-                matched_cards = ClarificationBuilder.find_matching_cards(
+                matched_cards = self.clarification_builder.find_matching_cards(
                     banking_type=state.collected_profile.get("banking_type"),
                     use_case=state.collected_profile.get("primary_use_case"),
                     annual_income=state.collected_profile.get("annual_income"),
                     employment_type=state.collected_profile.get("employment_type"),
+                    preferred_tier=state.preferred_tier,
                 )
                 
                 if matched_cards:
@@ -67,18 +73,27 @@ class CrewPipeline:
                             if product_name:
                                 product_names.append(product_name)
                     
-                    # Set first (best match) product as recommended
+                    # Set first (best match) product as recommended, store others as alternatives
                     if product_names:
                         state.recommended_product = product_names[0]
-                        print(f"📌 Recommended product set to: {state.recommended_product}")
+                        state.alternative_products = product_names[1:] if len(product_names) > 1 else []
+                        state.shown_products_context = matched_cards
+                        
+                        if state.alternative_products:
+                            print(f"📌 Recommended: {state.recommended_product} | Alternatives: {state.alternative_products}")
+                        else:
+                            print(f"📌 Recommended product set to: {state.recommended_product}")
                     
-                    msg = f"Great! Based on your profile, here are the best credit cards for you:\n\n{matched_cards}"
+                    # Clean and format product output
+                    cleaned_cards = self._format_product_display(matched_cards)
+                    msg = f"Great! Based on your profile, here are the best credit cards for you:\n\n{cleaned_cards}"
                     return self._respond(msg, ["Smart Profiler", "RAG Search"], state.intent)
             else:
                 # Still missing info, request next field (with context of what we know)
-                clarification_msg = ClarificationBuilder.get_clarification_questions(
+                clarification_msg = self.clarification_builder.get_dynamic_clarification_message(
                     state.missing_profile_fields,
-                    collected_profile=state.collected_profile
+                    collected_profile=state.collected_profile,
+                    intent_type=state.intent.get("intent_type", "product_info")
                 )
                 return self._respond(
                     clarification_msg,
@@ -91,6 +106,39 @@ class CrewPipeline:
         query_lower = query.lower()
         has_apply_phrase = any(phrase in query_lower for phrase in ["how to apply", "apply for", "application process", "apply process"])
         
+        # If just completed eligibility, directly return how-to-apply for that product
+        # (don't ask to clarify - they already selected it during eligibility)
+        if has_apply_phrase and state.eligibility_done and state.recommended_product:
+            print(f"✏️  Just completed eligibility for: {state.recommended_product}")
+            print(f"🔎 Detected 'how to apply' query, retrieving from knowledge base")
+            how_to_apply = self._get_how_to_apply(state.recommended_product, state.products_text)
+            if how_to_apply:
+                print(f"✅ Returning 'How to Apply?' section")
+                state.eligibility_done = False  # Clear the flag since we're moving forward
+                return self._respond(
+                    how_to_apply,
+                    ["Product Info Retriever", "Formatter"],
+                    {"intent_type": "product_info", "category": "product_info"},
+                )
+        
+        # If multiple alternatives exist and user wants to apply - ask which card
+        if has_apply_phrase and state.alternative_products and len(state.alternative_products) > 0:
+            # Multiple products shown and user wants to apply - ask which one
+            clarification = (
+                f"Which card would you like to know the application process for?\n\n"
+                f"1. **{state.recommended_product}** (our recommendation for your profile)\n"
+            )
+            for i, alt in enumerate(state.alternative_products, start=2):
+                clarification += f"{i}. **{alt}**\n"
+            clarification += "\nLet me know which one, or type its name!"
+            
+            return self._respond(
+                clarification,
+                ["Intent Classifier"],
+                {},
+                needs_clarification=True,
+            )
+        
         if state.recommended_product:
             print(f"✏️  Recommended product available: {state.recommended_product}")
             if has_apply_phrase:
@@ -100,21 +148,65 @@ class CrewPipeline:
                     print(f"✅ Returning 'How to Apply?' section")
                     return self._respond(
                         how_to_apply,
-                    ["Product Info Retriever", "Formatter"],
-                    {"intent_type": "product_info", "category": "product_info"},
-                )
+                        ["Product Info Retriever", "Formatter"],
+                        {"intent_type": "product_info", "category": "product_info"},
+                    )
+
+        # Handle product selection if user is responding to "which card for how to apply?" question
+        # This handles responses like "1", "2", "Visa Platinum", etc.
+        if query_lower.strip() in ("1", "2", "3") and (state.recommended_product or state.alternative_products):
+            # User selected option by number
+            selection_idx = int(query_lower.strip()) - 1
+            all_products = [state.recommended_product] + state.alternative_products
+            if 0 <= selection_idx < len(all_products):
+                selected_product = all_products[selection_idx]
+                print(f"📍 User selected product #{selection_idx+1}: {selected_product}")
+                how_to_apply = self._get_how_to_apply(selected_product, state.products_text)
+                if how_to_apply:
+                    return self._respond(
+                        how_to_apply,
+                        ["Product Info Retriever", "Formatter"],
+                        {"intent_type": "product_info", "category": "product_info"},
+                    )
 
         intent = self._understand_intent(query, history, state.intent)
         print(
             f"📋 Intent detected: type={intent['intent_type']}, banking={intent['banking_type']}, "
-            f"features={intent.get('specific_features', [])}, income={intent.get('customer_income')}"
+            f"features={intent.get('specific_features', [])}, income={intent.get('customer_income')}, "
+            f"relevance={intent.get('relevance_score', 0)}"
         )
+        
+        # Handle off-topic (low relevance) queries
+        if intent.get("is_off_topic", False) or intent.get("relevance_score", 100) < 55:
+            state.increment_confusion()
+            off_topic_response = (
+                ollama_chat(
+                    system="You are a warm Prime Bank assistant. Gently redirect off-topic queries back to banking.",
+                    user=(
+                        f'Customer said something off-topic: "{query[:100]}"\n'
+                        f'Write 1-2 warm sentences acknowledging it, then redirect to how you can help with banking/credit cards.'
+                    ),
+                    temperature=0.6,
+                    max_tokens=100,
+                )
+                or "I appreciate that! Is there anything I can help you with at Prime Bank?"
+            )
+            
+            # If confusion is getting high, offer escalation
+            if state.confusion_counter > 3 and not state.escalation_offered:
+                off_topic_response += (
+                    "\n\nI notice we're going in different directions. Would you like to speak with "
+                    "one of our support team members who might help you better?"
+                )
+                state.escalation_offered = True
+            
+            return self._respond(off_topic_response, [], intent)
 
         if intent["category"] == "greeting":
             return self._respond(greet(query, history), [], intent)
 
         if intent["category"] == "small_talk":
-            return self._respond(chat(query, history), [], intent)
+            return self._respond(chat(query, history, state), [], intent)
 
         if state.has_products() and intent.get("preferences_changed"):
             state.reset_products()
@@ -130,16 +222,87 @@ class CrewPipeline:
 
         intent_type = intent["intent_type"]
         state.intent = intent
+        
+        # Extract preferred tier/brand if user specified them upfront
+        if intent.get("preferred_tier") and intent.get("preferred_tier") != "unknown":
+            state.preferred_tier = intent["preferred_tier"]
+        if intent.get("card_brand") and intent.get("card_brand") != "unknown":
+            state.card_brand = intent["card_brand"]
+
+        # PRIORITY: Handle comparison intent with products already shown
+        # When user asks "compare these" or "which is best" - immediately show comparison table 
+        if intent_type == "comparison" and state.recommended_product and state.alternative_products:
+            products_list = self._extract_products_from_text(state.products_text) if state.products_text else []
+            
+            if len(products_list) >= 2:
+                # Build comparison table immediately - no extra questions
+                comparison_table = _comparator.build_comparison_table(
+                    products_list[:2],
+                    customer_profile=state.collected_profile
+                )
+                # Extract which product was recommended and store for context in follow-up questions
+                recommended = _comparator.extract_recommended_product(comparison_table)
+                if recommended:
+                    state.recommended_product = recommended
+                print(f"🎯 Showing direct comparison of {products_list[0][:20]}... vs {products_list[1][:20]}...")
+                return self._respond(comparison_table, ["Comparator"], intent)
 
         # Check for vague queries that need smart profiling (product_info, product_search_by_income)
-        is_vague, missing_profile_fields = ClarificationBuilder.needs_clarification(intent_type, intent)
+        is_vague, missing_profile_fields = self.clarification_builder.needs_clarification(intent_type, intent)
         if is_vague:
+            # If user already specified a preferred tier or brand, skip profiling - just search for that
+            if (state.preferred_tier and state.preferred_tier != "unknown") or (state.card_brand and state.card_brand != "unknown"):
+                # User said "I want platinum" or "I want mastercard" - search for that directly
+                search_query = ""
+                if state.card_brand and state.card_brand != "unknown":
+                    search_query += state.card_brand + " "
+                if state.preferred_tier and state.preferred_tier != "unknown":
+                    search_query += state.preferred_tier + " "
+                search_query += "credit card"
+                
+                # Use RAG with the specified tier/brand
+                matched_cards = rag_search_impl(
+                    query=search_query,
+                    banking_type=intent.get("banking_type") or "",
+                    tier=state.preferred_tier or "",
+                    top_k=15,
+                    customer_income=None,
+                )
+                
+                if matched_cards and matched_cards != "NO_PRODUCTS_FOUND":
+                    state.products_text = matched_cards
+                    
+                    # Extract product names for context
+                    product_names = []
+                    for line in matched_cards.split('\n'):
+                        if line.startswith('PRODUCT:'):
+                            product_name = line.replace('PRODUCT:', '').strip()
+                            if product_name:
+                                product_names.append(product_name)
+                    
+                    if product_names:
+                        state.recommended_product = product_names[0]
+                        if len(product_names) > 1:
+                            state.alternative_products = product_names[1:]
+                    
+                    return self._respond(matched_cards, ["Brand/Tier Aware RAG"], intent)
+                else:
+                    tier_str = f"{state.preferred_tier} " if state.preferred_tier and state.preferred_tier != "unknown" else ""
+                    brand_str = f"{state.card_brand} " if state.card_brand and state.card_brand != "unknown" else ""
+                    return self._respond(
+                        f"I couldn't find any {brand_str}{tier_str}cards matching your preferences. "
+                        f"Could you tell me a bit more about what you're looking for?",
+                        ["Brand/Tier Aware RAG"],
+                        intent,
+                    )
+            
             # Store that we need profiling info, will ask next
             state.profiling_needed = True
             state.missing_profile_fields = missing_profile_fields
-            clarification_msg = ClarificationBuilder.get_clarification_questions(
+            clarification_msg = self.clarification_builder.get_dynamic_clarification_message(
                 missing_profile_fields,
-                collected_profile=state.collected_profile
+                collected_profile=state.collected_profile,
+                intent_type=intent_type
             )
             return self._respond(
                 clarification_msg,
@@ -155,23 +318,40 @@ class CrewPipeline:
         
         # Handle "am i eligible for it?" when referred to recently recommended product
         elif ("eligible" in query.lower() or "qualify" in query.lower()) and not intent.get("specific_product"):
-            # Check if a product was recently recommended (look for PRODUCT: in state.products_text)
-            if state.products_text and "PRODUCT:" in state.products_text:
-                # Extract first product name from RAG results
-                for line in state.products_text.split('\n'):
-                    if line.startswith('PRODUCT:'):
-                        recommended = line.replace('PRODUCT:', '').strip()
-                        intent["specific_product"] = recommended
-                        intent_type = "eligibility_check"
-                        intent["intent_type"] = "eligibility_check"
-                        print(f"🔍 Found recently recommended product in context: {recommended}")
-                        break
-            # Also check state.recommended_product if it's set
-            elif state.recommended_product:
+            # If we just recommended a product, use that directly (high confidence that "it" refers to the recommendation)
+            if state.recommended_product:
                 intent["specific_product"] = state.recommended_product
                 intent_type = "eligibility_check"
                 intent["intent_type"] = "eligibility_check"
                 print(f"🔍 Using recommended product from state: {state.recommended_product}")
+            # Check if multiple products were shown - if so, ask for clarification
+            elif state.alternative_products and len(state.alternative_products) > 0:
+                clarification = (
+                    f"I see you're interested in eligibility! Just to clarify, which card would you like to check eligibility for?\n\n"
+                    f"1. **{state.recommended_product}** (our recommendation for your profile)\n"
+                )
+                for i, alt in enumerate(state.alternative_products, start=2):
+                    clarification += f"{i}. **{alt}**\n"
+                clarification += "\nLet me know which one, or type its name directly!"
+                
+                return self._respond(
+                    clarification,
+                    ["Intent Classifier"],
+                    intent,
+                    needs_clarification=True,
+                )
+            
+            # Single product case: use it directly
+            elif state.products_text and "PRODUCT:" in state.products_text:
+                # Extract first product name from RAG results
+                for line in state.products_text.split('\n'):
+                    if line.startswith('PRODUCT:'):
+                        specific_product = line.replace('PRODUCT:', '').strip()
+                        intent["specific_product"] = specific_product
+                        intent_type = "eligibility_check"
+                        intent["intent_type"] = "eligibility_check"
+                        print(f"🔍 Found recently recommended product in context: {specific_product}")
+                        break
 
         # Handle special cases
         if intent_type == "eligibility_check":
@@ -226,6 +406,26 @@ class CrewPipeline:
                 intent,
             )
 
+        # Handle comparison intent with products already shown
+        if intent_type == "comparison":
+            # If we have shown products, build a comparison table
+            if state.recommended_product and state.alternative_products:
+                # Extract the 2 products from state
+                product1_name = state.recommended_product
+                product2_name = state.alternative_products[0] if state.alternative_products else None
+                
+                if product2_name and state.products_text:
+                    # Parse products from the stored text
+                    products_list = self._extract_products_from_text(state.products_text)
+                    
+                    if len(products_list) >= 2:
+                        # Build comparison table
+                        comparison_table = _comparator.build_comparison_table(
+                            products_list[:2],
+                            customer_profile=state.collected_profile
+                        )
+                        return self._respond(comparison_table, ["Comparator"], intent)
+        
         # For all other intent types (feature_inquiry, product_search_by_income, product_info, comparison)
         # Use RAG-based search with different search strategies
         enriched = build_context_block(query, history, intent, state)
@@ -258,7 +458,8 @@ class CrewPipeline:
         if status["complete"]:
             return self._run_eligibility_assessment(state)
 
-        reply = ask_for_next_field(status["next_field"], status["collected"], state)
+        # Pass the user input for validation and confirmation flows
+        reply = ask_for_next_field(status["next_field"], status["collected"], state, query)
         state.eligibility_chat.append({"role": "assistant", "content": reply})
         return self._respond(
             reply,
@@ -288,14 +489,37 @@ class CrewPipeline:
         
         # Preserve the product being checked for eligibility as recommended_product
         # so "how to apply?" queries can use it
-        if state.eligibility_product and not state.recommended_product:
-            state.recommended_product = state.eligibility_product
+        # MUST do this BEFORE reset_eligibility() which clears eligibility_product
+        eligibility_product = state.eligibility_product
+        if eligibility_product:
+            state.recommended_product = eligibility_product
         
         state.eligibility_done = True
         state.reset_eligibility()
+        
+        # Add follow-up question based on eligibility result
+        follow_up = ""
+        if "eligible" in response.lower() or "qualify" in response.lower():
+            follow_up = (
+                "\n\n**Next Steps:**\n"
+                "Would you like to:\n"
+                "1. Proceed with the application?\n"
+                "2. Check eligibility for another card?\n"
+                "3. Explore other options?"
+            )
+        else:
+            follow_up = (
+                "\n\n**What would you like to do next?**\n"
+                "I can help you:\n"
+                "1. Explore cards with different eligibility criteria\n"
+                "2. Check your eligibility for another card\n"
+                "3. Learn about how you can become eligible"
+            )
+        
+        final_response = response + follow_up
 
         return self._respond(
-            response,
+            final_response,
             ["Eligibility Conversation", "Retriever", "Eligibility Analyzer", "Formatter"],
             state.intent,
         )
@@ -308,47 +532,65 @@ class CrewPipeline:
         """
         # Use LLM for ALL extractions (consistent with classifier approach)
         # Build context about what we're asking for
-        context_msg = f"""Customer is answering profiling questions. Extract ANY information they provide:
-        
-Missing profile fields: {', '.join(state.missing_profile_fields)}
-Already collected: {state.collected_profile}
+        context_msg = f"""TASK: Extract customer profile information from their response. BE THOROUGH.
 
-Customer's response: "{query}"
+Missing fields to extract: {', '.join(state.missing_profile_fields)}
+Already have: {state.collected_profile}
 
-IMPORTANT: Look for ANY mention of numbers with k, lakh, thousand, or plain digits that could be income.
-Extract the following IF present in the response:
-1. banking_type: "conventional" or "islamic" (if they mention either)
-2. primary_use_case: "travel", "dining", "business", "rewards", or "lifestyle" (if they describe their use case)
-3. annual_income: annual income in BDT (AGGRESSIVELY search for numbers - see rules below)
-4. employment_type: "salaried" or "business_owner" (if they mention employment type)
+CUSTOMER SAID: "{query}"
 
-Return JSON with these fields (null if not mentioned):
-{{
-  "banking_type": "conventional" | "islamic" | null,
-  "primary_use_case": "travel" | "dining" | "business" | "rewards" | "lifestyle" | null,
-  "annual_income": <number in BDT> | null,
-  "employment_type": "salaried" | "business_owner" | null
-}}
+EXTRACTION INSTRUCTIONS:
+====================================
 
-AGGRESSIVE INCOME EXTRACTION RULES (must follow all):
-1. Look for any number + unit: "50k", "5 lakh", "500000", "50 thousand"
-2. IF number has "k" or "thousand": multiply by 1000
-3. IF number has "lakh": multiply by 100,000
-4. IF result < 100,000 OR phrase mentions "monthly/month/"month: multiply annual result by 12
-5. IF phrase says "annual" or "per year": do NOT multiply by 12 (already annual)
-6. EXAMPLES:
-   - "200k" alone → 200*1000 = 200,000 < 100k threshold → 200,000*12 = 2,400,000 annual ✓
-   - "200k/month" → 200*1000*12 = 2,400,000 annual ✓
-   - "50 lakh annual" → 50*100,000 = 5,000,000 (no *12 because "annual") ✓
-   - "300000 monthly" → 300,000*12 = 3,600,000 annual ✓
-7. If no number found, return null (NEVER invent)
+**CRITICAL: Extract EVERY field you can find, even if mixed with other info. Don't skip because of word order.**
 
-Output ONLY valid JSON. No explanations."""
+1. BANKING_TYPE (highest priority - MUST search aggressively):
+   - ANY mention of: "conventional", "traditional", "regular", "standard", "normal", "banking", "cards"
+   - ANY mention of: "Islamic", "Shariah", "Hasanah", "faith-based"
+   - Examples that MUST be caught:
+     * "conventional cards" → "conventional"
+     * "wants dining and conventional" → "conventional"
+     * "traditional banking" → "conventional"
+     * "Islamic cards" → "islamic"
+   - Output: "conventional" or "islamic" (lowercase) or null
+   
+2. PRIMARY_USE_CASE:
+   - Search for: "travel", "dining", "business", "shopping", "everyday", "rewards", "lifestyle"
+   - Output: "travel" | "dining" | "business" | "rewards" | "lifestyle" or null
+
+3. ANNUAL_INCOME (aggressive extraction with explicit calculation):
+   - STEP 1: Search for ANY number: "300k", "5 lakh", "500000", any digit
+   - STEP 2: Convert to base number:
+     * If has "k": multiply by 1,000 → "300k" = 300,000
+     * If has "lakh": multiply by 100,000 → "5 lakh" = 500,000
+     * If plain number: use as is → "500000" = 500,000
+   - STEP 3: Determine if monthly or annual:
+     * IF phrase says "monthly", "per month", "month", or "/month": IT'S MONTHLY
+     * IF phrase says "annual", "per year", "yearly": IT'S ANNUAL
+   - STEP 4: Calculate annual income:
+     * IF monthly: Multiply result from STEP 2 by 12
+     * IF annual: Keep result from STEP 2 as is
+   - EXAMPLES:
+     * "300k monthly" → 300,000 * 12 = 3,600,000 annual
+     * "5 lakh per month" → 500,000 * 12 = 6,000,000 annual
+     * "50 lakh annual" → 5,000,000 (no *12)
+     * "monthly income 300k" → 300,000 * 12 = 3,600,000 annual
+   - Output: calculated annual number in BDT or null
+
+4. EMPLOYMENT_TYPE:
+   - Search for: "salaried", "employee", "business owner", "self-employed", "freelance"
+   - Output: "salaried" | "business_owner" or null
+
+RETURN JSON (must include all 4 fields, use null if not found):
+{{"banking_type": "conventional"|"islamic"|null, "primary_use_case": "travel"|"dining"|"business"|"rewards"|"lifestyle"|null, "annual_income": <number>|null, "employment_type": "salaried"|"business_owner"|null}}
+
+**IMPORTANT: This is customer input - be flexible with phrasing, typos, and word order.**
+"""
         
         income_classifier = ollama_chat(
-            system="You are a data extraction system. Output only JSON. Be strict.",
+            system="You are a meticulous data extraction specialist. The user provides personal info. Extract EVERYTHING including performing income calculations. Output ONLY valid JSON, no explanations.",
             user=context_msg,
-            temperature=0.0,
+            temperature=0.5,  # Higher to encourage calculation
             max_tokens=200,
         )
         
@@ -374,6 +616,22 @@ Output ONLY valid JSON. No explanations."""
             if income and isinstance(income, (int, float)) and income > 0:
                 state.collected_profile["annual_income"] = int(income)
                 state.missing_profile_fields.remove("annual_income")
+            else:
+                # Fallback: try pattern matching for common patterns like "300k" or "300k monthly"
+                import re
+                # Pattern: number + optional "k"/"lakh" + optional "monthly"/"per month"
+                pattern = r'(\d+)\s*(?:k|lakh)?\s*(?:monthly|per\s+month|/month)?'
+                matches = re.findall(r'(\d+)\s*k(?:[\s,]|$)', query.lower())  # Look for "300k"
+                if matches:
+                    try:
+                        amount = int(matches[0]) * 1000  # Convert "300k" to 300000
+                        # If query says "monthly", multiply by 12
+                        if any(word in query.lower() for word in ["monthly", "per month", "/month", "month"]):
+                            amount *= 12
+                        state.collected_profile["annual_income"] = amount
+                        state.missing_profile_fields.remove("annual_income")
+                    except (ValueError, IndexError):
+                        pass
         
         # Employment type
         if "employment_type" in state.missing_profile_fields:
@@ -408,24 +666,26 @@ Output ONLY valid JSON. No explanations."""
             Formatted "How to Apply?" section or None if not found
         """
         try:
-            # Extract banking_type from products_text to narrow search
-            banking_type = ""
+            # Extract banking_type from products_text to narrow search (case-insensitive)
+            banking_type = None  # Default to None for no filtering
             if products_text:
-                if "Islamic" in products_text or "Hasanah" in products_text:
+                products_lower = products_text.lower()
+                if "islamic" in products_lower or "hasanah" in products_lower:
                     banking_type = "islami"
-                elif "Conventional" in products_text:
+                elif "conventional" in products_lower:
                     banking_type = "conventional"
             
-            print(f"🔍 Searching Chroma for 'How to Apply?' section of {product_name}")
+            print(f"🔍 Searching Chroma for 'How to Apply?' section of {product_name} (banking_type={banking_type})")
             
             # Search specifically for the application/how to apply process
             # Include product name to help embeddings find the exact product
-            search_query = f"{product_name} how to apply application process documents required"
+            # Be VERY explicit about what we want
+            search_query = f"{product_name} How to Apply Required Documents Application Process"
             
             results = rag_search_impl(
                 query=search_query,
-                banking_type=banking_type,
-                top_k=3
+                banking_type=banking_type or "",  # Pass None as empty string for rag_search_impl
+                top_k=5  # Increased from 3 to get more chunks
             )
             
             if not results or "ERROR" in results or "NO_PRODUCTS_FOUND" in results:
@@ -436,7 +696,7 @@ Output ONLY valid JSON. No explanations."""
             results_lower = results.lower()
             
             # Try different variations of the section header
-            section_markers = ["how to apply", "application process", "applying for"]
+            section_markers = ["how to apply", "required documents", "application process", "applying for", "apply for", "document"]
             section_idx = -1
             section_marker = ""
             
@@ -448,9 +708,43 @@ Output ONLY valid JSON. No explanations."""
                     break
             
             if section_idx < 0:
-                print(f"⚠️  'How to Apply' section not found in results. Raw content length: {len(results)}")
-                # Try to return at least the beginning of product info
-                return None
+                print(f"⚠️  'How to Apply' section not found in primary search. Trying broad fallback...")
+                # Fallback 1: search with product name only, no banking type filter
+                fallback_query = f"{product_name}"
+                fallback_results = rag_search_impl(
+                    query=fallback_query,
+                    banking_type="",  # No filter
+                    top_k=15  # Get many more results
+                )
+                if fallback_results and "how to apply" in fallback_results.lower():
+                    results = fallback_results
+                    results_lower = results.lower()
+                    section_idx = results_lower.find("how to apply")
+                    print(f"✅ Found in broad fallback search")
+                else:
+                    print(f"⚠️  'How to Apply' section still not found. Trying generic application query...")
+                    # Fallback 2: search for just "how to apply" without product name
+                    generic_query = "How to Apply Required Documents Application Process"
+                    generic_results = rag_search_impl(
+                        query=generic_query,
+                        banking_type="",  # No filter
+                        top_k=10
+                    )
+                    if generic_results and "how to apply" in generic_results.lower():
+                        # Try to find this product in the generic results
+                        if product_name.lower() in generic_results.lower():
+                            results = generic_results
+                            results_lower = results.lower()
+                            # Find "how to apply" section that comes after this product
+                            prod_idx = results_lower.find(product_name.lower())
+                            apply_idx = results_lower.find("how to apply", prod_idx if prod_idx >= 0 else 0)
+                            if apply_idx >= 0:
+                                section_idx = apply_idx
+                                print(f"✅ Found in generic search for this product")
+                    
+                    if section_idx < 0:
+                        print(f"⚠️  'How to Apply' section still not found after all fallbacks. Raw content length: {len(results)}")
+                        return None
             
             # Extract the section
             section = results[section_idx:]
@@ -484,6 +778,126 @@ Output ONLY valid JSON. No explanations."""
             import traceback
             traceback.print_exc()
             return None
+
+    def _extract_products_from_text(self, products_text: str) -> list:
+        """
+        Split products_text into individual product blocks.
+        Each product starts with 'PRODUCT:' marker.
+        
+        Returns:
+            List of product text blocks
+        """
+        products = []
+        current_product_lines = []
+        
+        for line in products_text.split('\n'):
+            if line.startswith('PRODUCT:'):
+                # If we have a current product, save it
+                if current_product_lines:
+                    products.append('\n'.join(current_product_lines))
+                    current_product_lines = []
+                # Start new product
+                current_product_lines.append(line)
+            else:
+                if current_product_lines:  # Only add if we're in a product
+                    current_product_lines.append(line)
+        
+        # Don't forget the last product
+        if current_product_lines:
+            products.append('\n'.join(current_product_lines))
+        
+        return products
+    
+    def _clean_product_output(self, products_text: str) -> str:
+        """
+        Remove separator lines and format products professionally.
+        Replace '=============' with clean headers using bold.
+        
+        Args:
+            products_text: Raw product text from RAG
+        
+        Returns:
+            Cleaned, professionally formatted text
+        """
+        lines = products_text.split('\n')
+        cleaned = []
+        
+        for line in lines:
+            # Skip the separator lines
+            if line.strip() and all(c == '=' for c in line.strip()):
+                continue
+            # Skip multiple consecutive empty lines
+            if not line.strip():
+                if cleaned and not cleaned[-1].strip():
+                    continue
+                cleaned.append(line)
+            else:
+                cleaned.append(line)
+        
+        return '\n'.join(cleaned)
+    
+    def _format_product_display(self, products_text: str) -> str:
+        """
+        Format product output professionally for chat display.
+        Shows only essential info: name + highlights (5-6 key features)
+        Offers full details on demand.
+        """
+        products = self._extract_products_from_text(products_text)
+        formatted = []
+        
+        for idx, product in enumerate(products[:2], 1):  # Show max 2 products
+            lines = product.split('\n')
+            product_name = ""
+            key_features = []
+            overview = ""
+            
+            # Extract product name
+            for line in lines:
+                if line.startswith('PRODUCT:'):
+                    product_name = line.replace('PRODUCT:', '').strip()
+                    break
+            
+            # Extract key features (max 5-6)
+            counting_features = 0
+            in_features = False
+            for line in lines:
+                if '[Key Features]' in line:
+                    in_features = True
+                    continue
+                
+                if in_features:
+                    if line.strip().startswith('✅'):
+                        counting_features += 1
+                        if counting_features <= 6:  # Show only top 6 features
+                            # Get feature title
+                            feature = line.replace('✅', '').strip()
+                            key_features.append(feature)
+                    elif counting_features > 0 and not line.strip().startswith('-') and line.strip():
+                        in_features = False
+                
+                # Extract overview/tagline
+                if 'Tagline:' in line:
+                    overview = line.replace('Tagline:', '').strip()
+            
+            # Format product display
+            if product_name:
+                formatted.append(f"\n**{product_name}**")
+                if overview:
+                    formatted.append(f"_{overview}_")
+                formatted.append("")
+                formatted.append("**✨ Key Highlights:**")
+                for feat in key_features[:5]:  # Show max 5
+                    formatted.append(f"• {feat}")
+                formatted.append("")
+                formatted.append("_Need detailed information? Ask me!_")
+        
+        result = "\n".join(formatted)
+        result += "\n\n---\n\n**What would you like to do?**\n" \
+                  "• Compare these cards\n" \
+                  "• Check eligibility\n" \
+                  "• Get full details about a specific card"
+        
+        return result
 
     def _respond(
         self,

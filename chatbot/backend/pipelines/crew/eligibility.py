@@ -1,17 +1,16 @@
-"""
-Eligibility collection and assessment flow — multi-turn conversation.
-"""
 
 from core import SessionState
 from utils.ollama import ollama_chat, parse_json
+from pipelines.crew.validation import DynamicInputValidator
+
+_validator = DynamicInputValidator()
 
 
 def start_eligibility_collection(intent: dict, state: SessionState) -> str:
     """Start the eligibility collection multi-turn flow."""
     state.eligibility_active = True
 
-    # Prefer specific_product name if available (e.g., "Visa Platinum Credit Card")
-    # Fall back to generic product_type if not
+    
     if intent.get("specific_product"):
         state.eligibility_product = intent.get("specific_product")
         print(f"✅ Eligibility check for specific product: {state.eligibility_product}")
@@ -100,7 +99,7 @@ Output ONLY the JSON. Do not add explanation.""",
     if not parsed:
         return {"complete": False, "next_field": "age", "collected": {}}
 
-    # Post-process: ensure has_etin is treated as required
+    
     collected = parsed.get("collected", {})
     if collected.get("has_etin") is None:
         parsed["complete"] = False
@@ -114,8 +113,99 @@ Output ONLY the JSON. Do not add explanation.""",
     }
 
 
-def ask_for_next_field(field: str, collected: dict, state: SessionState) -> str:
-    """LLM generates the next natural question based on conversation so far."""
+def ask_for_next_field(field: str, collected: dict, state: SessionState, last_user_input: str = None) -> str:
+    """
+    Ask for next field with validation, confirmation, and simple question flow.
+    
+    Flow:
+    1. Ask for the current field
+    2. When user provides input, validate it matches the field
+    3. If valid, show a simple confirmation and ask for the next field
+    4. If invalid, ask again with a helpful note (not accusatory)
+    """
+    
+    if not last_user_input:
+        # First time asking for this field
+        return _ask_field_question(field, collected, state)
+    
+    # Validate the input based on field type
+    validation_result = _validator.validate_with_context(
+        user_input=last_user_input,
+        field_name=field,
+        conversation_context=dict(collected),
+        previous_attempts=getattr(state, '_previous_invalid_attempts', [])
+    )
+    
+    if not validation_result.get("valid", False):
+        # Invalid input - ask for the same field again with a gentle prompt
+        attempts = state.increment_invalid_attempts()
+        if not hasattr(state, '_previous_invalid_attempts'):
+            state._previous_invalid_attempts = []
+        state._previous_invalid_attempts.append(last_user_input)
+        
+        # Gentle re-ask instead of accusatory message
+        simple_question = _ask_field_question(field, collected, state)
+        if attempts > 1:
+            simple_question = f"Let me try that again. {simple_question}"
+        
+        return simple_question
+    
+    # Valid input - simple confirmation and move to next field
+    extracted_value = validation_result.get("extracted_value")
+    confidence = validation_result.get("confidence", 0)
+    
+    # Build simple, positive confirmation
+    confirmation_msg = ""
+    if extracted_value and confidence > 0.7:
+        if isinstance(extracted_value, dict):
+            if "age_years" in extracted_value:
+                confirmation_msg = f"✓ Got it - **{extracted_value['age_years']} years old**"
+            elif "monthly_bdt" in extracted_value:
+                monthly = extracted_value["monthly_bdt"]
+                annual = extracted_value.get("annual_bdt", monthly * 12)
+                confirmation_msg = f"✓ Got it - **BDT {monthly:,}/month**"
+            elif "category" in extracted_value:
+                confirmation_msg = f"✓ Got it - **{extracted_value['category']}**"
+            elif "tenure_months" in extracted_value:
+                display = extracted_value.get("tenure_display", f"{extracted_value['tenure_months']} months")
+                confirmation_msg = f"✓ Got it - **{display}**"
+            elif "has_etin" in extracted_value:
+                etin_status = "Yes" if extracted_value["has_etin"] else "No"
+                confirmation_msg = f"✓ Got it - **{etin_status}**"
+            else:
+                confirmation_msg = f"✓ Got it - **{extracted_value}**"
+        else:
+            confirmation_msg = f"✓ **{extracted_value}**"
+    else:
+        confirmation_msg = "✓ Confirmed"
+    
+    # Reset invalid attempts since this field is valid
+    state.invalid_attempt_count = 0
+    if hasattr(state, '_previous_invalid_attempts'):
+        state._previous_invalid_attempts = []
+    
+    # Track confirmed value
+    if extracted_value:
+        state.confirm_field_value(field, extracted_value, confirmation_msg)
+    
+    # Move to next field
+    next_field_map = ["age", "employment_type", "tenure", "monthly_income", "has_etin"]
+    try:
+        current_idx = next_field_map.index(field)
+        remaining_fields = [f for f in next_field_map[current_idx + 1:] if collected.get(f) is None]
+        
+        if remaining_fields:
+            next_field = remaining_fields[0]
+            next_question = _ask_field_question(next_field, collected, state)
+            return f"{confirmation_msg}\n\n{next_question}"
+        else:
+            return f"{confirmation_msg}\n\n✨ Great! I have all the information I need."
+    except (ValueError, IndexError):
+        return confirmation_msg or _ask_field_question(field, collected, state)
+
+
+def _ask_field_question(field: str, collected: dict, state: SessionState) -> str:
+    """Generate a natural question for the specified field with context awareness."""
     history_text = "\n".join(
         f"{m['role'].upper()}: {m['content']}" for m in state.eligibility_chat[-6:]
     )
@@ -144,18 +234,20 @@ def ask_for_next_field(field: str, collected: dict, state: SessionState) -> str:
             or "Do you have an E-TIN (Employer's Tax Identification Number) or tax registration? This helps us verify employment."
         )
     
+    # For other fields, ask naturally with context
     return (
         ollama_chat(
             system=(
                 f"You are a warm Prime Bank eligibility assistant helping a customer apply for: "
                 f"{state.eligibility_product or 'a credit card'}. "
-                "Ask for ONE piece of information at a time. Be brief and natural. Max 2 sentences."
+                "Ask for ONE piece of information at a time. Be brief and natural. Max 2 sentences. "
+                "Reference what they've already shared."
             ),
             user=(
                 f"Conversation so far:\n{history_text}\n\n"
                 f"We have collected: {collected_summary}\n"
                 f"Next, we need to know: {field}\n\n"
-                "Write the next question naturally. Reference what they've already shared if relevant."
+                "Write the next question naturally, referencing earlier context if relevant."
             ),
             temperature=0.5,
             max_tokens=90,
