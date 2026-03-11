@@ -12,30 +12,36 @@ def compare_features_task(
 ) -> Task:
     """
     Create a task that instructs the comparator agent to retrieve and compare
-    multiple products side-by-side using a CONCISE TABLE format.
+    multiple products side-by-side using a CONCISE TABLE format ONLY.
     """
     return Task(
         description=(
-            f"TASK: Compare products using CONCISE TABLE ONLY. NO LONG NARRATIVES.\n\n"
+            f"TASK: OUTPUT ONLY A MARKDOWN COMPARISON TABLE. NOTHING ELSE.\n\n"
+            f"!!!DO NOT include any sections, headers, or long descriptions!!!\n"
+            f"!!!ONLY output: TABLE + ONE sentence per product + ONE short paragraph!!!\n\n"
             f"CONTEXT:\n{comparison_context}\n\n"
-            f"CRITERIA:\n{search_criteria}\n\n"
-            f"FORMAT (MANDATORY):\n"
-            f"1. Markdown table: | Product | Annual Fee | Interest-Free | Rewards | Lounge Access | Best For |\n"
-            f"2. ONE sentence per product (identity)\n"
-            f"3. ONE paragraph (2-3 sentences) for 'Your Best Choice' with specific reason\n"
-            f"4. TOTAL: Fewer than 10 lines\n"
-            f"\n"
-            f"CRITICAL:\n"
-            f"- Table rows MUST match retrieved products exactly\n"
-            f"- Use ONLY values from retrieval, never invent fees/features\n"
-            f"- NO repeated descriptions, NO detailed sections\n"
-            f"- Explain which card is better FOR THEIR SPECIFIC INCOME (600k annual)"
+            f"REQUIRED FORMAT (must follow exactly):\n"
+            f"1. START with markdown table: | Product | Annual Fee | Interest-Free | Rewards | Lounge Access | Best For |\n"
+            f"2. Fill table with product data - ONE ROW per product\n"
+            f"3. After table ONLY: ONE sentence per product identifying it (e.g., 'JCB Platinum Credit Card offers premium JCB benefits with Balaka VIP lounge.')\n"
+            f"4. After that ONLY: ONE paragraph (2-3 sentences max) titled 'Your Best Choice:' explaining WHICH CARD IS BETTER FOR THEIR SPECIFIC PROFILE and WHY\n"
+            f"5. TOTAL OUTPUT: TABLE + 3-4 sentences ONLY (less than 10 lines)\n\n"
+            f"!!!CRITICAL RULES (MUST FOLLOW)!!!\n"
+            f"- NO [Key Features], [Overview], or section headers\n"
+            f"- NO bullet points or detailed feature lists\n"
+            f"- NO repeated information\n"
+            f"- NO lengthy explanations\n"
+            f"- Use ONLY values from retrieved data - NEVER invent fees/rates\n"
+            f"- Explain why one card is better FOR THEIR ACTUAL INCOME/USE CASE\n"
+            f"- If customer mentioned dining focus + BDT 2.4M annual income, explain which card suits that better\n\n"
+            f"If you output anything other than TABLE + minimal sentences, the output is WRONG."
         ),
         expected_output=(
-            "Markdown comparison table with 2-3 columns\n"
-            "One identity sentence per product\n"
-            "One short paragraph (3-4 sentences max) explaining which is better and why\n"
-            "Total response: <15 lines (table + minimal explanation)"
+            "ONLY one markdown table (4-6 rows: header + 2-4 product rows)\n"
+            "ONLY 1 sentence per product (max 50 words each)\n"
+            "ONLY 1 paragraph (2-3 sentences) for 'Your Best Choice' (max 100 words)\n"
+            "NOTHING ELSE - NO sections, NO bullets, NO descriptions, NO long text\n"
+            "Total: table (4-6 lines) + 5-8 sentences (5-10 lines) = <15 lines total"
         ),
         agent=agent,
     )

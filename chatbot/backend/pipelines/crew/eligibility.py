@@ -61,16 +61,20 @@ def check_eligibility_completeness(state: SessionState) -> dict:
 Conversation:
 {history_text}
 
-REQUIRED FIELDS (all must be provided before eligibility can be assessed):
+REQUIRED FIELDS (ALL MUST be provided - none can be skipped):
 1. age - customer's age (number)
 2. employment_type - salaried, self_employed, business_owner, student
 3. tenure - how long in current job (e.g., "2 years", "8 years")
 4. monthly_income - income in BDT (e.g., "BDT 150000")
-5. has_etin - true if customer HAS E-TIN/TAX NUMBER, false if NO, null if NOT MENTIONED YET
+5. has_etin - REQUIRED - true if HAS E-TIN, false if NO E-TIN, null if NOT YET ASKED
 
-CRITICAL: If customer mentions job type, always extract it. If customer mentions employment years/duration, that is tenure.
-If E-TIN is mentioned (Tax ID, E-TIN, employer number), set has_etin=true. If customer says they DON'T have it, set has_etin=false.
-If NOT mentioned, set has_etin=null (DO NOT assume true).
+CRITICAL EXTRACTION RULES:
+- If customer mentions job type, extract it
+- If customer mentions employment years/duration, that is tenure
+- If E-TIN is mentioned (Tax ID, E-TIN, employer number), set has_etin=true
+- If customer says they DON'T have E-TIN, set has_etin=false
+- If E-TIN NOT mentioned in conversation yet, set has_etin=null
+- DO NOT assume has_etin=true. Only true if customer actually confirmed they have it.
 
 Output JSON (exactly this format):
 {{
@@ -82,10 +86,11 @@ Output JSON (exactly this format):
     "has_etin": <true|false|null>,
     "credit_history": <string or null>
   }},
-  "complete": <true ONLY if ALL required fields are non-null>,
-  "next_field": <missing field to ask about next: "age", "employment_type", "tenure", "monthly_income", or "has_etin", or null if complete>
+  "complete": <true ONLY if age AND employment_type AND tenure AND monthly_income AND has_etin are ALL non-null>,
+  "next_field": <missing field to ask next: "age"|"employment_type"|"tenure"|"monthly_income"|"has_etin", or null if complete>
 }}
 
+IMPORTANT: If any field is null, complete=false. Return the first null field as next_field.
 Output ONLY the JSON. Do not add explanation.""",
         temperature=0.0,
         max_tokens=300,
@@ -94,6 +99,13 @@ Output ONLY the JSON. Do not add explanation.""",
     parsed = parse_json(raw)
     if not parsed:
         return {"complete": False, "next_field": "age", "collected": {}}
+
+    # Post-process: ensure has_etin is treated as required
+    collected = parsed.get("collected", {})
+    if collected.get("has_etin") is None:
+        parsed["complete"] = False
+        if not parsed.get("next_field"):
+            parsed["next_field"] = "has_etin"
 
     return {
         "complete": bool(parsed.get("complete", False)),
