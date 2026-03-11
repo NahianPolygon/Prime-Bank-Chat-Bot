@@ -839,64 +839,59 @@ RETURN JSON (must include all 4 fields, use null if not found):
     def _format_product_display(self, products_text: str) -> str:
         """
         Format product output professionally for chat display.
-        Shows only essential info: name + highlights (5-6 key features)
-        Offers full details on demand.
+        Shows only essential info: name + highlights (5-6 key features).
+        Robustly extracts ✅ features from anywhere in product block.
         """
         products = self._extract_products_from_text(products_text)
         formatted = []
-        
-        for idx, product in enumerate(products[:2], 1):  # Show max 2 products
+
+        for product in products[:2]:  # Show max 2 products
             lines = product.split('\n')
             product_name = ""
             key_features = []
             overview = ""
-            
-            # Extract product name
+
             for line in lines:
-                if line.startswith('PRODUCT:'):
-                    product_name = line.replace('PRODUCT:', '').strip()
-                    break
-            
-            # Extract key features (max 5-6)
-            counting_features = 0
-            in_features = False
-            for line in lines:
-                if '[Key Features]' in line:
-                    in_features = True
-                    continue
-                
-                if in_features:
-                    if line.strip().startswith('✅'):
-                        counting_features += 1
-                        if counting_features <= 6:  # Show only top 6 features
-                            # Get feature title
-                            feature = line.replace('✅', '').strip()
-                            key_features.append(feature)
-                    elif counting_features > 0 and not line.strip().startswith('-') and line.strip():
-                        in_features = False
-                
-                # Extract overview/tagline
-                if 'Tagline:' in line:
-                    overview = line.replace('Tagline:', '').strip()
-            
-            # Format product display
-            if product_name:
-                formatted.append(f"\n**{product_name}**")
-                if overview:
-                    formatted.append(f"_{overview}_")
-                formatted.append("")
-                formatted.append("**✨ Key Highlights:**")
-                for feat in key_features[:5]:  # Show max 5
+                stripped = line.strip()
+
+                if stripped.startswith('PRODUCT:'):
+                    product_name = stripped.replace('PRODUCT:', '').strip()
+
+                elif 'Tagline:' in stripped:
+                    overview = stripped.replace('Tagline:', '').strip()
+
+                elif stripped.startswith('✅') and len(key_features) < 5:
+                    feature = stripped.replace('✅', '').strip()
+                    if ' - ' in feature:
+                        feature = feature.split(' - ')[0].strip()
+                    if feature:
+                        key_features.append(feature)
+
+            if not product_name:
+                continue
+
+            if len(formatted) > 0:
+                formatted.append("\n---\n")
+            formatted.append(f"**{product_name}**")
+            if overview:
+                formatted.append(f"_{overview}_")
+            formatted.append("")
+            formatted.append("**✨ Key Highlights:**")
+
+            if key_features:
+                for feat in key_features:
                     formatted.append(f"• {feat}")
-                formatted.append("")
-                formatted.append("_Need detailed information? Ask me!_")
-        
+            else:
+                formatted.append("• Premium credit card with exclusive benefits")
+
+            formatted.append("")
+            formatted.append("_Need detailed information? Ask me!_")
+
+        if not formatted:
+            return products_text
+
         result = "\n".join(formatted)
-        result += "\n\n---\n\n**What would you like to do?**\n" \
-                  "• Compare these cards\n" \
-                  "• Check eligibility\n" \
-                  "• Get full details about a specific card"
-        
+        result += "\n\n---\n\n**What would you like to do?**\n• Compare these cards\n• Check eligibility\n• Get full details about a specific card"
         return result
 
     def _respond(

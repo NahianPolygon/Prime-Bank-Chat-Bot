@@ -83,6 +83,8 @@
             display: flex;
             gap: 10px;
             animation: fadeIn 0.3s ease-in;
+            /* KEY FIX: allow bot messages to be wider when needed */
+            width: 100%;
         }
 
         @keyframes fadeIn {
@@ -125,15 +127,51 @@
             border-radius: 4px 18px 12px 12px;
         }
 
+        /* ── KEY FIX: wide bubble when a table is present ── */
+        .message.bot .message-bubble.has-table {
+            max-width: 100%;
+            width: 100%;
+            background: transparent;  /* let table sit on page bg */
+            padding: 0;
+        }
+
+        /* Inner wrapper for non-table text inside a wide bubble */
+        .message.bot .message-bubble.has-table .bubble-text {
+            background: #e9ecef;
+            border-radius: 4px 18px 12px 12px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .message.bot .message-bubble.has-table .bubble-text:empty {
+            display: none;
+        }
+
+        .message.bot .message-bubble.has-table .bubble-footer {
+            background: #e9ecef;
+            border-radius: 4px 18px 12px 12px;
+            padding: 12px 16px;
+            margin-top: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .message.bot .message-bubble.has-table .bubble-footer:empty {
+            display: none;
+        }
+
         .message-bubble table {
             width: 100%;
             border-collapse: collapse;
-            margin: 12px 0;
+            margin: 0;
             font-size: 13px;
             background: white;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            table-layout: auto;
         }
 
         .message-bubble table th,
@@ -141,6 +179,7 @@
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #e0e0e0;
+            word-break: break-word;
         }
 
         .message-bubble table th {
@@ -148,6 +187,7 @@
             color: white;
             font-weight: 600;
             border: none;
+            white-space: nowrap;
         }
 
         .message-bubble table tr:last-child td {
@@ -162,6 +202,15 @@
             color: #333;
             display: block;
             margin-bottom: 2px;
+        }
+
+        /* ── small tag inside table area ── */
+        .table-wrapper small {
+            display: block;
+            font-size: 11px;
+            color: #888;
+            margin-top: 6px;
+            padding-left: 4px;
         }
 
         .message-bubble code {
@@ -393,22 +442,11 @@
         }
 
         @media (max-width: 600px) {
-            .container {
-                height: 100vh;
-                border-radius: 0;
-            }
-
-            .message-bubble {
-                max-width: 90%;
-            }
-
-            .input-area {
-                flex-wrap: wrap;
-            }
-
-            .send-btn {
-                padding: 10px 20px;
-            }
+            .container { height: 100vh; border-radius: 0; }
+            .message-bubble { max-width: 90%; }
+            .message.bot .message-bubble.has-table { max-width: 100%; }
+            .input-area { flex-wrap: wrap; }
+            .send-btn { padding: 10px 20px; }
         }
     </style>
 </head>
@@ -573,10 +611,48 @@
             scrollToBottom();
         }
 
-        function addBotMessage(text, sources = [], confidence = 0) {
-            const chatContainer = document.getElementById('chatContainer');
+        /**
+         * Converts mixed Markdown + HTML text into safe renderable HTML.
+         * Handles:
+         *  - **bold** → <strong>
+         *  - _italic_ → <em>
+         *  - --- → <hr>
+         *  - → recommendation lines
+         *  - Plain newlines outside HTML tags → <br>
+         *  - Preserves raw <table>, <small>, <strong> etc. as-is
+         */
+        function parseMixedContent(text) {
+            // Process line by line to preserve structure
+            // Each line gets markdown converted, then lines are joined with <br>
+            const lines = text.split('\n');
+            const processedLines = lines.map(line => {
+                // Convert **bold**
+                line = line.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+                
+                // Convert _italic_
+                line = line.replace(/_([^_]+)_/g, '<em>$1</em>');
+                
+                // Convert → recommendation lines (full line only)
+                line = line.replace(/^(→.+)$/, '<span style="display:block;color:#667eea;font-weight:600;margin-top:10px;">$1</span>');
+                
+                // Convert --- separator (full line only)
+                line = line.replace(/^---$/, '<hr style="border:none;border-top:2px solid #667eea;margin:16px 0;">');
+                
+                return line;
+            });
             
-            // Clear empty state if present
+            // Join lines with <br> to preserve structure
+            return processedLines.join('<br>');
+        }
+
+        /**
+         * Checks whether the raw answer text contains an HTML table.
+         * If yes, splits the content into: before-table text, table, after-table text
+         * and renders them in separate styled wrappers so the table can be full-width.
+         */
+        function addBotMessage(rawText, sources = [], confidence = 0) {
+            const chatContainer = document.getElementById('chatContainer');
+
             if (chatContainer.innerHTML.includes('empty-state')) {
                 chatContainer.innerHTML = '';
             }
@@ -584,32 +660,71 @@
             const messageEl = document.createElement('div');
             messageEl.className = 'message bot';
 
-            let bubble = document.createElement('div');
+            const bubble = document.createElement('div');
             bubble.className = 'message-bubble';
 
-            // Parse markdown-like formatting
-            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            text = text.replace(/\n/g, '<br>');
+            const hasTable = /<table[\s>]/i.test(rawText);
 
-            bubble.innerHTML = text;
+            if (hasTable) {
+                // ── Wide bubble layout ──────────────────────────────────────────
+                bubble.classList.add('has-table');
 
-            // Add sources if available
+                // Split: everything before first <table, the table block, everything after </table>
+                const tableStart = rawText.search(/<table[\s>]/i);
+                const tableEndMatch = rawText.match(/<\/table>/i);
+                const tableEnd = tableEndMatch
+                    ? rawText.lastIndexOf('</table>') + '</table>'.length
+                    : rawText.length;
+
+                const beforeTable = rawText.slice(0, tableStart).trim();
+                const tableBlock  = rawText.slice(tableStart, tableEnd).trim();
+                const afterTable  = rawText.slice(tableEnd).trim();
+
+                // Before-table text (e.g. "**📊 PRODUCT COMPARISON**")
+                if (beforeTable) {
+                    const headerDiv = document.createElement('div');
+                    headerDiv.className = 'bubble-text';
+                    headerDiv.innerHTML = parseMixedContent(beforeTable);
+                    bubble.appendChild(headerDiv);
+                }
+
+                // Table wrapper (full-width, scrollable on mobile)
+                const tableWrapper = document.createElement('div');
+                tableWrapper.className = 'table-wrapper';
+                tableWrapper.style.cssText = 'overflow-x:auto; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);';
+                tableWrapper.innerHTML = tableBlock;
+                bubble.appendChild(tableWrapper);
+
+                // After-table text (e.g. recommendation text)
+                if (afterTable) {
+                    const footerDiv = document.createElement('div');
+                    footerDiv.className = 'bubble-footer';
+                    footerDiv.innerHTML = parseMixedContent(afterTable);
+                    bubble.appendChild(footerDiv);
+                }
+
+            } else {
+                // ── Normal narrow bubble ────────────────────────────────────────
+                bubble.innerHTML = parseMixedContent(rawText);
+            }
+
+            // Sources
             if (sources && sources.length > 0) {
                 const sourcesDiv = document.createElement('div');
                 sourcesDiv.className = 'sources';
                 sourcesDiv.innerHTML = '<strong>Sources:</strong>';
-
                 sources.forEach(source => {
-                    const sourceItem = document.createElement('div');
-                    sourceItem.className = 'source-item';
-                    sourceItem.innerHTML = `• ${escapeHtml(source.product)} - ${escapeHtml(source.section)}`;
+                    const item = document.createElement('div');
+                    item.className = 'source-item';
+                    item.innerHTML = `• ${escapeHtml(source.product)} - ${escapeHtml(source.section)}`;
                     if (source.confidence) {
-                        sourceItem.innerHTML += `<span class="confidence-badge">${source.confidence}</span>`;
+                        item.innerHTML += `<span class="confidence-badge">${source.confidence}</span>`;
                     }
-                    sourcesDiv.appendChild(sourceItem);
+                    sourcesDiv.appendChild(item);
                 });
-
-                bubble.appendChild(sourcesDiv);
+                // Attach sources to the last child or bubble itself
+                const lastChild = bubble.lastElementChild || bubble;
+                lastChild.appendChild(sourcesDiv);
             }
 
             messageEl.appendChild(bubble);
