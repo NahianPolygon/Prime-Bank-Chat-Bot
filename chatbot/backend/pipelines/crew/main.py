@@ -356,6 +356,7 @@ class CrewPipeline:
         # Handle special cases
         if intent_type == "eligibility_check":
             question = start_eligibility_collection(intent, state)
+            state._current_field = "age"  # First field to ask about
             return self._respond(
                 question,
                 ["Eligibility Conversation"],
@@ -452,21 +453,92 @@ class CrewPipeline:
     def _eligibility_turn(
         self, query: str, state: SessionState, history: list
     ) -> dict:
-        state.eligibility_chat.append({"role": "user", "content": query})
-        status = check_eligibility_completeness(state)
+        """
+        Process one turn of eligibility field collection.
 
-        if status["complete"]:
+        State machine:
+          state._current_field  = field we ASKED about on the previous turn
+          state._confirmed_fields = dict of {field: value} confirmed so far
+
+        Flow per turn:
+          1. Find which field we were collecting (state._current_field)
+          2. Try to extract that field's value from user's current reply
+          3. If extracted → store in _confirmed_fields, advance to next field
+          4. If not extracted → re-ask the same field (with gentle retry message)
+          5. If all fields done → run assessment immediately
+        """
+        # Import helpers
+        from pipelines.crew.eligibility import (
+            _extract_single_field, _build_confirmation, _ask_field_question, get_next_pending_field
+        )
+        
+        # Initialize confirmed fields dict if not present
+        if not hasattr(state, '_confirmed_fields'):
+            state._confirmed_fields = {}
+
+        # Append the user message to eligibility chat history
+        state.eligibility_chat.append({"role": "user", "content": query})
+
+        # ── STEP 1: Which field were we collecting? ───────────────
+        current_field = getattr(state, '_current_field', None)
+
+        # If no current field tracked yet, derive from confirmed_fields
+        if current_field is None:
+            current_field = get_next_pending_field(state)
+
+        # ── STEP 2: Try to extract the current field from user reply ──
+        if current_field:
+            extracted = _extract_single_field(current_field, query, state._confirmed_fields)
+
+            if extracted is not None:
+                # ── STEP 3: Extraction succeeded → confirm and advance ──
+                state._confirmed_fields[current_field] = extracted
+                state.invalid_attempt_count = 0
+                state.confirm_field_value(current_field, extracted, str(extracted))
+                
+                confirmation = _build_confirmation(current_field, extracted)
+                print(f"✓ Confirmed {current_field}={extracted}")
+
+                # Find the next uncollected field
+                next_field = get_next_pending_field(state)
+
+                if next_field is None:
+                    # ── STEP 5: All fields done → run assessment ──
+                    state._current_field = None
+                    state.eligibility_chat.append({
+                        "role": "assistant",
+                        "content": f"{confirmation}\n\n✨ Thank you! Checking your eligibility now..."
+                    })
+                    return self._run_eligibility_assessment(state)
+
+                # Ask for next field
+                state._current_field = next_field
+                collected = dict(state._confirmed_fields)
+                next_question = _ask_field_question(next_field, collected, state)
+                reply = f"{confirmation}\n\n{next_question}"
+
+            else:
+                # ── STEP 4: Extraction failed → re-ask same field ──
+                state.invalid_attempt_count = (state.invalid_attempt_count or 0) + 1
+                print(f"⚠️  Could not extract '{current_field}' from: '{query[:50]}'")
+                
+                collected = dict(state._confirmed_fields)
+                base_question = _ask_field_question(current_field, collected, state)
+                
+                if state.invalid_attempt_count == 1:
+                    reply = f"I didn't quite catch that. {base_question}"
+                else:
+                    reply = base_question
+                
+                # current_field stays the same — we're re-asking
+                state._current_field = current_field
+
+        else:
+            # No pending fields — shouldn't reach here, but handle gracefully
             return self._run_eligibility_assessment(state)
 
-        # Pass the user input for validation and confirmation flows
-        reply = ask_for_next_field(status["next_field"], status["collected"], state, query)
         state.eligibility_chat.append({"role": "assistant", "content": reply})
-        return self._respond(
-            reply,
-            ["Eligibility Conversation"],
-            state.intent,
-            needs_clarification=True,
-        )
+        return self._respond(reply, ["Eligibility Conversation"], state.intent, needs_clarification=True)
 
     def _run_eligibility_assessment(self, state: SessionState) -> dict:
         profile = build_eligibility_profile(state)

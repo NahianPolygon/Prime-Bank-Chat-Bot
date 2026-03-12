@@ -5,15 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Prime Bank Chatbot - AI Assistant</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-                'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
@@ -28,7 +23,7 @@
             height: 90vh;
             background: white;
             border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -39,18 +34,11 @@
             color: white;
             padding: 20px;
             text-align: center;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 2px solid rgba(255,255,255,0.1);
         }
 
-        .header h1 {
-            font-size: 24px;
-            margin-bottom: 5px;
-        }
-
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
+        .header h1 { font-size: 24px; margin-bottom: 5px; }
+        .header p  { font-size: 14px; opacity: 0.9; }
 
         .chat-container {
             flex: 1;
@@ -62,55 +50,31 @@
             background: #f8f9fa;
         }
 
-        .chat-container::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .chat-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        .chat-container::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-
-        .chat-container::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
+        .chat-container::-webkit-scrollbar { width: 8px; }
+        .chat-container::-webkit-scrollbar-track { background: #f1f1f1; }
+        .chat-container::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        .chat-container::-webkit-scrollbar-thumb:hover { background: #555; }
 
         .message {
             display: flex;
             gap: 10px;
             animation: fadeIn 0.3s ease-in;
-            /* KEY FIX: allow bot messages to be wider when needed */
             width: 100%;
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
-        .message.user {
-            justify-content: flex-end;
-        }
-
-        .message.bot {
-            justify-content: flex-start;
-        }
+        .message.user { justify-content: flex-end; }
+        .message.bot  { justify-content: flex-start; }
 
         .message-bubble {
             max-width: 70%;
             padding: 12px 16px;
             border-radius: 12px;
-            line-height: 1.5;
+            line-height: 1.6;
             word-wrap: break-word;
             font-size: 14px;
         }
@@ -127,40 +91,26 @@
             border-radius: 4px 18px 12px 12px;
         }
 
-        /* ── KEY FIX: wide bubble when a table is present ── */
         .message.bot .message-bubble.has-table {
             max-width: 100%;
             width: 100%;
-            background: transparent;  /* let table sit on page bg */
+            background: transparent;
             padding: 0;
         }
 
-        /* Inner wrapper for non-table text inside a wide bubble */
-        .message.bot .message-bubble.has-table .bubble-text {
-            background: #e9ecef;
-            border-radius: 4px 18px 12px 12px;
-            padding: 12px 16px;
-            margin-bottom: 8px;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .message.bot .message-bubble.has-table .bubble-text:empty {
-            display: none;
-        }
-
+        .message.bot .message-bubble.has-table .bubble-text,
         .message.bot .message-bubble.has-table .bubble-footer {
             background: #e9ecef;
             border-radius: 4px 18px 12px 12px;
             padding: 12px 16px;
-            margin-top: 8px;
             font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
-        .message.bot .message-bubble.has-table .bubble-footer:empty {
-            display: none;
-        }
+        .message.bot .message-bubble.has-table .bubble-text  { margin-bottom: 8px; }
+        .message.bot .message-bubble.has-table .bubble-footer { margin-top: 8px; }
+        .message.bot .message-bubble.has-table .bubble-text:empty,
+        .message.bot .message-bubble.has-table .bubble-footer:empty { display: none; }
 
         .message-bubble table {
             width: 100%;
@@ -170,7 +120,7 @@
             background: white;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             table-layout: auto;
         }
 
@@ -190,21 +140,10 @@
             white-space: nowrap;
         }
 
-        .message-bubble table tr:last-child td {
-            border-bottom: none;
-        }
+        .message-bubble table tr:last-child td { border-bottom: none; }
+        .message-bubble table tr:hover { background: #f9f9f9; }
+        .message-bubble table td strong { color: #333; display: block; margin-bottom: 2px; }
 
-        .message-bubble table tr:hover {
-            background: #f9f9f9;
-        }
-
-        .message-bubble table td strong {
-            color: #333;
-            display: block;
-            margin-bottom: 2px;
-        }
-
-        /* ── small tag inside table area ── */
         .table-wrapper small {
             display: block;
             font-size: 11px;
@@ -213,17 +152,87 @@
             padding-left: 4px;
         }
 
+        /* Rich text elements */
+        .message-bubble .md-h2 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #444;
+            margin: 14px 0 6px 0;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #ddd;
+            display: block;
+        }
+
+        .message-bubble .md-h3 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #444;
+            margin: 10px 0 4px 0;
+            display: block;
+        }
+
+        .message-bubble .md-h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #667eea;
+            margin: 8px 0 2px 0;
+            display: block;
+        }
+
+        .message-bubble .md-li {
+            display: block;
+            padding: 2px 0 2px 16px;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .message-bubble .md-li::before {
+            content: '•';
+            position: absolute;
+            left: 4px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .message-bubble .md-numbered {
+            display: block;
+            padding: 4px 0 2px 4px;
+            line-height: 1.6;
+            font-weight: 600;
+            color: #333;
+            margin-top: 8px;
+        }
+
+        .message-bubble .md-recommendation {
+            display: block;
+            color: #667eea;
+            font-weight: 600;
+            margin: 8px 0 4px 0;
+        }
+
+        .message-bubble .md-checkmark {
+            display: block;
+            padding: 2px 0 2px 4px;
+            line-height: 1.6;
+        }
+
+        .message-bubble .md-hr {
+            border: none;
+            border-top: 2px solid #667eea;
+            margin: 14px 0;
+            display: block;
+        }
+
         .message-bubble code {
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0,0,0,0.1);
             padding: 2px 6px;
             border-radius: 3px;
             font-family: 'Courier New', monospace;
             font-size: 13px;
         }
 
-        .message-bubble strong {
-            font-weight: 600;
-        }
+        .message-bubble strong { font-weight: 600; }
+        .message-bubble em { font-style: italic; }
 
         .message-bubble a {
             color: #667eea;
@@ -231,23 +240,17 @@
             border-bottom: 1px solid #667eea;
         }
 
-        .message.user .message-bubble a {
-            color: #fff;
-            border-bottom-color: #fff;
-        }
+        .message.user .message-bubble a { color: #fff; border-bottom-color: #fff; }
 
         .sources {
             font-size: 12px;
             margin-top: 8px;
             padding-top: 8px;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(0,0,0,0.1);
             color: #666;
         }
 
-        .source-item {
-            margin: 4px 0;
-            padding: 4px 0;
-        }
+        .source-item { margin: 4px 0; padding: 4px 0; }
 
         .confidence-badge {
             display: inline-block;
@@ -258,32 +261,18 @@
             margin-left: 4px;
         }
 
-        .loading {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #666;
-            font-style: italic;
-        }
+        .loading { display: flex; align-items: center; gap: 8px; color: #666; font-style: italic; }
 
         .spinner {
             display: inline-block;
-            width: 12px;
-            height: 12px;
+            width: 12px; height: 12px;
             border: 2px solid #f3f3f3;
             border-top: 2px solid #667eea;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .error-message {
             background: #fee;
@@ -302,12 +291,7 @@
             align-items: flex-end;
         }
 
-        .input-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        .input-wrapper { flex: 1; display: flex; flex-direction: column; gap: 8px; }
 
         .input-wrapper input {
             width: 100%;
@@ -319,15 +303,8 @@
             font-family: inherit;
         }
 
-        .input-wrapper input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .input-wrapper input:disabled {
-            background: #f5f5f5;
-            color: #999;
-        }
+        .input-wrapper input:focus { outline: none; border-color: #667eea; }
+        .input-wrapper input:disabled { background: #f5f5f5; color: #999; }
 
         .send-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -342,19 +319,9 @@
             white-space: nowrap;
         }
 
-        .send-btn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .send-btn:active:not(:disabled) {
-            transform: translateY(0);
-        }
-
-        .send-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+        .send-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
+        .send-btn:active:not(:disabled) { transform: translateY(0); }
+        .send-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
         .info-bar {
             background: #f0f0f0;
@@ -367,28 +334,16 @@
             border-bottom: 1px solid #e0e0e0;
         }
 
-        .status-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .status-indicator { display: inline-flex; align-items: center; gap: 6px; }
 
         .status-dot {
-            width: 8px;
-            height: 8px;
+            width: 8px; height: 8px;
             border-radius: 50%;
             background: #28a745;
             animation: pulse 2s infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
-        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
         .empty-state {
             display: flex;
@@ -400,22 +355,9 @@
             height: 100%;
         }
 
-        .empty-state-icon {
-            font-size: 48px;
-            opacity: 0.5;
-        }
-
-        .empty-state-text {
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .example-queries {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-top: 20px;
-        }
+        .empty-state-icon  { font-size: 48px; opacity: 0.5; }
+        .empty-state-text  { font-size: 16px; font-weight: 500; }
+        .example-queries { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
 
         .example-query {
             background: #f9f9f9;
@@ -428,18 +370,7 @@
             transition: all 0.2s;
         }
 
-        .example-query:hover {
-            background: #f0f0f0;
-            border-color: #667eea;
-        }
-
-        .timestamp {
-            font-size: 11px;
-            color: #999;
-            margin-top: 4px;
-            text-align: center;
-            margin: 10px 0;
-        }
+        .example-query:hover { background: #f0f0f0; border-color: #667eea; }
 
         @media (max-width: 600px) {
             .container { height: 100vh; border-radius: 0; }
@@ -470,18 +401,10 @@
                 <div class="empty-state-icon">💬</div>
                 <div class="empty-state-text">Start a conversation</div>
                 <div class="example-queries">
-                    <div class="example-query" onclick="setQuery('Tell me about Visa Gold credit card')">
-                        📌 Visa Gold features
-                    </div>
-                    <div class="example-query" onclick="setQuery('What Islamic banking options do you have?')">
-                        📌 Islamic banking products
-                    </div>
-                    <div class="example-query" onclick="setQuery('Which card is best for international travel?')">
-                        📌 Best card for travel
-                    </div>
-                    <div class="example-query" onclick="setQuery('What are the eligibility requirements?')">
-                        📌 Eligibility requirements
-                    </div>
+                    <div class="example-query" onclick="setQuery('Tell me about Visa Gold credit card')">📌 Visa Gold features</div>
+                    <div class="example-query" onclick="setQuery('What Islamic banking options do you have?')">📌 Islamic banking products</div>
+                    <div class="example-query" onclick="setQuery('Which card is best for international travel?')">📌 Best card for travel</div>
+                    <div class="example-query" onclick="setQuery('What are the eligibility requirements?')">📌 Eligibility requirements</div>
                 </div>
             </div>
         </div>
@@ -501,14 +424,11 @@
     </div>
 
     <script>
-        const API_URL = 'http://localhost:8000';
+        const API_URL = 'http://192.168.12.41:8000';
         let isLoading = false;
         let sessionId = 'session_' + Date.now();
 
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', async () => {
-            await checkHealth();
-        });
+        document.addEventListener('DOMContentLoaded', async () => { await checkHealth(); });
 
         async function checkHealth() {
             try {
@@ -517,20 +437,17 @@
                     document.getElementById('status').textContent = 'Ready';
                     document.getElementById('queryInput').disabled = false;
                     document.getElementById('sendBtn').disabled = false;
-                    addBotMessage('Hello! 👋 I\'m the Prime Bank AI assistant. How can I help you today?');
+                    addBotMessage("Hello! 👋 I'm the Prime Bank AI assistant. How can I help you today?");
                 } else {
                     showError('Backend service error');
                 }
             } catch (error) {
                 showError('Cannot connect to backend. Make sure the server is running at http://localhost:8000');
-                console.error('Health check failed:', error);
             }
         }
 
         function handleKeyPress(event) {
-            if (event.key === 'Enter' && !isLoading) {
-                sendMessage();
-            }
+            if (event.key === 'Enter' && !isLoading) sendMessage();
         }
 
         function setQuery(query) {
@@ -541,54 +458,31 @@
         async function sendMessage() {
             const queryInput = document.getElementById('queryInput');
             const query = queryInput.value.trim();
+            if (!query || isLoading) return;
 
-            if (!query || isLoading) {
-                return;
-            }
-
-            // Disable input
             isLoading = true;
             queryInput.disabled = true;
             document.getElementById('sendBtn').disabled = true;
-
-            // Add user message
             addUserMessage(query);
             queryInput.value = '';
-
-            // Add loading indicator
             const loadingId = addLoadingMessage();
 
             try {
-                // Send to backend
                 const response = await fetch(`${API_URL}/chat`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        query: query,
-                        session_id: sessionId
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query, session_id: sessionId })
                 });
 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const data = await response.json();
-
-                // Remove loading message
                 removeMessage(loadingId);
-
-                // Add bot response
                 addBotMessage(data.answer, data.sources, data.confidence);
 
             } catch (error) {
-                console.error('Error:', error);
                 removeMessage(loadingId);
                 showError('Failed to get response. Please try again.');
             } finally {
-                // Re-enable input
                 isLoading = false;
                 queryInput.disabled = false;
                 document.getElementById('sendBtn').disabled = false;
@@ -596,66 +490,136 @@
             }
         }
 
-        function addUserMessage(text) {
-            const chatContainer = document.getElementById('chatContainer');
-            
-            // Clear empty state if present
-            if (chatContainer.innerHTML.includes('empty-state')) {
-                chatContainer.innerHTML = '';
-            }
-
-            const messageEl = document.createElement('div');
-            messageEl.className = 'message user';
-            messageEl.innerHTML = `<div class="message-bubble">${escapeHtml(text)}</div>`;
-            chatContainer.appendChild(messageEl);
-            scrollToBottom();
+        /**
+         * Convert inline markdown within a single line of text.
+         * Handles **bold**, _italic_, `code` — does NOT touch block syntax.
+         */
+        function inlineMarkdown(text) {
+            text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+            text = text.replace(/_([^_\s][^_]*)_/g, '<em>$1</em>');
+            text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+            return text;
         }
 
         /**
-         * Converts mixed Markdown + HTML text into safe renderable HTML.
-         * Handles:
-         *  - **bold** → <strong>
-         *  - _italic_ → <em>
-         *  - --- → <hr>
-         *  - → recommendation lines
-         *  - Plain newlines outside HTML tags → <br>
-         *  - Preserves raw <table>, <small>, <strong> etc. as-is
+         * Full mixed-content parser — converts every line of the backend response
+         * into a properly styled HTML element. Handles:
+         *
+         *  Block-level:
+         *    ## Heading       → .md-h2  (section heading with underline)
+         *    ### Heading      → .md-h3  (bold sub-heading)
+         *    #### Heading     → .md-h4  (coloured day/step heading)
+         *    ---              → .md-hr  (purple divider)
+         *    1. item          → .md-numbered
+         *    - item / • item  → .md-li  (purple bullet)
+         *    → text           → .md-recommendation
+         *    ✅ text          → .md-checkmark
+         *
+         *  Inline (inside any line):
+         *    **bold** _italic_ `code`
+         *
+         *  Special cleanup:
+         *    "How to Apply?]" → strips orphan ] from RAG chunk artifacts
+         *    Raw HTML tags    → passed through untouched
          */
         function parseMixedContent(text) {
-            // Process line by line to preserve structure
-            // Each line gets markdown converted, then lines are joined with <br>
+            // Fix broken bracket artifact from RAG chunks e.g. "How to Apply?]"
+            text = text.replace(/^([^\[\n]*)\]\s*\n/, '$1\n');
+            text = text.replace(/\]\s*$/, '');
+
             const lines = text.split('\n');
-            const processedLines = lines.map(line => {
-                // Convert **bold**
-                line = line.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
-                
-                // Convert _italic_
-                line = line.replace(/_([^_]+)_/g, '<em>$1</em>');
-                
-                // Convert → recommendation lines (full line only)
-                line = line.replace(/^(→.+)$/, '<span style="display:block;color:#667eea;font-weight:600;margin-top:10px;">$1</span>');
-                
-                // Convert --- separator (full line only)
-                line = line.replace(/^---$/, '<hr style="border:none;border-top:2px solid #667eea;margin:16px 0;">');
-                
-                return line;
-            });
-            
-            // Join lines with <br> to preserve structure
-            return processedLines.join('<br>');
+            const htmlParts = [];
+
+            for (let i = 0; i < lines.length; i++) {
+                const raw  = lines[i];
+                const trim = raw.trim();
+
+                // Pass raw HTML tags through unchanged
+                if (/^<[a-zA-Z\/!]/.test(trim)) {
+                    htmlParts.push(raw);
+                    continue;
+                }
+
+                // Empty line
+                if (trim === '') {
+                    htmlParts.push('<br>');
+                    continue;
+                }
+
+                // ## H2
+                if (/^##\s+/.test(trim)) {
+                    htmlParts.push(`<span class="md-h2">${inlineMarkdown(trim.replace(/^##\s+/, ''))}</span>`);
+                    continue;
+                }
+
+                // ### H3
+                if (/^###\s+/.test(trim)) {
+                    htmlParts.push(`<span class="md-h3">${inlineMarkdown(trim.replace(/^###\s+/, ''))}</span>`);
+                    continue;
+                }
+
+                // #### H4
+                if (/^####\s+/.test(trim)) {
+                    htmlParts.push(`<span class="md-h4">${inlineMarkdown(trim.replace(/^####\s+/, ''))}</span>`);
+                    continue;
+                }
+
+                // --- horizontal rule
+                if (/^---+$/.test(trim)) {
+                    htmlParts.push('<hr class="md-hr">');
+                    continue;
+                }
+
+                // → recommendation line
+                if (/^→/.test(trim)) {
+                    htmlParts.push(`<span class="md-recommendation">${inlineMarkdown(trim)}</span>`);
+                    continue;
+                }
+
+                // ✅ checkmark line
+                if (/^✅/.test(trim)) {
+                    htmlParts.push(`<span class="md-checkmark">${inlineMarkdown(trim)}</span>`);
+                    continue;
+                }
+
+                // Numbered list: "1. text"
+                if (/^\d+\.\s+/.test(trim)) {
+                    htmlParts.push(`<span class="md-numbered">${inlineMarkdown(trim)}</span>`);
+                    continue;
+                }
+
+                // Dash / bullet list: "- text" or "• text"
+                if (/^[-•]\s+/.test(trim)) {
+                    const content = trim.replace(/^[-•]\s+/, '');
+                    htmlParts.push(`<span class="md-li">${inlineMarkdown(content)}</span>`);
+                    continue;
+                }
+
+                // Normal text line
+                htmlParts.push(inlineMarkdown(trim));
+            }
+
+            // Join — block elements (span/hr/br) go on their own lines,
+            // plain text lines get a <br> separator
+            const result = [];
+            for (let i = 0; i < htmlParts.length; i++) {
+                const part = htmlParts[i];
+                const isBlock = part.startsWith('<span') || part.startsWith('<hr') || part === '<br>';
+                const prevIsBlock = i > 0 && (htmlParts[i-1].startsWith('<span') || htmlParts[i-1].startsWith('<hr') || htmlParts[i-1] === '<br>');
+
+                if (isBlock || prevIsBlock) {
+                    result.push(part);
+                } else {
+                    result.push((i > 0 ? '<br>' : '') + part);
+                }
+            }
+
+            return result.join('');
         }
 
-        /**
-         * Checks whether the raw answer text contains an HTML table.
-         * If yes, splits the content into: before-table text, table, after-table text
-         * and renders them in separate styled wrappers so the table can be full-width.
-         */
         function addBotMessage(rawText, sources = [], confidence = 0) {
             const chatContainer = document.getElementById('chatContainer');
-
-            if (chatContainer.innerHTML.includes('empty-state')) {
-                chatContainer.innerHTML = '';
-            }
+            if (chatContainer.innerHTML.includes('empty-state')) chatContainer.innerHTML = '';
 
             const messageEl = document.createElement('div');
             messageEl.className = 'message bot';
@@ -666,21 +630,15 @@
             const hasTable = /<table[\s>]/i.test(rawText);
 
             if (hasTable) {
-                // ── Wide bubble layout ──────────────────────────────────────────
                 bubble.classList.add('has-table');
 
-                // Split: everything before first <table, the table block, everything after </table>
                 const tableStart = rawText.search(/<table[\s>]/i);
-                const tableEndMatch = rawText.match(/<\/table>/i);
-                const tableEnd = tableEndMatch
-                    ? rawText.lastIndexOf('</table>') + '</table>'.length
-                    : rawText.length;
+                const tableEnd   = rawText.lastIndexOf('</table>') + '</table>'.length;
 
                 const beforeTable = rawText.slice(0, tableStart).trim();
                 const tableBlock  = rawText.slice(tableStart, tableEnd).trim();
                 const afterTable  = rawText.slice(tableEnd).trim();
 
-                // Before-table text (e.g. "**📊 PRODUCT COMPARISON**")
                 if (beforeTable) {
                     const headerDiv = document.createElement('div');
                     headerDiv.className = 'bubble-text';
@@ -688,27 +646,22 @@
                     bubble.appendChild(headerDiv);
                 }
 
-                // Table wrapper (full-width, scrollable on mobile)
                 const tableWrapper = document.createElement('div');
                 tableWrapper.className = 'table-wrapper';
                 tableWrapper.style.cssText = 'overflow-x:auto; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1);';
                 tableWrapper.innerHTML = tableBlock;
                 bubble.appendChild(tableWrapper);
 
-                // After-table text (e.g. recommendation text)
                 if (afterTable) {
                     const footerDiv = document.createElement('div');
                     footerDiv.className = 'bubble-footer';
                     footerDiv.innerHTML = parseMixedContent(afterTable);
                     bubble.appendChild(footerDiv);
                 }
-
             } else {
-                // ── Normal narrow bubble ────────────────────────────────────────
                 bubble.innerHTML = parseMixedContent(rawText);
             }
 
-            // Sources
             if (sources && sources.length > 0) {
                 const sourcesDiv = document.createElement('div');
                 sourcesDiv.className = 'sources';
@@ -717,17 +670,23 @@
                     const item = document.createElement('div');
                     item.className = 'source-item';
                     item.innerHTML = `• ${escapeHtml(source.product)} - ${escapeHtml(source.section)}`;
-                    if (source.confidence) {
-                        item.innerHTML += `<span class="confidence-badge">${source.confidence}</span>`;
-                    }
+                    if (source.confidence) item.innerHTML += `<span class="confidence-badge">${source.confidence}</span>`;
                     sourcesDiv.appendChild(item);
                 });
-                // Attach sources to the last child or bubble itself
-                const lastChild = bubble.lastElementChild || bubble;
-                lastChild.appendChild(sourcesDiv);
+                (bubble.lastElementChild || bubble).appendChild(sourcesDiv);
             }
 
             messageEl.appendChild(bubble);
+            chatContainer.appendChild(messageEl);
+            scrollToBottom();
+        }
+
+        function addUserMessage(text) {
+            const chatContainer = document.getElementById('chatContainer');
+            if (chatContainer.innerHTML.includes('empty-state')) chatContainer.innerHTML = '';
+            const messageEl = document.createElement('div');
+            messageEl.className = 'message user';
+            messageEl.innerHTML = `<div class="message-bubble">${escapeHtml(text)}</div>`;
             chatContainer.appendChild(messageEl);
             scrollToBottom();
         }
@@ -737,37 +696,32 @@
             const messageEl = document.createElement('div');
             messageEl.className = 'message bot';
             messageEl.id = 'loading-' + Date.now();
-
             const bubble = document.createElement('div');
             bubble.className = 'message-bubble loading';
             bubble.innerHTML = '<span class="spinner"></span> <span>Thinking...</span>';
-
             messageEl.appendChild(bubble);
             chatContainer.appendChild(messageEl);
             scrollToBottom();
-
             return messageEl.id;
         }
 
-        function removeMessage(messageId) {
-            const messageEl = document.getElementById(messageId);
-            if (messageEl) {
-                messageEl.remove();
-            }
+        function removeMessage(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
         }
 
         function showError(message) {
             const chatContainer = document.getElementById('chatContainer');
-            const errorEl = document.createElement('div');
-            errorEl.className = 'error-message';
-            errorEl.textContent = '⚠️ ' + message;
-            chatContainer.appendChild(errorEl);
+            const el = document.createElement('div');
+            el.className = 'error-message';
+            el.textContent = '⚠️ ' + message;
+            chatContainer.appendChild(el);
             scrollToBottom();
         }
 
         function scrollToBottom() {
-            const chatContainer = document.getElementById('chatContainer');
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            const c = document.getElementById('chatContainer');
+            c.scrollTop = c.scrollHeight;
         }
 
         function escapeHtml(text) {
