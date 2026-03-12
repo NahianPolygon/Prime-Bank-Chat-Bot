@@ -1,0 +1,218 @@
+"Timestamp","Scenario #","Category","Scenario Name","Status","Turn #","User Query","Bot Response","Turn Status","Issues","Detected Intent","Intent Correct?","Entities Correct?","Response Type Correct?","Turn Time (s)","Session ID"
+"2026-03-12 06:10:42","1","Intent Classification","Detect greeting intent","✅ PASS","1","Hello!","Hello there! Welcome to Prime Bank. I'm here to assist you with any banking or credit card needs you might have. How can I help you today?","✅ PASS","","greeting","YES","N/A","YES","14.51","test_7dee3892"
+"2026-03-12 06:10:57","2","Intent Classification","Detect feature inquiry intent","❌ FAIL","1","Which cards have dining benefits?","**JCB Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**Visa Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**What would yo","❌ FAIL","Feature: Feature 'dining' not mentioned","feature_inquiry","YES","YES","YES","12.69","test_f7afb911"
+"2026-03-12 06:11:15","3","Intent Classification","Detect comparison intent (cold-start)","❌ FAIL","1","Compare Visa Platinum vs JCB Platinum","Thank you for sharing that! I understand you're interested in comparing Visa Platinum and JCB Platinum. While I can't provide a direct comparison, I'd be happy to assist you with any questions about your credit card or banking needs. How can I help you today regarding your financial matters?","❌ FAIL","Intent: Expected intent 'comparison', got 'product_info'","product_info","NO","N/A","YES","16.34","test_e7b1779b"
+"2026-03-12 06:11:34","4","Intent Classification","Detect income-based search intent","✅ PASS","1","I earn 300k per month. What cards am I eligible for?","To recommend the best card for you:
+
+By the way, are you interested in traditional banking services or would you prefer Shariah-compliant Hasaanah banking options?
+
+And what will you primarily be using this card for, like travel, dining out, or everyday shopping?","✅ PASS","","product_search_by_income","YES","YES","YES","17.18","test_d07f92fe"
+"2026-03-12 06:11:49","5","Intent Classification","Detect eligibility check intent","✅ PASS","1","Am I eligible for Visa Platinum Credit Card?","============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access","✅ PASS","","eligibility_check","YES","YES","YES","13.03","test_92869653"
+"2026-03-12 06:12:08","6","Entity Extraction","Extract income from query (monthly)","✅ PASS","1","My monthly income is 300k","To recommend the best card for you:
+
+Are you interested in traditional banking services or would you prefer a Shariah-compliant Hasanah account?
+
+And what's your main goal for using this card—travelling, dining out, or something else entirely?","✅ PASS","","product_search_by_income","N/A","YES","N/A","16.86","test_5f9a8feb"
+"2026-03-12 06:12:27","7","Entity Extraction","Extract income from query (annual)","❌ FAIL","1","My annual income is 50 lakh BDT","To recommend the best card for you:
+
+What kind of banking approach suits you better—conventional banking or Islamic (Shariah-compliant/Hasanah) banking?
+
+And what will you primarily use this card for, like travel or everyday shopping?","❌ FAIL","Entity: customer_income: Expected ~5000000, got 6000000","product_search_by_income","N/A","NO","N/A","16.98","test_3e327ce0"
+"2026-03-12 06:12:42","8","Entity Extraction","Extract banking type (conventional)","✅ PASS","1","I want conventional banking credit cards","**JCB Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**Visa Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**What would yo","✅ PASS","","feature_inquiry","N/A","YES","N/A","12.7","test_17a27ca4"
+"2026-03-12 06:12:57","9","Entity Extraction","Extract banking type (Islamic)","✅ PASS","1","Show me Islamic credit card options","**Visa Hasanah Gold Credit Card**
+_**** Power Your Dreams & Enliven Your Lifestyle_
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**Visa Hasanah Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benef","✅ PASS","","feature_inquiry","N/A","YES","N/A","12.69","test_31a67c63"
+"2026-03-12 06:13:12","10","Entity Extraction","Extract multiple features","✅ PASS","1","I need a card with lounge access and dining benefits","**JCB Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**Mastercard World Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**What would","✅ PASS","","feature_inquiry","N/A","YES","N/A","12.82","test_abd3d4c3"
+"2026-03-12 06:13:26","11","Entity Extraction","Extract tier preference","✅ PASS","1","Show me only platinum cards","Could you tell me more about what you're looking for?","✅ PASS","","product_info","N/A","YES","N/A","12.57","test_df0e6947"
+"2026-03-12 06:13:41","12","Product Retrieval","Retrieve specific product by name","❌ FAIL","1","Tell me about Visa Platinum Credit Card","============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access","❌ FAIL","Response type: Asks for clarification instead of listing products","product_info","YES","N/A","NO","12.79","test_ae187374"
+"2026-03-12 06:13:56","13","Product Retrieval","Retrieve products by feature (dining)","❌ FAIL","1","Which cards have dining benefits?","**JCB Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**Visa Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**What would yo","❌ FAIL","Feature: Feature 'dining' not mentioned","feature_inquiry","YES","N/A","YES","12.62","test_e3c7d4dc"
+"2026-03-12 06:14:10","14","Product Retrieval","Retrieve products by feature (lounge)","✅ PASS","1","I want airport lounge access","**Mastercard Platinum Credit Card**
+
+**✨ Key Highlights:**
+• **Premium Credit Limit**
+• **50-Day Interest-Free Period**
+• **Elite Reward Points**
+• **Exclusive LoungeKey Access**
+• **Priority Pass Advantage**
+
+_Need detailed information? Ask me!_
+
+---
+
+**Mastercard World Credit Card**
+
+**✨ Key Highl","✅ PASS","","feature_inquiry","YES","N/A","YES","12.66","test_382ca2a4"
+"2026-03-12 06:14:25","15","Product Retrieval","Retrieve Islamic products","❌ FAIL","1","What Islamic credit cards do you have?","**Visa Hasanah Gold Credit Card**
+_**** Power Your Dreams & Enliven Your Lifestyle_
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**Visa Hasanah Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benef","❌ FAIL","Intent: Expected intent 'product_info', got 'feature_inquiry'","feature_inquiry","NO","YES","YES","12.83","test_a27d8ca9"
+"2026-03-12 06:14:44","16","Product Retrieval","Retrieve products by income level","❌ FAIL","1","I earn 300k monthly. What cards can I get?","To recommend the best card for you:
+
+Do you have a preference for traditional banking services or are you interested in Shariah-compliant options like Hasanah?
+
+And what's your main plan for using this card—travelling, dining out, or for everyday shopping?","❌ FAIL","Products: None of expected products found: ['Platinum']","product_search_by_income","YES","YES","YES","17.1","test_61cd7c69"
+"2026-03-12 06:15:03","17","Comparison Correctness","Compare two specific products (cold-start)","❌ FAIL","1","Compare Visa Platinum vs JCB Platinum","Thank you for sharing that! I understand you might be interested in comparing different credit card options. At Prime Bank, we specialize in helping our customers find the best banking and credit card solutions tailored to their needs. Would you like to know more about Visa Platinum or JCB Platinum ","❌ FAIL","Intent: Expected intent 'comparison', got 'product_info'; Response type: Does not show comparison structure","product_info","NO","N/A","NO","16.51","test_c6fdef27"
+"2026-03-12 06:15:28","18","Comparison Correctness","Compare after showing products (warm state)","❌ FAIL","1","income 300k monthly, conventional, dining","To recommend the best card for you:
+
+What's your main goal for using this card—travelling, eating out, making purchases, or something else entirely?","✅ PASS","","product_search_by_income","N/A","N/A","YES","15.34","test_46f4fb57"
+"2026-03-12 06:15:28","18","Comparison Correctness","Compare after showing products (warm state)","❌ FAIL","2","compare these two","To recommend the best card for you:
+
+What will you primarily be using this card for, like travel or everyday expenses?","❌ FAIL","Intent: Expected intent 'comparison', got 'product_search_by_income'; Response type: Does not show comparison structure","product_search_by_income","NO","N/A","NO","6.74","test_46f4fb57"
+"2026-03-12 06:15:56","19","Conversation Flow","Profiling flow: vague query → profile collection → products","✅ PASS","1","I want a credit card","To recommend the best card for you:
+
+1. Do you have a preference for traditional banking services or are you interested in Islamic (Shariah-compliant/Hasanah) banking options?
+
+2. What will you primarily be using this card for, like travel or daily expenses?
+
+3. So, could you share your annual incom","✅ PASS","","product_info","N/A","N/A","YES","18.44","test_53018d69"
+"2026-03-12 06:15:56","19","Conversation Flow","Profiling flow: vague query → profile collection → products","✅ PASS","2","conventional, 300k monthly, dining","Great! Based on your profile, here are the best credit cards for you:
+
+**JCB Platinum Credit Card**
+_**** Explore the World of Privileges & Enliven Your Lifestyle_
+
+**✨ Key Highlights:**
+• **Premium Credit Limit**
+• **50-Day Interest-Free Period**
+• **Elite Reward Points**
+• **Balaka VIP Lounge**
+• ","✅ PASS","","product_info","N/A","N/A","YES","5.4","test_53018d69"
+"2026-03-12 06:17:22","20","Conversation Flow","Eligibility flow: product → age → employment → verdict","❌ FAIL","1","Am I eligible for Visa Platinum?","============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access","✅ PASS","","eligibility_check","YES","N/A","YES","12.83","test_b5f1cf8a"
+"2026-03-12 06:17:22","20","Conversation Flow","Eligibility flow: product → age → employment → verdict","❌ FAIL","2","32 years old","============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access","✅ PASS","","eligibility_check","N/A","N/A","YES","12.95","test_b5f1cf8a"
+"2026-03-12 06:17:22","20","Conversation Flow","Eligibility flow: product → age → employment → verdict","❌ FAIL","3","full time salaried","============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access","✅ PASS","","product_search_by_income","N/A","N/A","YES","13.27","test_b5f1cf8a"
+"2026-03-12 06:17:22","20","Conversation Flow","Eligibility flow: product → age → employment → verdict","❌ FAIL","4","5 years","Could you tell me more about what you're looking for?","❌ FAIL","Response type: Does not ask for eligibility information","product_search_by_income","N/A","N/A","NO","12.77","test_b5f1cf8a"
+"2026-03-12 06:17:22","20","Conversation Flow","Eligibility flow: product → age → employment → verdict","❌ FAIL","5","300k monthly","============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access","✅ PASS","","product_search_by_income","N/A","N/A","YES","12.93","test_b5f1cf8a"
+"2026-03-12 06:17:22","20","Conversation Flow","Eligibility flow: product → age → employment → verdict","❌ FAIL","6","yes I have ETIN","============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access","✅ PASS","","eligibility_check","N/A","N/A","YES","12.65","test_b5f1cf8a"
+"2026-03-12 06:17:39","21","Conversation Flow","How to apply flow: product shown → how to apply","❌ FAIL","1","Tell me about Visa Platinum","============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access","❌ FAIL","Response type: Asks for clarification instead of listing products","product_info","N/A","N/A","NO","12.8","test_5fc5c76c"
+"2026-03-12 06:17:39","21","Conversation Flow","How to apply flow: product shown → how to apply","❌ FAIL","2","How do I apply for it?","Which card would you like to know the application process for?
+
+1. **Visa Platinum Credit Card** (our recommendation)
+2. **Mastercard Platinum Credit Card**
+3. **JCB Platinum Credit Card**
+4. **Visa Hasanah Platinum Credit Card**
+
+Let me know which one!","✅ PASS","","unknown","N/A","N/A","YES","0.01","test_5fc5c76c"

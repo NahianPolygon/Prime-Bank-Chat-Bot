@@ -1,10 +1,5 @@
-"""
-Crew orchestrator — builds and runs agent chains.
-"""
-
 from crewai import Crew
 from agents import (
-    product_retriever_agent,
     eligibility_analyzer_agent,
     feature_comparator_agent,
     response_formatter_agent,
@@ -12,23 +7,37 @@ from agents import (
 )
 from agents.cardholder_agent import existing_cardholder_agent
 from agents.tasks import (
-    retrieve_products_task,
     analyze_eligibility_task,
     compare_features_task,
     format_response_task,
     recommend_alternatives_task,
     cardholder_service_task,
 )
-from pipelines.rag.search import rag_search_tool, rag_search_impl
+from pipelines.rag.search import rag_search_impl
 from pipelines.rag.feature_expansion import expand_feature_query
 from core import SessionState
 from utils.cleanup import clean_response
+from utils.ollama import ollama_chat
+
+
+def _format_products(raw: str, query: str, intent_type: str) -> str:
+    """Convert raw RAG text to clean customer-facing response."""
+    instructions = {
+        "product_info":              "Present each card with name, key features, BDT amounts. Bullet points.",
+        "feature_inquiry":           "Name cards offering the feature. For each, describe exactly how it works with specific details and numbers.",
+        "product_search_by_income":  "Show which cards the customer qualifies for. Include credit limit, annual fee, key benefits.",
+        "comparison":                "Markdown table: Credit Limit | Annual Fee | Interest-Free | Lounge | Rewards | EMI. Fill every cell from the data.",
+        "eligibility_check":         "State eligible or not, why, requirements met/missed, next steps.",
+    }
+    rule = instructions.get(intent_type, "Present the product information clearly with all features and BDT amounts.")
+    return ollama_chat(
+        system="You are a Prime Bank specialist. Use only the product data given. Include specific numbers and named features. No vague placeholders.",
+        user=f'Customer asked: "{query}"\n\nProduct data:\n{raw}\n\nTask: {rule}\n\nEnd with 2-3 "What would you like to do?" options.',
+        temperature=0.3, max_tokens=700,
+    ) or raw
 
 
 class BankChatbotCrew:
-    """
-    Orchestrates retriever, eligibility, comparison, and formatter agents.
-    """
 
     def run_agents(
         self,
@@ -38,171 +47,91 @@ class BankChatbotCrew:
         intent: dict | None = None,
         customer_profile: str = "",
     ) -> tuple[str, str | None]:
-        """
-        Build and run the right agent chain. Returns (response, retrieved_products).
-
-        ARCHITECTURAL FIX: Retrieve products directly in Python using rag_search_tool,
-        then pass raw results to agents as context. This bypasses the 1.5B model's
-        tendency to summarise product data into just names.
-        """
         intent = intent or {}
-        needs_comparison = intent_type == "comparison"
+        needs_comparison  = intent_type == "comparison"
         needs_eligibility = intent_type == "eligibility_check"
+        print(f"\n🎯 intent={intent_type}")
 
-        print(
-            f"\n🎯 intent={intent_type} | comparison={needs_comparison} "
-            f"| eligibility={needs_eligibility}"
-        )
-
-        # === CARDHOLDER SERVICE FLOW (existing cardholders) ===
+        # ── Cardholder service ───────────────────────────────────────────────
         if intent_type == "existing_cardholder":
-            print(f"🆔 Routing to cardholder service agent")
-            cardholder_agent = existing_cardholder_agent()
-            cardholder_task = cardholder_service_task(cardholder_agent, enriched_query)
-            
-            crew = Crew(
-                agents=[cardholder_agent],
-                tasks=[cardholder_task],
-                verbose=True,
-                max_iter=3,
-                memory=False,
-            )
-            
-            result = clean_response(str(crew.kickoff()))
-            return result, None  # Cardholder queries don't store retrieved_products in session
+            agent = existing_cardholder_agent()
+            task  = cardholder_service_task(agent, enriched_query)
+            result = clean_response(str(Crew(agents=[agent], tasks=[task], verbose=True, max_iter=3, memory=False).kickoff()))
+            return result, None
 
-        agent_list = []
-        task_list = []
+        # ── Retrieve products ────────────────────────────────────────────────
+        raw = ""
+        product_types = ("product_info", "comparison", "feature_inquiry", "product_search_by_income")
 
-        # --- DIRECT PYTHON CALL: Retrieve products without using retriever agent ---
-        # This ensures we get raw, complete product data instead of the 1.5B model
-        # summarizing it into just product names
-        retrieved_raw = ""
-        retrieved_clean = ""
-
-        if intent_type in ("product_info", "comparison", "feature_inquiry", "product_search_by_income"):
-            print(f"📦 Calling rag_search_tool directly (no agent summarization)")
-            
-            # For comparisons of previously shown products, use session state products
-            search_query = enriched_query
+        if intent_type in product_types:
             if intent_type == "comparison" and state.has_products():
-                print(f"  Using previously shown products for comparison")
-                retrieved_raw = state.products_text
-                retrieved_clean = clean_response(retrieved_raw) if retrieved_raw else ""
+                raw = state.products_text or ""
             else:
-                # For feature_inquiry, use feature-optimized search query
-                search_query = enriched_query
+                search_q = enriched_query
                 if intent_type == "feature_inquiry":
                     features = intent.get("specific_features", [])
                     if features:
-                        feature_optimized = expand_feature_query(
-                            features,
-                            banking_type=intent.get("banking_type"),
-                            tier=intent.get("tier")
-                        )
-                        if feature_optimized:
-                            print(f"  Feature-optimized query: {feature_optimized}")
-                            search_query = feature_optimized
-                
+                        expanded = expand_feature_query(features, banking_type=intent.get("banking_type"))
+                        if expanded:
+                            search_q = expanded
                 try:
-                    retrieved_raw = rag_search_impl(
-                        query=search_query,
+                    raw = rag_search_impl(
+                        query=search_q,
                         banking_type=intent.get("banking_type", ""),
                         tier=intent.get("tier", ""),
                         top_k=10 if needs_comparison else 6,
                         customer_income=intent.get("customer_income"),
                     )
-                    retrieved_clean = clean_response(retrieved_raw) if retrieved_raw else ""
-                    print(f"✓ Retrieved {len(retrieved_raw)} chars of raw product data")
                 except Exception as e:
-                    print(f"⚠️ Direct rag_search_tool call failed: {e}")
-                    retrieved_raw = ""
-                    retrieved_clean = ""
+                    print(f"⚠️ RAG failed: {e}")
 
-        # For eligibility, fetch requirements directly
         if needs_eligibility:
-            print(f"📦 Calling rag_search_tool for eligibility requirements")
             try:
-                retrieved_raw = rag_search_impl(
-                    query=f"{enriched_query} eligibility requirements documents",
+                raw = rag_search_impl(
+                    query=f"{enriched_query} eligibility requirements",
                     banking_type=intent.get("banking_type", ""),
                     tier=intent.get("tier", ""),
                     top_k=6,
-                    customer_income=intent.get("customer_income"),
                 )
-                retrieved_clean = clean_response(retrieved_raw) if retrieved_raw else ""
-                print(f"✓ Retrieved {len(retrieved_raw)} chars of eligibility data")
             except Exception as e:
-                print(f"⚠️ Direct rag_search_tool call for eligibility failed: {e}")
-                retrieved_raw = ""
-                retrieved_clean = ""
+                print(f"⚠️ RAG eligibility failed: {e}")
 
-        # === Build Agent Chain (WITHOUT retriever for product flows) ===
-        # For product_info, comparison, feature_query: skip retriever agent entirely
-        # These flows get the raw data passed to formatter/comparator
+        cleaned = clean_response(raw) if raw else ""
 
-        # Comparator if needed (for comparison intent)
-        comparison_task = None
+        # ── Direct LLM format for simple product display ─────────────────────
+        if intent_type in ("product_info", "feature_inquiry", "product_search_by_income"):
+            if not raw or not raw.strip():
+                return "I couldn't find matching products. Could you rephrase or tell me more about what you're looking for?", None
+            # Extract original customer question from enriched block
+            customer_q = next(
+                (l.replace("Customer Query:", "").strip().strip('"') for l in enriched_query.split("\n") if l.startswith("Customer Query:")),
+                enriched_query
+            )
+            return _format_products(raw, customer_q, intent_type), cleaned or None
+
+        # ── CrewAI for comparison / eligibility ──────────────────────────────
+        agents, tasks = [], []
+
+        comp_task = elig_task = rec_task = None
+
         if needs_comparison:
-            comparator = feature_comparator_agent()
-            comparison_task = compare_features_task(comparator, enriched_query, "")
-            agent_list.append(comparator)
-            task_list.append(comparison_task)
+            comp = feature_comparator_agent()
+            comp_task = compare_features_task(comp, enriched_query, "")
+            agents.append(comp); tasks.append(comp_task)
 
-        # Eligibility analyzer if needed
-        eligibility_task = None
-        recommender_task = None
         if needs_eligibility:
-            elig_agent = eligibility_analyzer_agent()
-            eligibility_task = analyze_eligibility_task(
-                elig_agent,
-                customer_profile=customer_profile or "No profile collected yet.",
-                product_info=enriched_query,
-            )
-            agent_list.append(elig_agent)
-            task_list.append(eligibility_task)
-            
-            # If ineligible for requested product, recommend alternatives
-            # Extract ineligibility reason from customer profile and request
-            ineligibility_reason = (
-                f"Customer requested {intent.get('tier', 'unknown')} "
-                f"{intent.get('banking_type', 'conventional')} card. "
-                f"Eligibility check will determine if profile matches requirements."
-            )
-            
-            recommender = alternative_product_recommender_agent()
-            recommender_task = recommend_alternatives_task(
-                recommender,
-                customer_profile=customer_profile or "No profile collected yet.",
-                requested_product=enriched_query,
-                ineligibility_reason=ineligibility_reason,
-                retrieved_products=retrieved_raw,  # Pass actual products from Chroma DB
-            )
-            agent_list.append(recommender)
-            task_list.append(recommender_task)
+            elig = eligibility_analyzer_agent()
+            elig_task = analyze_eligibility_task(elig, customer_profile=customer_profile or "No profile.", product_info=enriched_query)
+            agents.append(elig); tasks.append(elig_task)
 
-        # Formatter always last — receives all previous task outputs via context=
-        context_tasks = [t for t in [comparison_task, eligibility_task, recommender_task] if t]
+            rec = alternative_product_recommender_agent()
+            rec_task = recommend_alternatives_task(rec, customer_profile=customer_profile or "No profile.", requested_product=enriched_query, ineligibility_reason="", retrieved_products=raw)
+            agents.append(rec); tasks.append(rec_task)
+
         formatter = response_formatter_agent()
-        formatter_task = format_response_task(
-            formatter,
-            raw_outputs=retrieved_clean or enriched_query,
-            customer_message=enriched_query,
-        )
-        agent_list.append(formatter)
-        task_list.append(formatter_task)
+        fmt_task  = format_response_task(formatter, raw_outputs=cleaned or enriched_query, customer_message=enriched_query)
+        agents.append(formatter); tasks.append(fmt_task)
 
-        print(f"Running: {[a.role for a in agent_list]}")
-
-        crew = Crew(
-            agents=agent_list,
-            tasks=task_list,
-            verbose=True,
-            max_iter=5,
-            memory=False,
-        )
-
-        result = clean_response(str(crew.kickoff()))
-
-        # Return both the formatted response and the raw retrieved data
-        return result, retrieved_clean if retrieved_clean else None
+        print(f"CrewAI: {[a.role for a in agents]}")
+        result = clean_response(str(Crew(agents=agents, tasks=tasks, verbose=True, max_iter=5, memory=False).kickoff()))
+        return result, cleaned or None

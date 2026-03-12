@@ -1,0 +1,178 @@
+"Timestamp","Scenario #","Category","Scenario Name","Status","Turn #","User Query","Bot Response","Turn Status","Issues","Detected Intent","Intent Correct?","Entities Correct?","Response Type Correct?","Turn Time (s)","Session ID"
+"2026-03-12 14:05:07","1","Intent Classification","Detect greeting intent","✅ PASS","1","Hello!","Hello! Welcome to Warm Prime Bank. How can I assist you with your credit card or banking needs today?","✅ PASS","","greeting","YES","N/A","YES","14.39","test_7fc349ee"
+"2026-03-12 14:05:34","2","Intent Classification","Detect feature inquiry intent","✅ PASS","1","Which cards have dining benefits?","Based on the product data provided:
+
+1. **JCB Platinum Credit Card**
+   - **Dining Benefits:** The JCB Platinum Credit Card offers a Premium Dining Program, which provides exclusive dining benefits for cardholders.
+
+2. **Visa Platinum Credit Card**
+   - **Dining Benefits:** Similar to the JCB Platin","✅ PASS","","feature_inquiry","YES","YES","YES","24.68","test_e4cae551"
+"2026-03-12 14:05:49","3","Intent Classification","Detect comparison intent (cold-start)","✅ PASS","1","Compare Visa Platinum vs JCB Platinum","**📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Platinum</th>
+<th>JCB Platinum</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong>","✅ PASS","","comparison","YES","N/A","YES","13.21","test_be4afe03"
+"2026-03-12 14:06:22","4","Intent Classification","Detect income-based search intent","✅ PASS","1","I earn 300k per month. What cards am I eligible for?","Based on your monthly income of BDT 300,000, you are eligible for the following Visa and Mastercard credit cards:
+
+### **Visa Gold Credit Card**
+- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Annual Fee:** BDT 10,000 (waived on 15+ purchases)
+- **Key Benefits:**
+  -","✅ PASS","","product_search_by_income","YES","YES","YES","30.92","test_d31e1d8a"
+"2026-03-12 14:06:39","5","Intent Classification","Detect eligibility check intent","✅ PASS","1","Am I eligible for Visa Platinum Credit Card?","Warmly acknowledging, I'd be delighted to assist you with your Visa Platinum Credit Card application! Could you please share your age with me?","✅ PASS","","eligibility_check","YES","YES","YES","14.8","test_c36f8c78"
+"2026-03-12 14:07:27","6","Entity Extraction","Extract income from query (monthly)","✅ PASS","1","My monthly income is 300k","Based on your monthly income of BDT 300,000, here are the credit cards that you qualify for:
+
+### Mastercard World Credit Card
+**Credit Limit:** Not explicitly stated in the product data but typically within the range of BDT 150,000 to BDT 600,000.
+**Annual Fee:** Not specified.
+**Key Benefits:**
+- ","✅ PASS","","product_search_by_income","N/A","YES","N/A","46.3","test_68582aca"
+"2026-03-12 14:08:07","7","Entity Extraction","Extract income from query (annual)","✅ PASS","1","My annual income is 50 lakh BDT","Based on your annual income of 50 lakh BDT (BDT 5,000,000), here are the cards you qualify for:
+
+### Mastercard World Credit Card
+**Credit Limit:** Unspecified but likely within a range suitable for high-income individuals.
+**Annual Fee:** No annual fee if you make at least 15 purchases per year; ot","✅ PASS","","product_search_by_income","N/A","YES","N/A","38.33","test_28330181"
+"2026-03-12 14:08:53","8","Entity Extraction","Extract banking type (conventional)","✅ PASS","1","I want conventional banking credit cards","Based on your request for conventional banking credit cards, I will highlight the features of the Mastercard World Credit Card, as it offers a comprehensive set of benefits that align closely with traditional banking credit card expectations:
+
+### Mastercard World Credit Card
+
+#### Key Features:
+1. ","✅ PASS","","feature_inquiry","N/A","YES","N/A","43.28","test_f5fc571f"
+"2026-03-12 14:09:07","9","Entity Extraction","Extract banking type (Islamic)","✅ PASS","1","Show me Islamic credit card options","Could you tell me more about what you're looking for?","✅ PASS","","product_info","N/A","YES","N/A","12.46","test_a2bbdde1"
+"2026-03-12 14:09:55","10","Entity Extraction","Extract multiple features","✅ PASS","1","I need a card with lounge access and dining benefits","Based on your requirements for a card that offers lounge access and dining benefits, here are the relevant credit cards from the provided data:
+
+### Visa Hasanah Platinum Credit Card
+
+**Lounge Access:**
+- **Balaka VIP Lounge Access**: 
+  - Exclusive lounge entrance with VIP reception.
+  - Gourmet re","✅ PASS","","feature_inquiry","N/A","YES","N/A","46.12","test_45e59d31"
+"2026-03-12 14:10:10","11","Entity Extraction","Extract tier preference","✅ PASS","1","Show me only platinum cards","Could you tell me more about what you're looking for?","✅ PASS","","product_info","N/A","YES","N/A","12.57","test_b54ed489"
+"2026-03-12 14:10:42","12","Product Retrieval","Retrieve specific product by name","✅ PASS","1","Tell me about Visa Platinum Credit Card","### Visa Platinum Credit Card
+
+**Key Features:**
+- **Credit Limit:** 
+  - Unsecured: BDT 1,000,000
+  - Collateralized: BDT 2,500,000
+- **Interest-Free Period:** 50 days (full balance covered)
+- **Reward Points:** 1 point per BDT 50 spent
+- **Insurance:** Triple Benefit coverage up to BDT 1,000,000
+-","✅ PASS","","product_info","YES","N/A","YES","30.11","test_aa1a9cb0"
+"2026-03-12 14:11:10","13","Product Retrieval","Retrieve products by feature (dining)","✅ PASS","1","Which cards have dining benefits?","Based on the product data provided:
+
+1. **JCB Platinum Credit Card**
+   - **Dining Benefits**: The JCB Platinum Credit Card offers a Premium Dining Program that provides exclusive dining discounts and special offers at participating restaurants.
+
+2. **Visa Platinum Credit Card**
+   - **Dining Benefi","✅ PASS","","feature_inquiry","YES","N/A","YES","26.07","test_e8baa302"
+"2026-03-12 14:11:55","14","Product Retrieval","Retrieve products by feature (lounge)","✅ PASS","1","I want airport lounge access","Certainly! Here are the details for the credit cards that offer airport lounge access:
+
+### Visa Hasanah Platinum Credit Card
+
+**Balaka VIP Lounge Access**
+- **Exclusive Benefits:**
+  - Exclusive lounge entrance
+  - VIP reception and greeting
+  - Gourmet refreshments
+  - Business class facilities
+  ","✅ PASS","","feature_inquiry","YES","N/A","YES","42.9","test_8d71e2e7"
+"2026-03-12 14:12:35","15","Product Retrieval","Retrieve Islamic products","❌ FAIL","1","What Islamic credit cards do you have?","Based on the product data provided, both the Visa Hasanah Gold Credit Card and the Visa Hasanah Platinum Credit Card offer Islamic insurance through Takaful Triple Benefit. Here's a detailed description of how this feature works for each card:
+
+### Visa Hasanah Gold Credit Card
+
+**Takaful Triple Ben","❌ FAIL","Intent: Expected intent 'product_info', got 'feature_inquiry'","feature_inquiry","NO","YES","YES","38.44","test_4c6a4867"
+"2026-03-12 14:13:09","16","Product Retrieval","Retrieve products by income level","✅ PASS","1","I earn 300k monthly. What cards can I get?","Based on your monthly income of BDT 300,000, here are the credit cards that you qualify for:
+
+### Visa Platinum Credit Card
+**Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Annual Fee:** BDT 10,000 (waived on 15+ purchases)
+- **Key Benefits:**
+  - Interest-Free: 50 da","✅ PASS","","product_search_by_income","YES","YES","YES","31.53","test_7ca8da1b"
+"2026-03-12 14:13:24","17","Comparison Correctness","Compare two specific products (cold-start)","✅ PASS","1","Compare Visa Platinum vs JCB Platinum","**📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Platinum</th>
+<th>JCB Platinum</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong>","✅ PASS","","comparison","YES","N/A","YES","13.21","test_5108c833"
+"2026-03-12 14:14:28","18","Comparison Correctness","Compare after showing products (warm state)","✅ PASS","1","income 300k monthly, conventional, dining","Based on your monthly income of BDT 300,000 and considering a conventional approach, here are the credit cards that you qualify for:
+
+### JCB Platinum Credit Card
+**Credit Limit:**
+- Unsecured: BDT 1,000,000
+- Collateralized: BDT 2,500,000
+
+**Annual Fee:** Not specified in the data provided. Typical","✅ PASS","","product_search_by_income","N/A","N/A","YES","47.65","test_11545346"
+"2026-03-12 14:14:28","18","Comparison Correctness","Compare after showing products (warm state)","✅ PASS","2","compare these two","**📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>JCB Platinum</th>
+<th>Mastercard World</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>BDT 1,000,000</td>
+<td>BDT 1,000,000</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>BDT 2,500,000</td>
+<td>BDT 2,500,000</td>
+<","✅ PASS","","comparison","YES","N/A","YES","13.06","test_11545346"
+"2026-03-12 14:15:12","19","Conversation Flow","Profiling flow: vague query → profile collection → products","✅ PASS","1","I want a credit card","Hello! Welcome to Prime Bank. To better serve you, could you please let us know if you prefer conventional or Islamic (Shariah) banking services? Additionally, can you tell us about your main card usage—whether it's for travel, dining, shopping, business purposes, or something else? Lastly, might yo","✅ PASS","","product_info","N/A","N/A","YES","16.61","test_5930aee3"
+"2026-03-12 14:15:12","19","Conversation Flow","Profiling flow: vague query → profile collection → products","✅ PASS","2","conventional, 300k monthly, dining","Based on your profile, here are the best cards for you:
+
+### JCB Platinum Credit Card
+
+**Name:** JCB Platinum Credit Card  
+**Credit Limit:**
+- Unsecured: BDT 1,000,000  
+- Collateralized: BDT 2,500,000  
+
+**Key Features:**
+- **Premium Dining Program**: Year-round BOGO dining at 6 luxury restaurants","✅ PASS","","product_info","N/A","N/A","YES","23.58","test_5930aee3"
+"2026-03-12 14:15:52","20","Conversation Flow","Eligibility flow: product → age → employment → verdict","❌ FAIL","1","Am I eligible for Visa Platinum?","Warmly acknowledged! To proceed with your visa platinum credit card eligibility check, may I please know your age?","✅ PASS","","eligibility_check","YES","N/A","YES","14.56","test_edea00a1"
+"2026-03-12 14:15:52","20","Conversation Flow","Eligibility flow: product → age → employment → verdict","❌ FAIL","2","32 years old","I didn't quite catch that. To determine your eligibility, could you please share your current age in years?","✅ PASS","","eligibility_check","N/A","N/A","YES","2.62","test_edea00a1"
+"2026-03-12 14:15:52","20","Conversation Flow","Eligibility flow: product → age → employment → verdict","❌ FAIL","3","full time salaried","✓ Age: **30**
+
+Based on your Visa Platinum Credit Card application, could you please confirm your employment status? Are you salaried, self-employed, a business owner, or a student?","✅ PASS","","eligibility_check","N/A","N/A","YES","3.32","test_edea00a1"
+"2026-03-12 14:15:52","20","Conversation Flow","Eligibility flow: product → age → employment → verdict","❌ FAIL","4","5 years","I didn't quite catch that. Based on your Visa Platinum Credit Card application, could you please confirm your employment status? Are you salaried, self-employed, a business owner, or a student?","✅ PASS","","eligibility_check","N/A","N/A","YES","3.28","test_edea00a1"
+"2026-03-12 14:15:52","20","Conversation Flow","Eligibility flow: product → age → employment → verdict","❌ FAIL","5","300k monthly","Based on your Visa Platinum Credit Card application, could you please confirm your employment status? Are you currently employed as a salaried employee, self-employed, a business owner, or a student?","✅ PASS","","eligibility_check","N/A","N/A","YES","3.47","test_edea00a1"
+"2026-03-12 14:15:52","20","Conversation Flow","Eligibility flow: product → age → employment → verdict","❌ FAIL","6","yes I have ETIN","✓ Employment: **Salaried**
+
+Have you been employed in your current role for at least one year? This information will help us assess your eligibility for the Visa Platinum Credit Card.","❌ FAIL","Response type: Does not provide eligibility verdict","eligibility_check","N/A","N/A","NO","3.24","test_edea00a1"
+"2026-03-12 14:17:03","21","Conversation Flow","How to apply flow: product shown → how to apply","❌ FAIL","1","Tell me about Visa Platinum","## Visa Platinum Credit Card
+
+**Key Features:**
+- **Credit Limit:** 
+  - Unsecured: BDT 1,000,000
+  - Collateralized: BDT 2,500,000
+- **Interest-Free Period:** 50 days (full balance covered)
+- **Reward Points:** 1 point per BDT 50 spent
+- **Insurance:** Triple Benefit coverage up to BDT 10 lac
+- **T","✅ PASS","","product_info","N/A","N/A","YES","23.74","test_4e6f9bf3"
+"2026-03-12 14:17:03","21","Conversation Flow","How to apply flow: product shown → how to apply","❌ FAIL","2","How do I apply for it?","### Visa Platinum Credit Card
+- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Interest-Free Period:** 50 days
+- **Reward Points:** 1 point per BDT 50 spent
+- **Insurance:** Triple Benefit coverage (BDT 10 lac max)
+- **Travel Privileges:** LoungeKey + Balaka VIP + A","❌ FAIL","Response type: Does not provide application information","product_info","N/A","N/A","NO","44.02","test_4e6f9bf3"

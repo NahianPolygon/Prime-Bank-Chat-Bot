@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Prime Bank Chatbot — Test Report</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f6f9; color: #333; }
+.header { background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 32px; text-align: center; }
+.header h1 { font-size: 28px; margin-bottom: 8px; }
+.header p { opacity: 0.9; font-size: 14px; }
+.summary { display: flex; gap: 16px; padding: 24px; flex-wrap: wrap; justify-content: center; }
+.stat { background: white; border-radius: 12px; padding: 20px 32px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); min-width: 140px; }
+.stat .num { font-size: 36px; font-weight: 700; }
+.stat .label { font-size: 13px; color: #888; margin-top: 4px; }
+.num.green { color: #28a745; }
+.num.red { color: #dc3545; }
+.num.blue { color: #667eea; }
+.main { max-width: 1100px; margin: 0 auto; padding: 24px; }
+.category { margin-bottom: 32px; }
+.category h2 { font-size: 18px; margin-bottom: 12px; color: #444; display: flex; align-items: center; gap: 8px; }
+.cat-score { font-size: 13px; color: #888; font-weight: normal; }
+.scenario { background: white; border-radius: 10px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+.scenario.fail { border-left: 4px solid #dc3545; }
+.scenario.pass { border-left: 4px solid #28a745; }
+.scenario-header { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #fafafa; border-bottom: 1px solid #eee; flex-wrap: wrap; }
+.scenario-name { font-weight: 600; flex: 1; }
+.session-id { font-size: 11px; color: #aaa; }
+.badge { padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.badge-pass { background: #d4edda; color: #155724; }
+.badge-fail { background: #f8d7da; color: #721c24; }
+.turns { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; }
+.turn { border-radius: 8px; padding: 10px 12px; }
+.turn-pass { background: #f8fff9; border: 1px solid #d4edda; }
+.turn-fail { background: #fff8f8; border: 1px solid #f8d7da; }
+.turn-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; font-size: 13px; flex-wrap: wrap; }
+.turn-header strong { color: #444; }
+.turn-header em { color: #888; font-size: 12px; }
+.elapsed { font-size: 11px; color: #aaa; margin-left: auto; }
+.t-pass { color: #28a745; font-weight: 600; font-size: 12px; }
+.t-fail { color: #dc3545; font-weight: 600; font-size: 12px; }
+.msg { font-size: 13px; margin: 3px 0; line-height: 1.5; }
+.user-msg { color: #555; }
+.bot-msg { color: #333; }
+.issues { list-style: none; margin-top: 6px; padding: 6px 10px; background: #fff3cd; border-radius: 6px; }
+.issues li { font-size: 12px; color: #856404; padding: 2px 0; }
+</style>
+</head>
+<body>
+<div class="header">
+    <h1>🏦 Prime Bank Chatbot — Test Report</h1>
+    <p>Generated: 2026-03-12 05:31:01 &nbsp;|&nbsp; 75 scenarios tested</p>
+</div>
+<div class="summary">
+    <div class="stat"><div class="num blue">75</div><div class="label">Total Tests</div></div>
+    <div class="stat"><div class="num green">17</div><div class="label">Passed</div></div>
+    <div class="stat"><div class="num red">58</div><div class="label">Failed</div></div>
+    <div class="stat"><div class="num red">22%</div><div class="label">Pass Rate</div></div>
+</div>
+<div class="main">
+<div class="category"><h2>❌ Greetings &amp; Small Talk <span class="cat-score">1/4</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Simple greeting</span><span class="session-id">Session: test_9e53bb9e</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">12.92s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Hello!</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Hello there! Welcome to Prime Bank. I'm here to assist you with any banking or credit card needs you might have. How can I help you today?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'hi'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">How are you</span><span class="session-id">Session: test_c2a2ad74</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">12.64s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> How are you doing today?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Hello there! I'm doing great, thanks for asking. How can Prime Bank assist you with your banking or credit card needs today?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'help'</li></ul>
+                </div></div></div><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Off-topic question (weather)</span><span class="session-id">Session: test_ccc81622</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">13.57s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> What's the weather like in Dhaka today?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Hello! I hope you're having a great day. While I can't check the current weather in Dhaka, I'd be happy to assist you with any banking or credit card inquiries. Is there anything specific about your Prime Bank account you need help with?</div>
+                    
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Off-topic question (food)</span><span class="session-id">Session: test_de20e50d</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">13.29s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> What's a good recipe for biryani?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> That sounds delicious! By the way, if you need any help with your finances or want to learn more about our banking services that could save you money, feel free to ask.</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'prime bank'</li><li>⚠ Missing expected: 'credit card'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Vague / General Queries <span class="cat-score">0/3</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Generic credit card request</span><span class="session-id">Session: test_02fb5d8d</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">14.01s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I want a credit card</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Thank you for reaching out! I'm glad you're thinking about getting a credit card. At Prime Bank, we offer a variety of credit card options tailored to different needs and preferences. How can I assist you in finding the right credit card or guide you through the application process?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'banking'</li><li>⚠ Missing expected: 'income'</li><li>⚠ Missing expected: 'use'</li><li>⚠ Missing expected: 'conventional'</li><li>⚠ Missing expected: 'islamic'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Best card for me</span><span class="session-id">Session: test_87ad790a</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">10.89s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Which card is best for me?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Could you tell me more about what you're looking for?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'income'</li><li>⚠ Missing expected: 'use'</li><li>⚠ Missing expected: 'prefer'</li><li>⚠ Missing expected: 'banking'</li><li>⚠ Missing expected: 'help'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Vague then profile answers</span><span class="session-id">Session: test_470271a3</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">10.87s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I need a credit card</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Could you tell me more about what you're looking for?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'banking'</li><li>⚠ Missing expected: 'income'</li><li>⚠ Missing expected: 'use'</li></ul>
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 2</strong>
+                        <em>Turn 2</em>
+                        <span class="elapsed">35.19s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> monthly income is 300k, i want conventional, use case is dining</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Thought: I now know the final answer based on the products found and their eligibility requirements.
+
+Action: No further action needed as all required information has been gathered.</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'platinum'</li><li>⚠ Missing expected: 'credit card'</li><li>⚠ Missing expected: 'highlights'</li><li>⚠ Missing expected: 'dining'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Specific Product Queries <span class="cat-score">4/5</span></h2><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Ask about Visa Gold (cold-start)</span><span class="session-id">Session: test_f8296f29</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.43s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Tell me about the Visa Gold Credit Card</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.
+
+---]
+## What is Visa Gold Credit Card?
+
+[Why Visa Gold?]
+...</div>
+                    
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Ask about Visa Platinum (cold-start)</span><span class="session-id">Session: test_9f1fbb3e</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.6s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> What are the features of Visa Platinum Credit Card?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **JCB Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**Visa Hasanah Platinum Credit Card**
+
+**✨ Key Highlights:**
+• **Premium Credit Limit**
+• **Elite Reward Points**
+• **World-Class Travel Access**
+• **Premium Dining Benefits**
+• **0% Interest Installment**
+
+_Need detailed information? Ask me!_
+
+---
+
+**What would you like to do?**
+• Compare these cards
+• Check eligibility
+• Get full details about a specific...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'visa platinum'</li></ul>
+                </div></div></div><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Ask about JCB Gold</span><span class="session-id">Session: test_2844a109</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.18s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Tell me about JCB Gold Credit Card</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: JCB Gold Credit Card
+============================================================
+
+[JCB Gold delivers premium credit with meaningful lifestyle benefits. Featuring 50-day interest-free period, exclusive VIP lounge access, year-round dining discounts, and comprehensive insurance—it's perfect for customers seeking premium JCB benefits with accessible pricing.
+
+---]
+## What is JCB Gold Credit Card?
+
+[Why JCB Gold?]
+Why JCB Gold?
+
+...</div>
+                    
+                </div></div></div><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Ask about JCB Platinum</span><span class="session-id">Session: test_a145fbc4</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.24s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> What is the JCB Platinum Credit Card?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: JCB Platinum Credit Card
+============================================================
+
+[JCB Platinum delivers premium credit with exclusive lifestyle privileges. Featuring Balaka VIP lounge access, year-round BOGO at premium restaurants, 50-day interest-free period, and comprehensive insurance—it's the ultimate premium JCB experience.
+
+---]
+## What is JCB Platinum Credit Card?
+
+[Why JCB Platinum?]
+Why JCB Platinum?
+
+[Overview]...</div>
+                    
+                </div></div></div><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Ask about Mastercard Platinum</span><span class="session-id">Session: test_4c713597</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.48s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Tell me about Mastercard Platinum Credit Card</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Mastercard Platinum Credit Card
+============================================================
+
+[Why Mastercard Platinum?]
+Why Mastercard Platinum?
+
+[Mastercard Platinum combines premium global access with lifestyle privileges. With LoungeKey + Priority Pass, exclusive Balaka VIP with companion, year-round BOGO at premium restaurants, and comprehensive insurance—it's elite credit perfected.
+
+---]
+## What is Mastercard Platinum?
+...</div>
+                    
+                </div></div></div></div><div class="category"><h2>❌ Islamic / Conventional Banking <span class="cat-score">1/3</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Ask for Islamic banking options</span><span class="session-id">Session: test_ccda42fd</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">15.0s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> What Islamic banking credit card options do you have?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+What will you mainly use this card for—travelling, dining out, or making everyday purchases?
+
+And so, could you tell me your annual income in bdt?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'islamic'</li><li>⚠ Missing expected: 'shariah'</li><li>⚠ Missing expected: 'hasanah'</li><li>⚠ Missing expected: 'credit card'</li></ul>
+                </div></div></div><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Ask for conventional banking cards</span><span class="session-id">Session: test_002a2b96</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">10.96s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Show me conventional banking credit cards</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.
+
+---]
+## What is Visa Gold Credit Card?
+
+[What is Visa Gol...</div>
+                    
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Islamic card with income</span><span class="session-id">Session: test_e9649729</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">12.88s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I want an Islamic credit card, my income is 200k monthly</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Thank you for reaching out! To help us determine your eligibility, could I please know your age?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'islamic'</li><li>⚠ Missing expected: 'shariah'</li><li>⚠ Missing expected: 'hasanah'</li><li>⚠ Missing expected: 'credit card'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Feature Queries <span class="cat-score">3/8</span></h2><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Cards with lounge access</span><span class="session-id">Session: test_f4770a79</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.49s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Which cards offer airport lounge access?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance—it's the ultimate premium credit experience.
+
+---]
+## What is Visa Platinum Credit Card?
+
+[Why Vis...</div>
+                    
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Cards with dining benefits</span><span class="session-id">Session: test_931a2340</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">17.21s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> What credit cards have dining benefits or BOGO offers?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+1. Do you have a preference for traditional banking or are you interested in Shariah-compliant Hasanah banking options?
+
+2. What will you primarily use this card for, like travel, dining out, or everyday shopping?
+
+3. What's your annual income in BDT?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'credit card'</li></ul>
+                </div></div></div><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Cards with travel benefits</span><span class="session-id">Session: test_4ecd9346</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.47s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I travel internationally a lot, which card is best for me?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **📊 PRODUCT COMPARISON**
+&lt;table&gt;
+&lt;tr&gt;
+&lt;th&gt;Aspect&lt;/th&gt;
+&lt;th&gt;Visa Platinum&lt;/th&gt;
+&lt;th&gt;JCB Gold&lt;/th&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Unsecured Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Collateral Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Interest-Free&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Reward Points&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Dining Benefits&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;BOGO dining&lt;/td&gt;...</div>
+                    
+                </div></div></div><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Cards with rewards points</span><span class="session-id">Session: test_faae9782</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.09s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Which card gives the most reward points?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.
+
+---]
+## What is Visa Gold Credit Card?
+
+[What is Visa Gol...</div>
+                    
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Cards with highest credit limit</span><span class="session-id">Session: test_5a34775d</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">16.86s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Which card has the highest credit limit?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+1. So, are you interested in traditional banking services or do you prefer Shariah-compliant options like Hasanah?
+
+2. What will you primarily be using this card for—travel, dining out, everyday shopping, or perhaps business expenses?
+
+3. What's your annual income in BDT?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'limit'</li><li>⚠ Missing expected: 'credit card'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Annual fee information</span><span class="session-id">Session: test_7d77d74c</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.41s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> What are the annual fees for credit cards?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **Mastercard World Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**Visa Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**What would you like to do?**
+• Compare these cards
+• Check eligibility
+• Get full details about a specific card</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'annual fee'</li><li>⚠ Missing expected: 'bdt'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">EMI / installment options</span><span class="session-id">Session: test_da91eecc</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">16.82s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Do any cards offer EMI or installment payment options?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+1. Are you interested in traditional banking services or would you prefer a Shariah-compliant banking option like Hasanah?
+
+2. What will you primarily use this card for, like travel, dining out, or everyday shopping?
+
+3. What's your annual income in BDT?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'emi'</li><li>⚠ Missing expected: 'installment'</li><li>⚠ Missing expected: 'credit card'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Interest-free period</span><span class="session-id">Session: test_1b94d52e</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">16.7s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> What is the interest-free period on credit cards?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+1. Are you interested in traditional banking services or do you prefer Shariah-compliant Hasaanah banking?
+
+2. What will you primarily use this card for, like travel, dining out, or everyday shopping?
+
+3. So, could you tell me your annual income in BDT?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'credit card'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Income-Based Search <span class="cat-score">1/4</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Cards for 50k monthly income</span><span class="session-id">Session: test_52e92caa</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">13.89s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> What credit cards can I get with 50k monthly salary?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+Do you have a preference for traditional banking services or are you interested in Islamic (Shariah-compliant/Hasanah) banking options?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'credit card'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Cards for 300k monthly income</span><span class="session-id">Session: test_79cb04d2</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">13.74s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I earn 300,000 BDT per month. What cards am I eligible for?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+Do you have a preference for traditional banking services or are you interested in Islamic (Shariah-compliant/Hasanah) banking options?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'credit card'</li><li>⚠ Missing expected: 'platinum'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Cards for 5 lakh annual income</span><span class="session-id">Session: test_1cd29bb2</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">15.15s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> My annual income is 5 lakh BDT. Which cards suit me?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+Are you interested in traditional banking services or would you prefer to explore Shariah-compliant options?
+
+And what will you primarily be using this card for, like everyday expenses or business trips?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'credit card'</li></ul>
+                </div></div></div><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Eligibility matching: income + feature</span><span class="session-id">Session: test_e9fd8bdd</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.52s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I earn 300k per month and want lounge access. What cards match?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.
+
+---]
+## What is Visa Gold Credit Card?
+
+[What is Visa Gol...</div>
+                    
+                </div></div></div></div><div class="category"><h2>❌ Comparison (Cold-Start) <span class="cat-score">2/3</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Compare Visa Platinum vs JCB Platinum (cold-start)</span><span class="session-id">Session: test_a869aedb</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.84s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Compare Visa Platinum Credit Card vs JCB Platinum Credit Card</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **📊 PRODUCT COMPARISON**
+&lt;table&gt;
+&lt;tr&gt;
+&lt;th&gt;Aspect&lt;/th&gt;
+&lt;th&gt;Visa Platinum&lt;/th&gt;
+&lt;th&gt;JCB Platinum&lt;/th&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Unsecured Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Collateral Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Interest-Free&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Reward Points&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Dining Benefits&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;BOGO dining&lt;...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'credit limit'</li></ul>
+                </div></div></div><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Compare Visa Gold vs JCB Gold (cold-start)</span><span class="session-id">Session: test_db68679b</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.73s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Which is better: Visa Gold or JCB Gold?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **📊 PRODUCT COMPARISON**
+&lt;table&gt;
+&lt;tr&gt;
+&lt;th&gt;Aspect&lt;/th&gt;
+&lt;th&gt;Visa Gold&lt;/th&gt;
+&lt;th&gt;JCB Gold&lt;/th&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Unsecured Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Collateral Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Interest-Free&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Reward Points&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Dining Benefits&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;BOGO dining&lt;/td&gt;
+&lt;td...</div>
+                    
+                </div></div></div><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Compare conventional vs Islamic (cold-start)</span><span class="session-id">Session: test_e649ab27</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.74s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Compare conventional and Islamic credit cards</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **📊 PRODUCT COMPARISON**
+&lt;table&gt;
+&lt;tr&gt;
+&lt;th&gt;Aspect&lt;/th&gt;
+&lt;th&gt;Visa Gold&lt;/th&gt;
+&lt;th&gt;JCB Gold&lt;/th&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Unsecured Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Collateral Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Interest-Free&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Reward Points&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Dining Benefits&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;BOGO dining&lt;/td&gt;
+&lt;td...</div>
+                    
+                </div></div></div></div><div class="category"><h2>❌ Comparison (Warm State) <span class="cat-score">0/1</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Product discovery then compare</span><span class="session-id">Session: test_51986e10</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">53.65s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> my income is 300k monthly, conventional, dining</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Cards matching customer's feature request:
+
+1. **Visa Platinum Credit Card**
+   - Minimum Monthly Income Requirement: BDT 30,000 (BDT 360,000 annual)
+   - Income Gap: BDT 324,000
+
+2. **Mastercard World Credit Card**
+   - Minimum Monthly Income Requirement: BDT 30,000 (BDT 360,000 annual)
+   - Income Gap: BDT 324,000
+
+3. **JCB Platinum Credit Card**
+   - Minimum Monthly Income Requirement: BDT 50,000 (BDT 600,000 annual)
+   - Income Gap: BDT 160,000
+
+The customer can consider applying for the Vis...</div>
+                    
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 2</strong>
+                        <em>Turn 2</em>
+                        <span class="elapsed">12.91s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> compare these two cards</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **📊 PRODUCT COMPARISON**
+&lt;table&gt;
+&lt;tr&gt;
+&lt;th&gt;Aspect&lt;/th&gt;
+&lt;th&gt;Visa Platinum&lt;/th&gt;
+&lt;th&gt;JCB Platinum&lt;/th&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Unsecured Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Collateral Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Interest-Free&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Reward Points&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Dining Benefits&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;BOGO dining&lt;...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'credit limit'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ How to Apply (Cold-Start) <span class="cat-score">0/3</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">How to apply for Visa Platinum (cold-start)</span><span class="session-id">Session: test_1e0ae0ff</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">0.33s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> How do I apply for Visa Platinum Credit Card?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **How to Apply for Visa Platinum Credit Card**
+
+How to Apply?]
+### Required Documents
+
+1. **Identity &amp; Address Proof**
+   - NID/Passport (attested copy)
+   - Driving license (if available)
+   - Utility bill (&lt;2 months)
+   - Permanent address certificate
+
+2. **Income Proof**
+   - Latest 3 months salary slip + employment letter (salaried)
+   - Latest ITR + business registration (self-employed)
+   - 3-year trade license + audited financials (business)
+
+3. **Financial Documents**
+   - Valid E-TIN ce...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'step'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">How to apply for JCB Gold (cold-start)</span><span class="session-id">Session: test_d9d8231d</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">0.64s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> What is the application process for JCB Gold Credit Card?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **How to Apply for Jcb Gold Credit Card**
+
+How to Apply?]
+### Required Documents
+
+1. **Identity &amp; Address Proof**
+   - NID/Passport (attested copy)
+   - Driving license (if available)
+   - Utility bill (&lt;2 months old)
+   - Permanent address certificate
+
+2. **Income Proof**
+   - **Salaried:** Latest 3 months salary slip + employment letter
+   - **Self-Employed:** Latest ITR + business registration
+   - **Business:** 3-year trade license + audited financials
+
+3. **Financial Documents**
+   - Valid ...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'step'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">How to apply with no product named</span><span class="session-id">Session: test_d1e2ba77</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">0.01s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> How do I apply for a credit card?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> I'd be happy to help with the application process! Which card would you like to know about? (e.g., Visa Platinum, JCB Gold, Mastercard World)</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'credit card'</li><li>⚠ Missing expected: 'apply'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ How to Apply (Warm State) <span class="cat-score">0/1</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Product discovery then apply</span><span class="session-id">Session: test_82645812</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">43.08s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> my income is 300k monthly, conventional, dining</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Cards matching customer's feature request:
+
+- **JCB Platinum Credit Card**
+  - Product Name: JCB Platinum Credit Card
+  - Feature: Premium Dining Program (Year-Round BOGO Dining)
+  - Minimum Monthly Income Requirement: BDT 30,000
+  - Income Gap: BDT 270,000/month
+
+- **Visa Platinum Credit Card**
+  - Product Name: Visa Platinum Credit Card
+  - Feature: Premium Dining Program (Year-Round BOGO)
+  - Minimum Monthly Income Requirement: BDT 35,000
+  - Income Gap: BDT 265,000/month
+
+- **Mastercard Plat...</div>
+                    
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 2</strong>
+                        <em>Turn 2</em>
+                        <span class="elapsed">0.01s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> how do I apply for it?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> I'd be happy to help with the application process! Which card would you like to know about? (e.g., Visa Platinum, JCB Gold, Mastercard World)</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'apply'</li><li>⚠ Missing expected: 'document'</li><li>⚠ Missing expected: 'step'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Eligibility Check (Cold-Start) <span class="cat-score">0/2</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Eligibility for Visa Platinum (cold-start, full flow)</span><span class="session-id">Session: test_10c42d69</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.51s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Am I eligible for Visa Platinum Credit Card?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance—it's the ultimate premium credit experience.
+
+---]
+## What is Visa Platinum Credit Card?
+
+[Why Vis...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'eligibility'</li></ul>
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 2</strong>
+                        <em>Turn 2</em>
+                        <span class="elapsed">17.79s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I am 32 years old</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance—it's the ultimate premium credit experience.
+
+---]
+## What is Visa Platinum Credit Card?
+
+[Why Vis...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'employment'</li></ul>
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 3</strong>
+                        <em>Turn 3</em>
+                        <span class="elapsed">23.69s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I am a full time salaried employee</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Thank you for reaching out about the Visa Platinum Credit Card! Could you please let me know your age so I can assist you better?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'tenure'</li><li>⚠ Missing expected: '✓'</li><li>⚠ Missing expected: 'employment'</li></ul>
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 4</strong>
+                        <em>Turn 4</em>
+                        <span class="elapsed">3.16s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I have been working for 5 years</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> I didn't quite catch that. Could you please tell me your age so I can check if you meet the eligibility requirements for the Visa Platinum Credit Card?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'income'</li><li>⚠ Missing expected: '✓'</li><li>⚠ Missing expected: 'tenure'</li></ul>
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 5</strong>
+                        <em>Turn 5</em>
+                        <span class="elapsed">3.41s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> My monthly income is 300k</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Could you please share your age with me so I can verify if it meets the eligibility criteria for the Visa Platinum Credit Card?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'etin'</li><li>⚠ Missing expected: '✓'</li><li>⚠ Missing expected: 'income'</li></ul>
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 6</strong>
+                        <em>Turn 6</em>
+                        <span class="elapsed">3.41s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Yes I have an E-TIN</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Could you please tell me your age so I can check if you meet the eligibility requirements for the Visa Platinum Credit Card?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'eligible'</li><li>⚠ Missing expected: '✓'</li><li>⚠ Missing expected: 'e-tin'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Eligibility for generic card (no product named)</span><span class="session-id">Session: test_3c3bf89b</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">13.41s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Am I eligible for a credit card?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+By the way, do you have a preference for conventional banking or Islamic (Shariah-compliant/Hasanah) banking options?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'age'</li><li>⚠ Missing expected: 'eligibility'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Eligibility Check (Warm State) <span class="cat-score">0/1</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Product shown then eligibility check</span><span class="session-id">Session: test_5b42a41a</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.25s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> tell me about Visa Platinum Credit Card</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance—it's the ultimate premium credit experience.
+
+---]
+## What is Visa Platinum Credit Card?
+
+[Why Vis...</div>
+                    
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 2</strong>
+                        <em>Turn 2</em>
+                        <span class="elapsed">17.77s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> am I eligible for it?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance—it's the ultimate premium credit experience.
+
+---]
+## What is Visa Platinum Credit Card?
+
+[Why Vis...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'eligibility'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Full Sequential Flow <span class="cat-score">0/1</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Full sequential: vague → profile → compare → eligibility → apply</span><span class="session-id">Session: test_06b8df09</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Step 1: Vague query triggers profiling</em>
+                        <span class="elapsed">13.98s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I want a credit card</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Thank you for reaching out! I'm glad you're considering our credit card options. At Prime Bank, we have a variety of credit cards designed to meet different needs and preferences. How can I assist you in finding the right credit card that suits your financial goals?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'banking'</li><li>⚠ Missing expected: 'income'</li><li>⚠ Missing expected: 'use'</li></ul>
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 2</strong>
+                        <em>Step 2: Profile answers → product display</em>
+                        <span class="elapsed">53.45s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> monthly income 300k, conventional, dining</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Cards matching customer's feature request:
+
+1. **Visa Platinum Credit Card**
+   - Product Features: Dining (Year-round BOGO at luxury restaurants)
+   - Minimum Monthly Income Requirement: BDT 25,000
+   - Income Gap: BDT 300,000 - BDT 25,000 = BDT 275,000/month
+
+2. **Mastercard World Credit Card**
+   - Product Features: Dining (Year-round BOGO at 6 luxury restaurants)
+   - Minimum Monthly Income Requirement: BDT 10,000
+   - Income Gap: BDT 300,000 - BDT 10,000 = BDT 290,000/month
+
+3. **Mastercard...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'highlights'</li></ul>
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 3</strong>
+                        <em>Step 3: Compare shown products</em>
+                        <span class="elapsed">14.32s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> compare these two</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **📊 PRODUCT COMPARISON**
+&lt;table&gt;
+&lt;tr&gt;
+&lt;th&gt;Aspect&lt;/th&gt;
+&lt;th&gt;Visa Platinum&lt;/th&gt;
+&lt;th&gt;JCB Gold&lt;/th&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Unsecured Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Collateral Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Interest-Free&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Reward Points&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Dining Benefits&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;BOGO dining&lt;/td&gt;...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'credit limit'</li></ul>
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 4</strong>
+                        <em>Step 4: Eligibility check</em>
+                        <span class="elapsed">15.23s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> am I eligible for the first one?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Thank you for reaching out! To proceed with your inquiry about the Visa Platinum Credit Card, may I please have your age?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'eligibility'</li></ul>
+                </div>
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 5</strong>
+                        <em>Step 5: Eligibility - age</em>
+                        <span class="elapsed">1.97s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> 32</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ✓ Age: **32**
+
+Great, thank you for providing your age. Could you also let me know your current employment type, please?</div>
+                    
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 6</strong>
+                        <em>Step 6: Eligibility - employment</em>
+                        <span class="elapsed">2.04s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> salaried full time</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ✓ Employment: **salaried**
+
+Great! Thank you for that information. Could you please let me know how long you've been in your current job?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'tenure'</li></ul>
+                </div>
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 7</strong>
+                        <em>Step 7: Eligibility - tenure</em>
+                        <span class="elapsed">1.97s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> 7 years</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ✓ Tenure: **7 years**
+
+Could you please provide your monthly income? This will help us determine your eligibility for the Visa Platinum Credit Card.</div>
+                    
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 8</strong>
+                        <em>Step 8: Eligibility - income</em>
+                        <span class="elapsed">3.14s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> 300k per month</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ✓ Income: **BDT 300,000/month**
+
+Hi there! Just to help us better understand your financial situation, do you have an E-TIN (Employer’s Tax Identification Number)? This is important because it helps verify your employment details and ensures we can process your application smoothly. Thank you for your cooperation!</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'etin'</li></ul>
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 9</strong>
+                        <em>Step 9: Eligibility - ETIN → verdict</em>
+                        <span class="elapsed">52.99s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> yes I have ETIN</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> I'm glad to inform you that based on your profile, **Visa Platinum Credit Card** is a perfect fit for you! With a monthly income of BDT 300,000 and an E-TIN confirming your employment details, you meet the eligibility criteria. Here’s what you can expect from this card:
+
+- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Interest-Free Period:** Enjoy 50 days of interest-free spending
+- **Reward Points:** Earn 1 point for every BDT 50 spent
+- **Insurance Coverage:*...</div>
+                    <ul class='issues'><li>⚠ Missing expected: '✓'</li></ul>
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 10</strong>
+                        <em>Step 10: How to apply</em>
+                        <span class="elapsed">0.1s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> how do I apply for it?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **How to Apply for Visa Platinum Credit Card**
+
+How to Apply?]
+### Required Documents
+
+1. **Identity &amp; Address Proof**
+   - NID/Passport (attested copy)
+   - Driving license (if available)
+   - Utility bill (&lt;2 months)
+   - Permanent address certificate
+
+2. **Income Proof**
+   - Latest 3 months salary slip + employment letter (salaried)
+   - Latest ITR + business registration (self-employed)
+   - 3-year trade license + audited financials (business)
+
+3. **Financial Documents**
+   - Valid E-TIN ce...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'step'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Numeric Selection <span class="cat-score">0/1</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Numeric selection after product display</span><span class="session-id">Session: test_8f6edb5a</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">120.0s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> monthly income 300k, conventional, dining</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> </div>
+                    <ul class='issues'><li>⚠ Request error: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)</li></ul>
+                </div>
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 2</strong>
+                        <em>Turn 2</em>
+                        <span class="elapsed">31.13s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> 1</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Hello! I'm glad you're interested in our credit card services. To help determine your eligibility, could you please share your age with me?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'apply'</li><li>⚠ Missing expected: 'document'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Existing Cardholder <span class="cat-score">1/3</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Lost card report</span><span class="session-id">Session: test_09727b78</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">13.09s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> My credit card is lost, what should I do?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+Are you interested in traditional banking services or are you considering Shariah-compliant Hasanah banking options?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'contact'</li><li>⚠ Missing expected: 'lost'</li></ul>
+                </div></div></div><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Card activation query</span><span class="session-id">Session: test_39d82e28</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.19s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> How do I activate my new credit card?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.
+
+---]
+## What is Visa Gold Credit Card?
+
+[What is Visa Gol...</div>
+                    
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Check bill query</span><span class="session-id">Session: test_b0f8fbc5</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">13.09s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> How can I check my credit card bill?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+Are you interested in traditional banking services or do you prefer Shariah-compliant Hasaanah banking?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'bill'</li><li>⚠ Missing expected: 'statement'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Edge Cases <span class="cat-score">2/4</span></h2><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Very short query</span><span class="session-id">Session: test_a7c0850e</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">13.94s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> card</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> I see you mentioned &quot;card,&quot; and I'd be happy to assist you! Whether it's about your credit card or any other banking needs, feel free to share more details so I can provide the best support for you. How can I help you with your banking or credit card inquiries today?</div>
+                    
+                </div></div></div><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Misspelled product name</span><span class="session-id">Session: test_c2f6ab33</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.23s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Tell me about Viza Platinium card</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance—it's the ultimate premium credit experience.
+
+---]
+## What is Visa Platinum Credit Card?
+
+[Why Vis...</div>
+                    
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Mixed language query (English + Bengali intent)</span><span class="session-id">Session: test_46a36657</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.33s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> ami credit card nite chai conventional</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **Visa Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**Mastercard Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**What would you like to do?**
+• Compare these cards
+• Check eligibility
+• Get full details about a specific card</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'conventional'</li><li>⚠ Missing expected: 'banking'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Multiple off-topic messages</span><span class="session-id">Session: test_27b57b37</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">13.25s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> What is the capital of France?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Hello there! I'm delighted to assist you today. The capital of France is Paris, and if you need any help with banking or credit cards, feel free to ask—Prime Bank is here to support you!</div>
+                    <ul class='issues'><li>⚠ Found forbidden: 'paris'</li><li>⚠ Found forbidden: 'france'</li></ul>
+                </div>
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 2</strong>
+                        <em>Turn 2</em>
+                        <span class="elapsed">13.96s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Tell me a joke</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Sure, here's one: Why don't scientists trust atoms? Because they make up everything! 😄 At Prime Bank, we're here to help you make the most of your finances too. How can I assist you with your banking or credit cards today?</div>
+                    
+                </div></div></div></div><div class="category"><h2>❌ Tier Preference <span class="cat-score">0/3</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Platinum card only preference</span><span class="session-id">Session: test_bca491e2</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.27s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Show me only platinum credit cards</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance—it's the ultimate premium credit experience.
+
+---]
+## What is Visa Platinum Credit Card?
+
+[Why Vis...</div>
+                    <ul class='issues'><li>⚠ Found forbidden: 'gold'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Gold card preference with income</span><span class="session-id">Session: test_350e9c44</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.23s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I want gold tier cards for 150k monthly income</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.
+
+---]
+## What is Visa Gold Credit Card?
+
+[Why Visa Gold?]
+...</div>
+                    <ul class='issues'><li>⚠ Missing expected: '150000'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Platinum + feature preference</span><span class="session-id">Session: test_4d67c170</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.37s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Platinum cards with lounge access</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **JCB Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**Visa Hasanah Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**What would you like to do?**
+• Compare these cards
+• Check eligibility
+• Get full details about a specific card</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'lounge'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Brand Preference <span class="cat-score">1/4</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Visa brand only</span><span class="session-id">Session: test_3a03da87</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.46s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I prefer Visa. What options do you have?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **📊 PRODUCT COMPARISON**
+&lt;table&gt;
+&lt;tr&gt;
+&lt;th&gt;Aspect&lt;/th&gt;
+&lt;th&gt;Visa Platinum&lt;/th&gt;
+&lt;th&gt;JCB Gold&lt;/th&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Unsecured Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Collateral Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Interest-Free&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Reward Points&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Dining Benefits&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;BOGO dining&lt;/td&gt;...</div>
+                    <ul class='issues'><li>⚠ Found forbidden: 'jcb'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Mastercard brand preference</span><span class="session-id">Session: test_3ea5a05e</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.53s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Show me Mastercard credit cards</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **Mastercard Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**JCB Gold Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**What would you like to do?**
+• Compare these cards
+• Check eligibility
+• Get full details about a specific card</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'world'</li><li>⚠ Found forbidden: 'jcb'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">JCB brand preference</span><span class="session-id">Session: test_e2f6fd39</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.15s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> What JCB cards do you offer?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: JCB Gold Credit Card
+============================================================
+
+[JCB Gold delivers premium credit with meaningful lifestyle benefits. Featuring 50-day interest-free period, exclusive VIP lounge access, year-round dining discounts, and comprehensive insurance—it's perfect for customers seeking premium JCB benefits with accessible pricing.
+
+---]
+## What is JCB Gold Credit Card?
+
+[What is JCB Gold Credit Card?]...</div>
+                    <ul class='issues'><li>⚠ Found forbidden: 'visa'</li></ul>
+                </div></div></div><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Multiple brand preference</span><span class="session-id">Session: test_d4ba81ee</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.37s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I want either Visa or Mastercard</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **📊 PRODUCT COMPARISON**
+&lt;table&gt;
+&lt;tr&gt;
+&lt;th&gt;Aspect&lt;/th&gt;
+&lt;th&gt;Visa Platinum&lt;/th&gt;
+&lt;th&gt;Mastercard Platinum&lt;/th&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Unsecured Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Collateral Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Interest-Free&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Reward Points&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Dining Benefits&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;BOGO ...</div>
+                    
+                </div></div></div></div><div class="category"><h2>❌ Banking Type Advanced <span class="cat-score">0/3</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Islamic + high income</span><span class="session-id">Session: test_dec9410a</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">68.5s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Islamic credit card for 500k monthly income</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Thought process:
+1. The user is looking for credit cards with specific features such as reward points, lounge access, and insurance coverage.
+2. We need to identify which of the provided cards meet these criteria while also considering the user's income level (implied by their high credit limit requirements).
+3. Based on the information given, we can prioritize cards that offer a combination of rewards, travel benefits, and insurance.
+
+Analysis:
+- **Visa Hasanah Gold Credit Card**: Offers 1 poin...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'islamic'</li><li>⚠ Missing expected: '500k'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Islamic + tier preference</span><span class="session-id">Session: test_0cc73f7c</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.34s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Islamic platinum credit card</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Hasanah Platinum Credit Card
+============================================================
+
+[Visa Hasanah Platinum elevates Islamic banking to premium status. Operating on Ujrah principles (service fees, never interest), it combines world-class travel access, fine dining benefits, and full Takaful protection—all authentically Islamic.
+
+---]
+## What is Visa Hasanah Platinum?
+
+[What is Visa Hasanah Platinum?]
+**Visa Hasanah ...</div>
+                    <ul class='issues'><li>⚠ Found forbidden: 'gold'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Islamic + feature requirement</span><span class="session-id">Session: test_8bfcfefa</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.77s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Islamic card with lounge access and 0% EMI</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **Visa Hasanah Platinum Credit Card**
+
+**✨ Key Highlights:**
+• **Premium Credit Limit**
+• **Elite Reward Points**
+• **World-Class Travel Access**
+• **Premium Dining Benefits**
+• **0% Interest Installment**
+
+_Need detailed information? Ask me!_
+
+---
+
+**Visa Hasanah Gold Credit Card**
+
+**✨ Key Highlights:**
+• **Substantial Credit Limit**
+• **Premium Reward Points**
+• **Balaka VIP Lounge Access**
+• **0% Interest Installment**
+• **Year-Round Exclusive Discounts**
+
+_Need detailed information? Ask me!...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'islamic'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Income Boundaries <span class="cat-score">0/5</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Ultra-low income: 15k monthly</span><span class="session-id">Session: test_996936dc</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">10.97s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Which cards can I get with 15000 BDT monthly?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.
+
+---]
+## What is Visa Gold Credit Card?
+
+[What is Visa Gol...</div>
+                    <ul class='issues'><li>⚠ Missing expected: '15000'</li><li>⚠ Missing expected: 'income'</li><li>⚠ Missing expected: 'eligible'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Low income: 30k monthly</span><span class="session-id">Session: test_d1657f2b</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.0s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> 30k per month - what cards qualify me?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.
+
+---]
+## What is Visa Gold Credit Card?
+
+[What is Visa Gol...</div>
+                    <ul class='issues'><li>⚠ Missing expected: '30000'</li><li>⚠ Missing expected: 'eligible'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Mid-high income: 200k monthly</span><span class="session-id">Session: test_f10a4f82</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.41s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> 200k monthly income - what's suitable?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance—it's the ultimate premium credit experience.
+
+---]
+## What is Visa Platinum Credit Card?
+
+[Why Vis...</div>
+                    <ul class='issues'><li>⚠ Missing expected: '200000'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Very high income: 500k monthly</span><span class="session-id">Session: test_b6cc3abf</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">15.41s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I earn 500000 BDT per month</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+What kind of banking approach suits you better—conventional or Islamic (Shariah-compliant/Hasanah)?
+
+And what will you primarily be using this card for, like commuting or shopping?</div>
+                    <ul class='issues'><li>⚠ Missing expected: '500000'</li><li>⚠ Missing expected: 'platinum'</li><li>⚠ Missing expected: 'premium'</li><li>⚠ Missing expected: 'credit card'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Extreme income: 1 million monthly</span><span class="session-id">Session: test_1027d1a9</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.26s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> 1 million BDT monthly income - best premium card?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance—it's the ultimate premium credit experience.
+
+---]
+## What is Visa Platinum Credit Card?
+
+[Why Vis...</div>
+                    <ul class='issues'><li>⚠ Missing expected: '1000000'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Feature Deep Dives <span class="cat-score">0/4</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Insurance/Takaful details</span><span class="session-id">Session: test_3479ad7b</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">17.54s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Which cards include insurance or Takaful coverage?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+1. What type of banking do you prefer—conventional or Islamic (Shariah-compliant/Hasanah)?
+
+2. What's your main plan for using this card—travelling, dining out, or maybe for business expenses?
+
+3. So, could you share your annual income or monthly salary in BDT?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'insurance'</li><li>⚠ Missing expected: 'takaful'</li><li>⚠ Missing expected: 'triple benefit'</li><li>⚠ Missing expected: 'coverage'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Cash advance specifics</span><span class="session-id">Session: test_696a5db3</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.31s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Can I get cash advance on credit cards? What limits?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **Visa Hasanah Gold Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**JCB Gold Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**What would you like to do?**
+• Compare these cards
+• Check eligibility
+• Get full details about a specific card</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'cash advance'</li><li>⚠ Missing expected: 'limit'</li><li>⚠ Missing expected: 'percentage'</li><li>⚠ Missing expected: 'fee'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Supplementary card benefits</span><span class="session-id">Session: test_73574077</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.28s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> How many free supplementary cards can I get?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **Visa Hasanah Gold Credit Card**
+_**** Power Your Dreams &amp; Enliven Your Lifestyle_
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**Visa Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**What would you like to do?**
+• Compare these cards
+• Check eligibility
+• Get full details about a specific card</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'supplementary'</li><li>⚠ Missing expected: 'free'</li><li>⚠ Missing expected: 'requirement'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Annual fee waiver conditions</span><span class="session-id">Session: test_8c6ca3b5</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.41s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> How do I get annual fee waiver on my card?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **JCB Gold Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**Visa Gold Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**What would you like to do?**
+• Compare these cards
+• Check eligibility
+• Get full details about a specific card</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'annual fee'</li><li>⚠ Missing expected: 'waiver'</li><li>⚠ Missing expected: 'spending'</li><li>⚠ Missing expected: 'transaction'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Business Logic <span class="cat-score">0/5</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Business owner eligibility</span><span class="session-id">Session: test_682cf4db</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.44s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I'm a business owner with 400k monthly business income</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance—it's the ultimate premium credit experience.
+
+---]
+## What is Visa Platinum Credit Card?
+
+[Why Vis...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'business'</li><li>⚠ Missing expected: 'eligible'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Age boundary: 18 years old</span><span class="session-id">Session: test_8a575760</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">21.27s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I'm 18 years old with 100k monthly income. Can I get a card?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+Are you interested in traditional banking services or do you prefer Islamic (Shariah-compliant/Hasanah) banking options?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'age'</li><li>⚠ Missing expected: '18'</li><li>⚠ Missing expected: 'eligible'</li><li>⚠ Missing expected: 'credit card'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Age boundary: 70 years old</span><span class="session-id">Session: test_884c8c31</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">22.19s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I'm 70 with substantial income. Am I eligible?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> To recommend the best card for you:
+
+Do you have a preference for conventional banking or perhaps something like Islamic (Shariah-compliant/Hasanah) banking?</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'age'</li><li>⚠ Missing expected: '70'</li><li>⚠ Missing expected: 'eligible'</li><li>⚠ Missing expected: 'credit card'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Multi-feature complex query</span><span class="session-id">Session: test_4034a10d</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">92.85s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> 250k income, conventional, platinum, lounge + dining + 0% EMI</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> Thought Process:
+1. The user is looking for a credit card that offers specific benefits such as Balaka VIP Lounge access, Priority Pass Advantage, and year-round BOGO dining.
+2. From the provided list of cards, several options meet these criteria.
+
+Based on the given information:
+
+### Mastercard Platinum Credit Card
+- **Balaka VIP Lounge**: Exclusive access with 1 companion (1 point per BDT 50 spent)
+- **Priority Pass Advantage**: Additional premium lounge access
+- **Year-Round BOGO Dining**: Bu...</div>
+                    <ul class='issues'><li>⚠ Missing expected: '250000'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Collateralized vs unsecured choice</span><span class="session-id">Session: test_b86af454</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.97s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Can I get higher credit limit with collateral?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **JCB Gold Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**JCB Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**What would you like to do?**
+• Compare these cards
+• Check eligibility
+• Get full details about a specific card</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'collateral'</li><li>⚠ Missing expected: 'collateralized'</li><li>⚠ Missing expected: 'limit'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Cardholder Scenarios <span class="cat-score">0/2</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Card upgrade inquiry</span><span class="session-id">Session: test_b3782209</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.3s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> I have a gold card. Can I upgrade to platinum?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance—it's the ultimate premium credit experience.
+
+---]
+## What is Visa Platinum Credit Card?
+
+[Why Vis...</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'upgrade'</li></ul>
+                </div></div></div><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Rewards redemption query</span><span class="session-id">Session: test_40a33f95</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.36s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> How can I redeem my reward points?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **Mastercard Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**JCB Gold Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**What would you like to do?**
+• Compare these cards
+• Check eligibility
+• Get full details about a specific card</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'reward'</li><li>⚠ Missing expected: 'point'</li><li>⚠ Missing expected: 'redeem'</li><li>⚠ Missing expected: 'voucher'</li><li>⚠ Missing expected: 'travel'</li><li>⚠ Missing expected: 'dining'</li></ul>
+                </div></div></div></div><div class="category"><h2>❌ Comparison Variants <span class="cat-score">1/2</span></h2><div class="scenario fail"><div class="scenario-header"><span class="badge badge-fail">❌ FAIL</span><span class="scenario-name">Three-way comparison attempt</span><span class="session-id">Session: test_e6f6854a</span></div><div class="turns">
+                <div class="turn turn-fail">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">16.34s</span>
+                        <span class="t-fail">❌ FAIL</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Compare Visa Platinum, JCB Platinum, and Mastercard Platinum</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> I understand you're curious about comparing Visa Platinum, JCB Platinum, and Mastercard Platinum cards! While I appreciate your interest, I'd be happy to assist you with any banking or credit card inquiries you might have. Whether it's understanding the benefits of different cards, applying for a new one, or managing your existing accounts, feel free to let me know how I can support you today!</div>
+                    <ul class='issues'><li>⚠ Missing expected: 'comparison'</li></ul>
+                </div></div></div><div class="scenario pass"><div class="scenario-header"><span class="badge badge-pass">✅ PASS</span><span class="scenario-name">Feature-specific comparison</span><span class="session-id">Session: test_9ccd0dec</span></div><div class="turns">
+                <div class="turn turn-pass">
+                    <div class="turn-header">
+                        <strong>Turn 1</strong>
+                        <em>Turn 1</em>
+                        <span class="elapsed">11.73s</span>
+                        <span class="t-pass">✅ PASS</span>
+                    </div>
+                    <div class="msg user-msg"><strong>👤 User:</strong> Which has better lounge access: Visa Platinum or JCB Platinum?</div>
+                    <div class="msg bot-msg"><strong>🤖 Bot:</strong> **📊 PRODUCT COMPARISON**
+&lt;table&gt;
+&lt;tr&gt;
+&lt;th&gt;Aspect&lt;/th&gt;
+&lt;th&gt;Visa Platinum&lt;/th&gt;
+&lt;th&gt;JCB Platinum&lt;/th&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Unsecured Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Collateral Limit&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Interest-Free&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;td&gt;50 days&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Reward Points&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;td&gt;1 pt/BDT 50&lt;/td&gt;
+&lt;/tr&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Dining Benefits&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;BOGO dining&lt;...</div>
+                    
+                </div></div></div></div>
+</div>
+</body>
+</html>

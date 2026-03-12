@@ -1,6 +1,6 @@
 """
 FastAPI backend for bank chatbot with CrewAI multi-agent support.
-Serves both RAG and CrewAI pipelines via REST API.
+UPDATED: Now returns detected_intent in response for semantic testing.
 """
 
 import os
@@ -34,6 +34,7 @@ class ChatResponse(BaseModel):
     sources: Optional[List[Dict[str, str]]] = None
     agent_chain: Optional[List[str]] = None
     products_found: Optional[List[str]] = None
+    detected_intent: Optional[Dict[str, Any]] = None  # ← ADDED FOR SEMANTIC TESTING
     session_id: str
     timestamp: str
     success: bool
@@ -174,6 +175,8 @@ async def chat(request: ChatRequest) -> ChatResponse:
     """
     Main chat endpoint - routes to appropriate pipeline.
     Supports both RAG and CrewAI modes with session history.
+    
+    UPDATED: Now returns detected_intent for semantic testing.
     """
     if not crew_pipeline and not rag_pipeline:
         raise HTTPException(status_code=503, detail="Service not initialized")
@@ -209,12 +212,19 @@ async def chat(request: ChatRequest) -> ChatResponse:
             history.append({"role": "assistant", "content": result['response']})
             session_history[session_id] = history[-20:]  # Keep last 10 exchanges
             
+            # Extract detected_intent from result
+            detected_intent = result.get('detected_intent', {})
+            
+            # Log intent for debugging
+            print(f"📊 Returning intent: {detected_intent.get('intent_type', 'unknown')}")
+            
             return ChatResponse(
                 query=request.query,
                 answer=result['response'],
                 sources=None,
                 agent_chain=result.get('agent_chain', []),
                 products_found=result.get('products_found', []),
+                detected_intent=detected_intent,  # ← NOW INCLUDED IN RESPONSE
                 session_id=session_id,
                 timestamp=datetime.now().isoformat(),
                 success=True
@@ -238,6 +248,7 @@ async def chat(request: ChatRequest) -> ChatResponse:
                 sources=result['sources'],
                 agent_chain=["RAG"],
                 products_found=[s.get('product_name', 'Unknown') for s in result['sources']],
+                detected_intent=None,  # RAG mode doesn't have intent classification
                 session_id=session_id,
                 timestamp=datetime.now().isoformat(),
                 success=result['success']

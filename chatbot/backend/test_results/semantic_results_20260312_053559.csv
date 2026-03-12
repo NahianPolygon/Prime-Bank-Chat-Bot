@@ -1,0 +1,139 @@
+"Timestamp","Scenario #","Category","Scenario Name","Status","Turn #","User Query","Bot Response","Turn Status","Issues","Detected Intent","Intent Correct?","Entities Correct?","Response Type Correct?","Turn Time (s)","Session ID"
+"2026-03-12 05:36:25","1","Intent Classification","Detect greeting intent","❌ FAIL","1","Hello!","Hello there! Welcome to Prime Bank. How can I assist you today with your banking or credit card needs?","❌ FAIL","Intent: Expected intent 'greeting', got 'unknown'","unknown","NO","N/A","YES","16.14","test_e7752c8a"
+"2026-03-12 05:36:38","2","Intent Classification","Detect feature inquiry intent","❌ FAIL","1","Which cards have dining benefits?","============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lou","❌ FAIL","Intent: Expected intent 'feature_inquiry', got 'unknown'; Entity: specific_features: Expected list ['dining'], got None","unknown","NO","NO","YES","11.14","test_13de2fe4"
+"2026-03-12 05:36:52","3","Intent Classification","Detect comparison intent (cold-start)","❌ FAIL","1","Compare Visa Platinum vs JCB Platinum","**📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Platinum</th>
+<th>JCB Platinum</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong>","❌ FAIL","Intent: Expected intent 'comparison', got 'unknown'","unknown","NO","N/A","YES","11.98","test_d53cdbec"
+"2026-03-12 05:37:08","4","Intent Classification","Detect income-based search intent","❌ FAIL","1","I earn 300k per month. What cards am I eligible for?","To recommend the best card for you:
+
+By the way, do you have a preference for conventional banking or Islamic (Shariah-compliant/Hasanah) banking?","❌ FAIL","Intent: Expected intent 'product_search_by_income', got 'unknown'; Entity: customer_income: Expected ~3600000, got None","unknown","NO","NO","YES","13.83","test_11a338b6"
+"2026-03-12 05:37:21","5","Intent Classification","Detect eligibility check intent","❌ FAIL","1","Am I eligible for Visa Platinum Credit Card?","============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access","❌ FAIL","Intent: Expected intent 'eligibility_check', got 'unknown'; Entity: specific_product: Expected 'Visa Platinum Credit Card', got 'None'","unknown","NO","NO","YES","11.52","test_4a89da88"
+"2026-03-12 05:37:37","6","Entity Extraction","Extract income from query (monthly)","❌ FAIL","1","My monthly income is 300k","To recommend the best card for you:
+
+Are you more interested in traditional banking services or would you prefer a Shariah-compliant banking option like Hasanah?","❌ FAIL","Entity: customer_income: Expected ~3600000, got None","unknown","N/A","NO","N/A","13.59","test_1743a752"
+"2026-03-12 05:37:50","7","Entity Extraction","Extract income from query (annual)","❌ FAIL","1","My annual income is 50 lakh BDT","============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lou","❌ FAIL","Entity: customer_income: Expected ~5000000, got None","unknown","N/A","NO","N/A","11.43","test_25111559"
+"2026-03-12 05:38:04","8","Entity Extraction","Extract banking type (conventional)","❌ FAIL","1","I want conventional banking credit cards","============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lou","❌ FAIL","Entity: banking_type: Expected 'conventional', got 'None'","unknown","N/A","NO","N/A","11.11","test_fe965eb1"
+"2026-03-12 05:38:21","9","Entity Extraction","Extract banking type (Islamic)","❌ FAIL","1","Show me Islamic credit card options","To recommend the best card for you:
+
+What will you primarily be using this card for, like daily commuting or leisure travel?
+
+And so, could you tell me your annual income in bdt?","❌ FAIL","Entity: banking_type: Expected 'islamic', got 'None'","unknown","N/A","NO","N/A","15.06","test_49cc14c6"
+"2026-03-12 05:38:34","10","Entity Extraction","Extract multiple features","❌ FAIL","1","I need a card with lounge access and dining benefits","============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access","❌ FAIL","Entity: specific_features: Expected list ['lounge', 'dining'], got None","unknown","N/A","NO","N/A","11.6","test_a92ddf34"
+"2026-03-12 05:38:48","11","Entity Extraction","Extract tier preference","❌ FAIL","1","Show me only platinum cards","============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access","❌ FAIL","Entity: preferred_tier: Expected 'platinum', got 'None'","unknown","N/A","NO","N/A","11.32","test_48d49a90"
+"2026-03-12 05:39:01","12","Product Retrieval","Retrieve specific product by name","❌ FAIL","1","Tell me about Visa Platinum Credit Card","============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access","❌ FAIL","Intent: Expected intent 'product_info', got 'unknown'; Response type: Asks for clarification instead of listing products","unknown","NO","N/A","NO","11.42","test_a1ee9ac3"
+"2026-03-12 05:39:14","13","Product Retrieval","Retrieve products by feature (dining)","❌ FAIL","1","Which cards have dining benefits?","============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lou","❌ FAIL","Intent: Expected intent 'feature_inquiry', got 'unknown'","unknown","NO","N/A","YES","11.06","test_f7334a0d"
+"2026-03-12 05:39:27","14","Product Retrieval","Retrieve products by feature (lounge)","❌ FAIL","1","I want airport lounge access","**JCB Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**Visa Hasanah Platinum Credit Card**
+
+**✨ Key Highlights:**
+• Premium credit card with exclusive benefits
+
+_Need detailed information? Ask me!_
+
+---
+
+**What ","❌ FAIL","Intent: Expected intent 'feature_inquiry', got 'unknown'; Feature: Feature 'lounge' not mentioned","unknown","NO","N/A","YES","11.36","test_40d4c113"
+"2026-03-12 05:39:45","15","Product Retrieval","Retrieve Islamic products","❌ FAIL","1","What Islamic credit cards do you have?","To recommend the best card for you:
+
+What will you primarily be using this card for—like travel, dining out, or everyday shopping?
+
+And so, could you tell me your annual income or monthly salary in bdt?","❌ FAIL","Intent: Expected intent 'product_info', got 'unknown'; Entity: banking_type: Expected 'islamic', got 'None'; Response type: Asks for clarification instead of listing products; Products: None of expect","unknown","NO","NO","NO","15.14","test_bfa23d7c"
+"2026-03-12 05:40:02","16","Product Retrieval","Retrieve products by income level","❌ FAIL","1","I earn 300k monthly. What cards can I get?","To recommend the best card for you:
+
+By the way, do you prefer traditional banking services or are you interested in Shariah-compliant (Hasanah) options?
+
+And what's your main plan for using this card—travelling, dining out, or something else entirely?","❌ FAIL","Intent: Expected intent 'product_search_by_income', got 'unknown'; Entity: customer_income: Expected ~3600000, got None; Products: None of expected products found: ['Platinum']","unknown","NO","NO","YES","15.66","test_c217290f"
+"2026-03-12 05:40:16","17","Comparison Correctness","Compare two specific products (cold-start)","❌ FAIL","1","Compare Visa Platinum vs JCB Platinum","**📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Platinum</th>
+<th>JCB Platinum</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong>","❌ FAIL","Intent: Expected intent 'comparison', got 'unknown'","unknown","NO","N/A","YES","11.56","test_c229ea06"
+"2026-03-12 05:41:11","18","Comparison Correctness","Compare after showing products (warm state)","❌ FAIL","1","income 300k monthly, conventional, dining","Cards matching customer's feature request:
+- Visa Platinum Credit Card
+  - Minimum Monthly Income Requirement: BDT 30,000 (BDT 360,000 annually)
+  - Income Gap: BDT 240,000/month (BDT 2,880,000 annually)
+
+- Mastercard World Credit Card
+  - Minimum Monthly Income Requirement: BDT 30,000 (BDT 360,000 ","✅ PASS","","unknown","N/A","N/A","YES","38.67","test_2a97e839"
+"2026-03-12 05:41:11","18","Comparison Correctness","Compare after showing products (warm state)","❌ FAIL","2","compare these two","**📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Mastercard World</th>
+<th>Mastercard Platinum</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Fre","❌ FAIL","Intent: Expected intent 'comparison', got 'unknown'","unknown","NO","N/A","YES","12.88","test_2a97e839"
+"2026-03-12 05:42:51","19","Conversation Flow","Profiling flow: vague query → profile collection → products","✅ PASS","1","I want a credit card","Thank you for reaching out! I'm glad you're thinking about getting a credit card. At Prime Bank, we have a variety of credit card options tailored to different needs and preferences. How can I assist you in finding the right credit card that suits your requirements?","✅ PASS","","unknown","N/A","N/A","YES","13.93","test_bf302944"
+"2026-03-12 05:42:51","19","Conversation Flow","Profiling flow: vague query → profile collection → products","✅ PASS","2","conventional, 300k monthly, dining","Thought: The Visa Hasanah Platinum Credit Card scenario 1 indicates that the minimum income requirement is BDT 300,000 per month. Since the customer's monthly income is BDT 500,000, they meet this requirement. However, there are no explicit eligibility requirements mentioned for other products like ","✅ PASS","","unknown","N/A","N/A","YES","82.97","test_bf302944"

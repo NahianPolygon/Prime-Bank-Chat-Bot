@@ -1,0 +1,1396 @@
+================================================================================
+PRIME BANK CHATBOT — AUTOMATED TEST REPORT
+Generated: 2026-03-12 02:46:11
+Total: 75  |  Passed: 17  |  Failed: 58  |  Pass Rate: 22%
+================================================================================
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Greetings & Small Talk > Simple greeting
+Session: test_ef5583ac
+
+  Turn 1: Turn 1
+  USER: Hello!
+  BOT:  Hi there! Welcome back. I'm happy to help you explore our credit card, loan, or savings options. What brings you in today?
+  RESULT: ❌ FAIL  (12.9s)
+    ⚠ Missing expected: 'hello'
+    ⚠ Missing expected: 'assist'
+    ⚠ Missing expected: 'prime bank'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Greetings & Small Talk > How are you
+Session: test_80bfcd35
+
+  Turn 1: Turn 1
+  USER: How are you doing today?
+  BOT:  Hello there! I'm doing great, thanks for asking. How can I help you explore some of our amazing credit card, loan, or savings options today?
+  RESULT: ❌ FAIL  (12.94s)
+    ⚠ Missing expected: 'prime bank'
+    ⚠ Missing expected: 'assist'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Greetings & Small Talk > Off-topic question (weather)
+Session: test_9dbbab3f
+
+  Turn 1: Turn 1
+  USER: What's the weather like in Dhaka today?
+  BOT:  Hello! I hope you're having a great day. While we can't check the current weather in Dhaka right now, would you like to know more about our credit card offers or perhaps discuss some loan options that might suit your needs?
+  RESULT: ❌ FAIL  (13.54s)
+    ⚠ Missing expected: 'prime bank'
+    ⚠ Missing expected: 'banking'
+    ⚠ Missing expected: 'help'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Greetings & Small Talk > Off-topic question (food)
+Session: test_964e61e3
+
+  Turn 1: Turn 1
+  USER: What's a good recipe for biryani?
+  BOT:  That sounds yummy! While I can't share recipes, I'd be happy to help you find the best savings account rates that match your needs. Let me know if you have any questions about banking!
+  RESULT: ❌ FAIL  (13.33s)
+    ⚠ Missing expected: 'prime bank'
+    ⚠ Missing expected: 'credit card'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Vague / General Queries > Generic credit card request
+Session: test_f876dc66
+
+  Turn 1: Turn 1
+  USER: I want a credit card
+  BOT:  Thank you for reaching out! I'm glad you're considering a credit card. At Prime Bank, we offer a variety of credit card options tailored to different needs and preferences. How can I assist you in finding the right credit card or setting up one that suits your financial goals?
+  RESULT: ❌ FAIL  (13.76s)
+    ⚠ Missing expected: 'banking'
+    ⚠ Missing expected: 'income'
+    ⚠ Missing expected: 'use'
+    ⚠ Missing expected: 'conventional'
+    ⚠ Missing expected: 'islamic'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Vague / General Queries > Best card for me
+Session: test_8b1637e4
+
+  Turn 1: Turn 1
+  USER: Which card is best for me?
+  BOT:  Could you tell me more about what you're looking for?
+  RESULT: ❌ FAIL  (11.02s)
+    ⚠ Missing expected: 'income'
+    ⚠ Missing expected: 'use'
+    ⚠ Missing expected: 'prefer'
+    ⚠ Missing expected: 'banking'
+    ⚠ Missing expected: 'help'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Vague / General Queries > Vague then profile answers
+Session: test_d82ba757
+
+  Turn 1: Turn 1
+  USER: I need a credit card
+  BOT:  Could you tell me more about what you're looking for?
+  RESULT: ❌ FAIL  (10.89s)
+    ⚠ Missing expected: 'banking'
+    ⚠ Missing expected: 'income'
+    ⚠ Missing expected: 'use'
+
+  Turn 2: Turn 2
+  USER: monthly income is 300k, i want conventional, use case is dining
+  BOT:  
+  RESULT: ❌ FAIL  (120.1s)
+    ⚠ Request error: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Specific Product Queries > Ask about Visa Gold (cold-start)
+Session: test_1959427c
+
+  Turn 1: Turn 1
+  USER: Tell me about the Visa Gold Credit Card
+  BOT:  ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credi...
+  RESULT: ✅ PASS  (11.26s)
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Specific Product Queries > Ask about Visa Platinum (cold-start)
+Session: test_adb67734
+
+  Turn 1: Turn 1
+  USER: What are the features of Visa Platinum Credit Card?
+  BOT:  ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insuranc...
+  RESULT: ✅ PASS  (11.57s)
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Specific Product Queries > Ask about JCB Gold
+Session: test_d21c150f
+
+  Turn 1: Turn 1
+  USER: Tell me about JCB Gold Credit Card
+  BOT:  ============================================================
+PRODUCT: JCB Gold Credit Card
+============================================================
+
+[JCB Gold delivers premium credit with meaningful lifestyle benefits. Featuring 50-day interest-free period, exclusive VIP lounge access, year-round dining discounts, and comprehensive insurance—it's perfect for customers seeking premium JCB benef...
+  RESULT: ✅ PASS  (11.32s)
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Specific Product Queries > Ask about JCB Platinum
+Session: test_ca2a7c85
+
+  Turn 1: Turn 1
+  USER: What is the JCB Platinum Credit Card?
+  BOT:  ============================================================
+PRODUCT: JCB Platinum Credit Card
+============================================================
+
+[JCB Platinum delivers premium credit with exclusive lifestyle privileges. Featuring Balaka VIP lounge access, year-round BOGO at premium restaurants, 50-day interest-free period, and comprehensive insurance—it's the ultimate premium JCB exper...
+  RESULT: ✅ PASS  (11.25s)
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Specific Product Queries > Ask about Mastercard Platinum
+Session: test_afe6b453
+
+  Turn 1: Turn 1
+  USER: Tell me about Mastercard Platinum Credit Card
+  BOT:  ============================================================
+PRODUCT: Mastercard Platinum Credit Card
+============================================================
+
+[Why Mastercard Platinum?]
+Why Mastercard Platinum?
+
+[Mastercard Platinum combines premium global access with lifestyle privileges. With LoungeKey + Priority Pass, exclusive Balaka VIP with companion, year-round BOGO at premium restaura...
+  RESULT: ✅ PASS  (11.27s)
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Islamic / Conventional Banking > Ask for Islamic banking options
+Session: test_37c0938d
+
+  Turn 1: Turn 1
+  USER: What Islamic banking credit card options do you have?
+  BOT:  To recommend the best card for you:
+
+What will you primarily be using this card for—like travel expenses or daily coffee runs?
+
+And so, could you tell me your annual income in bdt?
+  RESULT: ❌ FAIL  (14.84s)
+    ⚠ Missing expected: 'islamic'
+    ⚠ Missing expected: 'shariah'
+    ⚠ Missing expected: 'hasanah'
+    ⚠ Missing expected: 'credit card'
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Islamic / Conventional Banking > Ask for conventional banking cards
+Session: test_a92729dd
+
+  Turn 1: Turn 1
+  USER: Show me conventional banking credit cards
+  BOT:  ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credi...
+  RESULT: ✅ PASS  (11.0s)
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Islamic / Conventional Banking > Islamic card with income
+Session: test_3d20cb9f
+
+  Turn 1: Turn 1
+  USER: I want an Islamic credit card, my income is 200k monthly
+  BOT:  Thank you for reaching out! To proceed with checking your eligibility for an Islamic banking credit card, may I please have your age?
+  RESULT: ❌ FAIL  (13.05s)
+    ⚠ Missing expected: 'shariah'
+    ⚠ Missing expected: 'hasanah'
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Feature Queries > Cards with lounge access
+Session: test_15d9f6c3
+
+  Turn 1: Turn 1
+  USER: Which cards offer airport lounge access?
+  BOT:  ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insuranc...
+  RESULT: ✅ PASS  (11.17s)
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Feature Queries > Cards with dining benefits
+Session: test_9a997d43
+
+  Turn 1: Turn 1
+  USER: What credit cards have dining benefits or BOGO offers?
+  BOT:  To recommend the best card for you:
+
+1. What type of banking do you prefer—conventional or Islamic (Shariah-compliant/Hasanah)?
+
+2. What will you primarily use this card for, like everyday shopping or business expenses?
+
+3. So, could you tell me your annual income in BDT?
+  RESULT: ❌ FAIL  (17.28s)
+    ⚠ Missing expected: 'dining'
+    ⚠ Missing expected: 'credit card'
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Feature Queries > Cards with travel benefits
+Session: test_979b193e
+
+  Turn 1: Turn 1
+  USER: I travel internationally a lot, which card is best for me?
+  BOT:  **📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Platinum</th>
+<th>Visa Gold</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong></td>
+<td>50 days</td>
+<td>50 days</td>
+</tr><tr>
+<td><strong>Reward Points</strong></td>
+<td>1 pt/BDT ...
+  RESULT: ✅ PASS  (11.43s)
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Feature Queries > Cards with rewards points
+Session: test_258d1b97
+
+  Turn 1: Turn 1
+  USER: Which card gives the most reward points?
+  BOT:  ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credi...
+  RESULT: ✅ PASS  (11.09s)
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Feature Queries > Cards with highest credit limit
+Session: test_0139ed99
+
+  Turn 1: Turn 1
+  USER: Which card has the highest credit limit?
+  BOT:  To recommend the best card for you:
+
+1. Are you interested in traditional banking services or do you prefer Shariah-compliant Hasanaah options?
+
+2. What will you primarily use this card for, like travel or everyday shopping?
+
+3. So, could you share your annual income or monthly salary in BDT?
+  RESULT: ❌ FAIL  (16.67s)
+    ⚠ Missing expected: 'limit'
+    ⚠ Missing expected: 'credit card'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Feature Queries > Annual fee information
+Session: test_93f7c497
+
+  Turn 1: Turn 1
+  USER: What are the annual fees for credit cards?
+  BOT:  ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credi...
+  RESULT: ❌ FAIL  (11.22s)
+    ⚠ Missing expected: 'annual fee'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Feature Queries > EMI / installment options
+Session: test_5e82924f
+
+  Turn 1: Turn 1
+  USER: Do any cards offer EMI or installment payment options?
+  BOT:  To recommend the best card for you:
+
+1. What type of banking do you prefer—conventional or Islamic (Shariah-compliant/Hasanah)?
+
+2. What will you primarily be using this card for, like travel or everyday shopping?
+
+3. So, could you tell me your annual income in BDT?
+  RESULT: ❌ FAIL  (16.89s)
+    ⚠ Missing expected: 'emi'
+    ⚠ Missing expected: 'installment'
+    ⚠ Missing expected: 'credit card'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Feature Queries > Interest-free period
+Session: test_d1367d51
+
+  Turn 1: Turn 1
+  USER: What is the interest-free period on credit cards?
+  BOT:  To recommend the best card for you:
+
+1. So, are you more comfortable with traditional banking or prefer an Islamic (Shariah-compliant/Hasanah) approach?
+
+2. What will you primarily be using this card for—traveling, dining out, or making everyday purchases?
+
+3. So, could you share your annual income or monthly salary in BDT?
+  RESULT: ❌ FAIL  (17.2s)
+    ⚠ Missing expected: 'interest'
+    ⚠ Missing expected: 'credit card'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Income-Based Search > Cards for 50k monthly income
+Session: test_69b97b4d
+
+  Turn 1: Turn 1
+  USER: What credit cards can I get with 50k monthly salary?
+  BOT:  To recommend the best card for you:
+
+By the way, do you have a preference for traditional banking or are you interested in Islamic (Shariah-compliant/Hasanah) banking options?
+  RESULT: ❌ FAIL  (13.9s)
+    ⚠ Missing expected: 'credit card'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Income-Based Search > Cards for 300k monthly income
+Session: test_c9273c2a
+
+  Turn 1: Turn 1
+  USER: I earn 300,000 BDT per month. What cards am I eligible for?
+  BOT:  To recommend the best card for you:
+
+By the way, do you have a preference for traditional banking services or are you interested in Islamic (Shariah-compliant/Hasanah) banking options?
+  RESULT: ❌ FAIL  (13.88s)
+    ⚠ Missing expected: 'credit card'
+    ⚠ Missing expected: 'platinum'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Income-Based Search > Cards for 5 lakh annual income
+Session: test_ce48cebb
+
+  Turn 1: Turn 1
+  USER: My annual income is 5 lakh BDT. Which cards suit me?
+  BOT:  To recommend the best card for you:
+
+So, are you more interested in traditional banking services or would you prefer a Shariah-compliant Hasanah account?
+
+And what's your main plan for using this card—travelling, eating out, or making everyday purchases?
+  RESULT: ❌ FAIL  (15.45s)
+    ⚠ Missing expected: 'credit card'
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Income-Based Search > Eligibility matching: income + feature
+Session: test_8540fb64
+
+  Turn 1: Turn 1
+  USER: I earn 300k per month and want lounge access. What cards match?
+  BOT:  ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credi...
+  RESULT: ✅ PASS  (11.35s)
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Comparison (Cold-Start) > Compare Visa Platinum vs JCB Platinum (cold-start)
+Session: test_d03f3956
+
+  Turn 1: Turn 1
+  USER: Compare Visa Platinum Credit Card vs JCB Platinum Credit Card
+  BOT:  **📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Platinum</th>
+<th>Visa Gold</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong></td>
+<td>50 days</td>
+<td>50 days</td>
+</tr><tr>
+<td><strong>Reward Points</strong></td>
+<td>1 pt/BDT ...
+  RESULT: ❌ FAIL  (11.55s)
+    ⚠ Missing expected: 'jcb platinum'
+    ⚠ Missing expected: 'credit limit'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Comparison (Cold-Start) > Compare Visa Gold vs JCB Gold (cold-start)
+Session: test_620529c2
+
+  Turn 1: Turn 1
+  USER: Which is better: Visa Gold or JCB Gold?
+  BOT:  **📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Gold</th>
+<th>Visa Platinum</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong></td>
+<td>50 days</td>
+<td>50 days</td>
+</tr><tr>
+<td><strong>Reward Points</strong></td>
+<td>1 pt/BDT ...
+  RESULT: ❌ FAIL  (11.58s)
+    ⚠ Missing expected: 'jcb gold'
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Comparison (Cold-Start) > Compare conventional vs Islamic (cold-start)
+Session: test_964e4884
+
+  Turn 1: Turn 1
+  USER: Compare conventional and Islamic credit cards
+  BOT:  **📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Gold</th>
+<th>Visa Platinum</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong></td>
+<td>50 days</td>
+<td>50 days</td>
+</tr><tr>
+<td><strong>Reward Points</strong></td>
+<td>1 pt/BDT ...
+  RESULT: ✅ PASS  (11.43s)
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Comparison (Warm State) > Product discovery then compare
+Session: test_f1c91083
+
+  Turn 1: Turn 1
+  USER: my income is 300k monthly, conventional, dining
+  BOT:  Cards matching customer's feature request:
+- **Visa Platinum Credit Card**
+  - Minimum Monthly Income Requirement: BDT 25,000 (BDT 300,000 / 12 months)
+  - Income Gap: BDT 265,000/month
+
+- **Mastercard World Credit Card**
+  - Minimum Monthly Income Requirement: BDT 25,000 (BDT 300,000 / 12 months)
+  - Income Gap: BDT 265,000/month
+
+- **Mastercard Platinum Credit Card**
+  - Minimum Monthly Income R...
+  RESULT: ✅ PASS  (47.89s)
+
+  Turn 2: Turn 2
+  USER: compare these two cards
+  BOT:  **📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Gold</th>
+<th>Visa Platinum</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong></td>
+<td>50 days</td>
+<td>50 days</td>
+</tr><tr>
+<td><strong>Reward Points</strong></td>
+<td>1 pt/BDT ...
+  RESULT: ❌ FAIL  (13.73s)
+    ⚠ Missing expected: 'credit limit'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  How to Apply (Cold-Start) > How to apply for Visa Platinum (cold-start)
+Session: test_7ae432dd
+
+  Turn 1: Turn 1
+  USER: How do I apply for Visa Platinum Credit Card?
+  BOT:  **How to Apply for Visa Platinum Credit Card**
+
+How to Apply?]
+### Required Documents
+
+1. **Identity & Address Proof**
+   - NID/Passport (copy, attested)
+   - Driving license (if available)
+   - Utility bill (<2 months)
+   - Permanent address certificate
+
+2. **Income Proof**
+   - **Salaried:** 3 months salary slip + employment letter
+   - **Self-Employed:** Latest ITR + business registration
+   - ...
+  RESULT: ❌ FAIL  (0.04s)
+    ⚠ Missing expected: 'step'
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  How to Apply (Cold-Start) > How to apply for JCB Gold (cold-start)
+Session: test_e630a481
+
+  Turn 1: Turn 1
+  USER: What is the application process for JCB Gold Credit Card?
+  BOT:  **How to Apply for Jcb Gold Credit Card**
+
+How to Apply?]
+### Required Documents
+
+1. **Identity & Address Proof**
+   - NID/Passport copy (attested)
+   - Driving license (if available)
+   - Utility bill (<2 months old)
+   - Permanent address certificate
+
+2. **Income Proof**
+   - **Salaried:** Latest 3 months salary slip + employment letter
+   - **Self-Employed:** Latest ITR + business registration
+...
+  RESULT: ✅ PASS  (0.04s)
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  How to Apply (Cold-Start) > How to apply with no product named
+Session: test_4475eb11
+
+  Turn 1: Turn 1
+  USER: How do I apply for a credit card?
+  BOT:  I'd be happy to help with the application process! Which card would you like to know about? (e.g., Visa Platinum, JCB Gold, Mastercard World)
+  RESULT: ❌ FAIL  (0.01s)
+    ⚠ Missing expected: 'credit card'
+    ⚠ Missing expected: 'apply'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  How to Apply (Warm State) > Product discovery then apply
+Session: test_bb02bf19
+
+  Turn 1: Turn 1
+  USER: my income is 300k monthly, conventional, dining
+  BOT:  Based on the customer's income of BDT 3,600,000 per year and their request for a credit card with dining conventional features, the following products match their criteria:
+
+1. **JCB Platinum Credit Card**
+   - **Annual Fee:** Not specified in the provided information.
+   - **Credit Limit:**
+     - Unsecured: BDT 1,000,000
+     - Collateralized: BDT 2,500,000
+   - **Eligibility Requirements:**
+   ...
+  RESULT: ✅ PASS  (65.02s)
+
+  Turn 2: Turn 2
+  USER: how do I apply for it?
+  BOT:  I'd be happy to help with the application process! Which card would you like to know about? (e.g., Visa Platinum, JCB Gold, Mastercard World)
+  RESULT: ❌ FAIL  (0.01s)
+    ⚠ Missing expected: 'apply'
+    ⚠ Missing expected: 'document'
+    ⚠ Missing expected: 'step'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Eligibility Check (Cold-Start) > Eligibility for Visa Platinum (cold-start, full flow)
+Session: test_c41724b0
+
+  Turn 1: Turn 1
+  USER: Am I eligible for Visa Platinum Credit Card?
+  BOT:  ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insuranc...
+  RESULT: ❌ FAIL  (11.31s)
+    ⚠ Missing expected: 'eligibility'
+
+  Turn 2: Turn 2
+  USER: I am 32 years old
+  BOT:  ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insuranc...
+  RESULT: ❌ FAIL  (17.88s)
+    ⚠ Missing expected: 'employment'
+
+  Turn 3: Turn 3
+  USER: I am a full time salaried employee
+  BOT:  Thank you for reaching out about the Visa Platinum Credit Card! To proceed, could I please have your age?
+  RESULT: ❌ FAIL  (23.42s)
+    ⚠ Missing expected: 'tenure'
+    ⚠ Missing expected: '✓'
+    ⚠ Missing expected: 'employment'
+
+  Turn 4: Turn 4
+  USER: I have been working for 5 years
+  BOT:  I didn't quite catch that. Sure, could you please share your age? This will help us determine your eligibility for the Visa Platinum Credit Card.
+  RESULT: ❌ FAIL  (3.06s)
+    ⚠ Missing expected: 'income'
+    ⚠ Missing expected: '✓'
+    ⚠ Missing expected: 'tenure'
+
+  Turn 5: Turn 5
+  USER: My monthly income is 300k
+  BOT:  I noticed you mentioned a monthly income of 300K. To proceed, could you please share your age? This will help us determine your eligibility for the Visa Platinum Credit Card!
+  RESULT: ❌ FAIL  (3.9s)
+    ⚠ Missing expected: 'etin'
+    ⚠ Missing expected: '✓'
+
+  Turn 6: Turn 6
+  USER: Yes I have an E-TIN
+  BOT:  Sure, could you please share your age? This will help us determine your eligibility for the Visa Platinum Credit Card!
+  RESULT: ❌ FAIL  (3.35s)
+    ⚠ Missing expected: 'eligible'
+    ⚠ Missing expected: '✓'
+    ⚠ Missing expected: 'e-tin'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Eligibility Check (Cold-Start) > Eligibility for generic card (no product named)
+Session: test_ecc3e3aa
+
+  Turn 1: Turn 1
+  USER: Am I eligible for a credit card?
+  BOT:  To recommend the best card for you:
+
+What type of banking do you prefer—conventional or Islamic (Shariah-compliant/Hasanah)?
+  RESULT: ❌ FAIL  (13.2s)
+    ⚠ Missing expected: 'age'
+    ⚠ Missing expected: 'eligibility'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Eligibility Check (Warm State) > Product shown then eligibility check
+Session: test_a13a2b7a
+
+  Turn 1: Turn 1
+  USER: tell me about Visa Platinum Credit Card
+  BOT:  ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insuranc...
+  RESULT: ✅ PASS  (11.27s)
+
+  Turn 2: Turn 2
+  USER: am I eligible for it?
+  BOT:  ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insuranc...
+  RESULT: ❌ FAIL  (17.76s)
+    ⚠ Missing expected: 'eligibility'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Full Sequential Flow > Full sequential: vague → profile → compare → eligibility → apply
+Session: test_78c9112d
+
+  Turn 1: Step 1: Vague query triggers profiling
+  USER: I want a credit card
+  BOT:  Thank you for reaching out! I'm glad you're thinking about getting a credit card. At Prime Bank, we have a variety of credit card options that can suit different needs and preferences. How can I assist you in finding the right credit card or help you through the application process?
+  RESULT: ❌ FAIL  (13.96s)
+    ⚠ Missing expected: 'banking'
+    ⚠ Missing expected: 'income'
+    ⚠ Missing expected: 'use'
+
+  Turn 2: Step 2: Profile answers → product display
+  USER: monthly income 300k, conventional, dining
+  BOT:  Cards matching customer's feature request:
+1. **Visa Platinum Credit Card**
+   - Minimum Monthly Income Requirement: BDT 300,000 (BDT 3,600,000 annual income)
+   - Income Gap: None
+
+2. **Mastercard World Credit Card**
+   - Minimum Monthly Income Requirement: BDT 300,000 (BDT 3,600,000 annual income)
+   - Income Gap: None
+  RESULT: ❌ FAIL  (34.05s)
+    ⚠ Missing expected: 'highlights'
+
+  Turn 3: Step 3: Compare shown products
+  USER: compare these two
+  BOT:  **📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Platinum</th>
+<th>Visa Gold</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong></td>
+<td>50 days</td>
+<td>50 days</td>
+</tr><tr>
+<td><strong>Reward Points</strong></td>
+<td>1 pt/BDT ...
+  RESULT: ❌ FAIL  (12.88s)
+    ⚠ Missing expected: 'credit limit'
+
+  Turn 4: Step 4: Eligibility check
+  USER: am I eligible for the first one?
+  BOT:  Thank you for reaching out about the Visa Platinum Credit Card! Could you please let me know your age so I can assist you better?
+  RESULT: ❌ FAIL  (15.14s)
+    ⚠ Missing expected: 'eligibility'
+
+  Turn 5: Step 5: Eligibility - age
+  USER: 32
+  BOT:  ✓ Age: **32**
+
+Great, thank you for providing your age. Could you also share your current employment type? This will help me provide more accurate information about the Visa Platinum Credit Card.
+  RESULT: ✅ PASS  (2.39s)
+
+  Turn 6: Step 6: Eligibility - employment
+  USER: salaried full time
+  BOT:  ✓ Employment: **salaried**
+
+Great to have that information! Could you please tell me how long you've been with your current employer? This will help in determining your eligibility for the Visa Platinum Credit Card.
+  RESULT: ❌ FAIL  (2.45s)
+    ⚠ Missing expected: 'tenure'
+
+  Turn 7: Step 7: Eligibility - tenure
+  USER: 7 years
+  BOT:  ✓ Tenure: **7 years**
+
+Could you please share your monthly income? This information will help us assess your eligibility for the Visa Platinum Credit Card more accurately.
+  RESULT: ✅ PASS  (2.09s)
+
+  Turn 8: Step 8: Eligibility - income
+  USER: 300k per month
+  BOT:  ✓ Income: **BDT 300,000/month**
+
+Hello! Thank you for sharing your details with us. To proceed smoothly with your application, could you please let me know if you have an E-TIN from your employer? This is necessary as it helps verify your employment and income information accurately.
+  RESULT: ❌ FAIL  (3.01s)
+    ⚠ Missing expected: 'etin'
+
+  Turn 9: Step 9: Eligibility - ETIN → verdict
+  USER: yes I have ETIN
+  BOT:  Based on your profile, **Visa Platinum Credit Card** is a fantastic choice for elite customers seeking top-tier benefits. Here’s what you can expect:
+
+- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Interest-Free Period:** 50 days
+- **Reward Points:** 1 point per BDT 50 spent
+- **Insurance:** Triple Benefit coverage up to BDT 10 lac
+- **Travel Privileges:** Loung...
+  RESULT: ❌ FAIL  (70.26s)
+    ⚠ Missing expected: '✓'
+
+  Turn 10: Step 10: How to apply
+  USER: how do I apply for it?
+  BOT:  **How to Apply for Visa Platinum Credit Card**
+
+How to Apply?]
+### Required Documents
+
+1. **Identity & Address Proof**
+   - NID/Passport (copy, attested)
+   - Driving license (if available)
+   - Utility bill (<2 months)
+   - Permanent address certificate
+
+2. **Income Proof**
+   - **Salaried:** 3 months salary slip + employment letter
+   - **Self-Employed:** Latest ITR + business registration
+   - ...
+  RESULT: ❌ FAIL  (0.23s)
+    ⚠ Missing expected: 'step'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Numeric Selection > Numeric selection after product display
+Session: test_2e0025d0
+
+  Turn 1: Turn 1
+  USER: monthly income 300k, conventional, dining
+  BOT:  
+  RESULT: ❌ FAIL  (120.04s)
+    ⚠ Request error: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+
+  Turn 2: Turn 2
+  USER: 1
+  BOT:  
+  RESULT: ❌ FAIL  (120.07s)
+    ⚠ Request error: HTTPConnectionPool(host='localhost', port=8000): Read timed out. (read timeout=120)
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Existing Cardholder > Lost card report
+Session: test_c7cf53cc
+
+  Turn 1: Turn 1
+  USER: My credit card is lost, what should I do?
+  BOT:  To recommend the best card for you:
+
+Do you have a preference for conventional banking or are you interested in Islamic (Shariah-compliant/Hasanah) banking options?
+  RESULT: ❌ FAIL  (24.54s)
+    ⚠ Missing expected: 'contact'
+    ⚠ Missing expected: 'lost'
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Existing Cardholder > Card activation query
+Session: test_a87836ce
+
+  Turn 1: Turn 1
+  USER: How do I activate my new credit card?
+  BOT:  ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credi...
+  RESULT: ✅ PASS  (11.16s)
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Existing Cardholder > Check bill query
+Session: test_6afe2d5b
+
+  Turn 1: Turn 1
+  USER: How can I check my credit card bill?
+  BOT:  To recommend the best card for you:
+
+What type of banking do you prefer—conventional or Islamic (Shariah-compliant/Hasanah)?
+  RESULT: ❌ FAIL  (13.18s)
+    ⚠ Missing expected: 'bill'
+    ⚠ Missing expected: 'statement'
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Edge Cases > Very short query
+Session: test_03e01ac1
+
+  Turn 1: Turn 1
+  USER: card
+  BOT:  I understand you mentioned a card—how can I assist you with your banking or credit card needs? Whether you're looking for information on account balances, making payments, or managing your credit card, I'm here to help!
+  RESULT: ✅ PASS  (13.27s)
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Edge Cases > Misspelled product name
+Session: test_1b72a5ea
+
+  Turn 1: Turn 1
+  USER: Tell me about Viza Platinium card
+  BOT:  ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insuranc...
+  RESULT: ✅ PASS  (11.19s)
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Edge Cases > Mixed language query (English + Bengali intent)
+Session: test_5241445c
+
+  Turn 1: Turn 1
+  USER: ami credit card nite chai conventional
+  BOT:  
+  RESULT: ❌ FAIL  (11.27s)
+    ⚠ Request error: 500 Server Error: Internal Server Error for url: http://localhost:8000/chat
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Edge Cases > Multiple off-topic messages
+Session: test_9baa057e
+
+  Turn 1: Turn 1
+  USER: What is the capital of France?
+  BOT:  Hello there! Nice to meet you! I see you're curious about the capital of France—Paris, by the way. Would you like to know more about our credit card offerings or perhaps have any questions about loans or savings too?
+  RESULT: ❌ FAIL  (13.55s)
+    ⚠ Missing expected: 'prime bank'
+    ⚠ Missing expected: 'banking'
+    ⚠ Found forbidden: 'paris'
+    ⚠ Found forbidden: 'france'
+
+  Turn 2: Turn 2
+  USER: Tell me a joke
+  BOT:  Sure, here's one for you: Why don't scientists trust atoms? Because they make up everything! 😄 So, are you interested in learning more about our savings plans or perhaps exploring some investment options?
+  RESULT: ❌ FAIL  (13.83s)
+    ⚠ Missing expected: 'prime bank'
+    ⚠ Missing expected: 'credit card'
+    ⚠ Missing expected: 'banking'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Tier Preference > Platinum card only preference
+Session: test_01e2cd4a
+
+  Turn 1: Turn 1
+  USER: Show me only platinum credit cards
+  BOT:  ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insuranc...
+  RESULT: ❌ FAIL  (11.25s)
+    ⚠ Found forbidden: 'gold'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Tier Preference > Gold card preference with income
+Session: test_2a37cc5a
+
+  Turn 1: Turn 1
+  USER: I want gold tier cards for 150k monthly income
+  BOT:  ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credi...
+  RESULT: ❌ FAIL  (11.19s)
+    ⚠ Missing expected: '150000'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Tier Preference > Platinum + feature preference
+Session: test_5864d4ad
+
+  Turn 1: Turn 1
+  USER: Platinum cards with lounge access
+  BOT:  ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insuranc...
+  RESULT: ❌ FAIL  (11.41s)
+    ⚠ Found forbidden: 'gold'
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Brand Preference > Visa brand only
+Session: test_1a51f4f2
+
+  Turn 1: Turn 1
+  USER: I prefer Visa. What options do you have?
+  BOT:  **📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Platinum</th>
+<th>Visa Gold</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong></td>
+<td>50 days</td>
+<td>50 days</td>
+</tr><tr>
+<td><strong>Reward Points</strong></td>
+<td>1 pt/BDT ...
+  RESULT: ✅ PASS  (11.43s)
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Brand Preference > Mastercard brand preference
+Session: test_badae0d0
+
+  Turn 1: Turn 1
+  USER: Show me Mastercard credit cards
+  BOT:  ============================================================
+PRODUCT: Mastercard World Credit Card
+============================================================
+
+[Why Mastercard World?]
+Why Mastercard World?
+
+[Mastercard World delivers exclusive access to global privileges. With Balaka VIP lounge for you and two companions, LoungeKey access to 1,400+ premium lounges, year-round BOGO at Dhaka's fine...
+  RESULT: ❌ FAIL  (11.27s)
+    ⚠ Found forbidden: 'visa'
+    ⚠ Found forbidden: 'jcb'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Brand Preference > JCB brand preference
+Session: test_6b9aeb00
+
+  Turn 1: Turn 1
+  USER: What JCB cards do you offer?
+  BOT:  ============================================================
+PRODUCT: JCB Gold Credit Card
+============================================================
+
+[JCB Gold delivers premium credit with meaningful lifestyle benefits. Featuring 50-day interest-free period, exclusive VIP lounge access, year-round dining discounts, and comprehensive insurance—it's perfect for customers seeking premium JCB benef...
+  RESULT: ❌ FAIL  (11.09s)
+    ⚠ Found forbidden: 'visa'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Brand Preference > Multiple brand preference
+Session: test_d989c512
+
+  Turn 1: Turn 1
+  USER: I want either Visa or Mastercard
+  BOT:  **📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Platinum</th>
+<th>Visa Gold</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong></td>
+<td>50 days</td>
+<td>50 days</td>
+</tr><tr>
+<td><strong>Reward Points</strong></td>
+<td>1 pt/BDT ...
+  RESULT: ❌ FAIL  (11.36s)
+    ⚠ Missing expected: 'mastercard'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Banking Type Advanced > Islamic + high income
+Session: test_5b740199
+
+  Turn 1: Turn 1
+  USER: Islamic credit card for 500k monthly income
+  BOT:  Thought process:
+1. Identify the relevant credit card products that offer lounge access and other benefits.
+2. Analyze the monthly spend requirements for each product to determine if they fit the user's income.
+
+Based on the provided information, the Visa Hasanah Gold Credit Card is more suitable given the user's monthly income of BDT 300,000:
+
+- **Visa Hasanah Gold Credit Card:**
+  - Monthly Spen...
+  RESULT: ❌ FAIL  (59.36s)
+    ⚠ Missing expected: 'islamic'
+    ⚠ Missing expected: '500k'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Banking Type Advanced > Islamic + tier preference
+Session: test_64e3a02d
+
+  Turn 1: Turn 1
+  USER: Islamic platinum credit card
+  BOT:  ============================================================
+PRODUCT: Visa Hasanah Platinum Credit Card
+============================================================
+
+[Visa Hasanah Platinum elevates Islamic banking to premium status. Operating on Ujrah principles (service fees, never interest), it combines world-class travel access, fine dining benefits, and full Takaful protection—all authenticall...
+  RESULT: ❌ FAIL  (11.37s)
+    ⚠ Found forbidden: 'gold'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Banking Type Advanced > Islamic + feature requirement
+Session: test_a92e5d8b
+
+  Turn 1: Turn 1
+  USER: Islamic card with lounge access and 0% EMI
+  BOT:  
+  RESULT: ❌ FAIL  (11.5s)
+    ⚠ Request error: 500 Server Error: Internal Server Error for url: http://localhost:8000/chat
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Income Boundaries > Ultra-low income: 15k monthly
+Session: test_95dac4a5
+
+  Turn 1: Turn 1
+  USER: Which cards can I get with 15000 BDT monthly?
+  BOT:  ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credi...
+  RESULT: ❌ FAIL  (11.29s)
+    ⚠ Missing expected: '15000'
+    ⚠ Missing expected: 'income'
+    ⚠ Missing expected: 'eligible'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Income Boundaries > Low income: 30k monthly
+Session: test_c3042ea2
+
+  Turn 1: Turn 1
+  USER: 30k per month - what cards qualify me?
+  BOT:  ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credi...
+  RESULT: ❌ FAIL  (11.0s)
+    ⚠ Missing expected: '30000'
+    ⚠ Missing expected: 'eligible'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Income Boundaries > Mid-high income: 200k monthly
+Session: test_d75f57be
+
+  Turn 1: Turn 1
+  USER: 200k monthly income - what's suitable?
+  BOT:  ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insuranc...
+  RESULT: ❌ FAIL  (11.33s)
+    ⚠ Missing expected: '200000'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Income Boundaries > Very high income: 500k monthly
+Session: test_d0a43236
+
+  Turn 1: Turn 1
+  USER: I earn 500000 BDT per month
+  BOT:  To recommend the best card for you:
+
+Do you have a preference for traditional banking services or are you interested in Shariah-compliant options like Hasanah banking?
+
+And what will you primarily use this card for, like travel or daily expenses?
+  RESULT: ❌ FAIL  (15.42s)
+    ⚠ Missing expected: '500000'
+    ⚠ Missing expected: 'platinum'
+    ⚠ Missing expected: 'premium'
+    ⚠ Missing expected: 'credit card'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Income Boundaries > Extreme income: 1 million monthly
+Session: test_265935e2
+
+  Turn 1: Turn 1
+  USER: 1 million BDT monthly income - best premium card?
+  BOT:  ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insuranc...
+  RESULT: ❌ FAIL  (11.18s)
+    ⚠ Missing expected: '1000000'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Feature Deep Dives > Insurance/Takaful details
+Session: test_c177627a
+
+  Turn 1: Turn 1
+  USER: Which cards include insurance or Takaful coverage?
+  BOT:  To recommend the best card for you:
+
+1. Do you prefer conventional banking services or are you interested in Islamic (Shariah-compliant/Hasanah) options?
+
+2. What will you primarily use this card for, like daily commuting or shopping at local stores?
+
+3. By the way, could you share your annual income or monthly salary in BDT?
+  RESULT: ❌ FAIL  (17.53s)
+    ⚠ Missing expected: 'insurance'
+    ⚠ Missing expected: 'takaful'
+    ⚠ Missing expected: 'triple benefit'
+    ⚠ Missing expected: 'coverage'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Feature Deep Dives > Cash advance specifics
+Session: test_8ff9c1fa
+
+  Turn 1: Turn 1
+  USER: Can I get cash advance on credit cards? What limits?
+  BOT:  ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credi...
+  RESULT: ❌ FAIL  (11.32s)
+    ⚠ Missing expected: 'cash advance'
+    ⚠ Missing expected: 'percentage'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Feature Deep Dives > Supplementary card benefits
+Session: test_fc1fa662
+
+  Turn 1: Turn 1
+  USER: How many free supplementary cards can I get?
+  BOT:  ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credi...
+  RESULT: ❌ FAIL  (11.26s)
+    ⚠ Missing expected: 'supplementary'
+    ⚠ Missing expected: 'requirement'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Feature Deep Dives > Annual fee waiver conditions
+Session: test_fcb35535
+
+  Turn 1: Turn 1
+  USER: How do I get annual fee waiver on my card?
+  BOT:  ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credi...
+  RESULT: ❌ FAIL  (11.35s)
+    ⚠ Missing expected: 'annual fee'
+    ⚠ Missing expected: 'waiver'
+    ⚠ Missing expected: 'spending'
+    ⚠ Missing expected: 'transaction'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Business Logic > Business owner eligibility
+Session: test_07b60f32
+
+  Turn 1: Turn 1
+  USER: I'm a business owner with 400k monthly business income
+  BOT:  ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insuranc...
+  RESULT: ❌ FAIL  (11.38s)
+    ⚠ Missing expected: 'business'
+    ⚠ Missing expected: 'eligible'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Business Logic > Age boundary: 18 years old
+Session: test_d750ad8c
+
+  Turn 1: Turn 1
+  USER: I'm 18 years old with 100k monthly income. Can I get a card?
+  BOT:  To recommend the best card for you:
+
+By the way, do you have a preference for conventional banking or Islamic (Shariah-compliant/Hasanah) banking options?
+  RESULT: ❌ FAIL  (13.54s)
+    ⚠ Missing expected: 'age'
+    ⚠ Missing expected: '18'
+    ⚠ Missing expected: 'eligible'
+    ⚠ Missing expected: 'credit card'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Business Logic > Age boundary: 70 years old
+Session: test_c3c11373
+
+  Turn 1: Turn 1
+  USER: I'm 70 with substantial income. Am I eligible?
+  BOT:  To recommend the best card for you:
+
+Are you interested in traditional banking services or do you prefer Shariah-compliant Hasanah banking?
+  RESULT: ❌ FAIL  (13.14s)
+    ⚠ Missing expected: 'age'
+    ⚠ Missing expected: '70'
+    ⚠ Missing expected: 'eligible'
+    ⚠ Missing expected: 'credit card'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Business Logic > Multi-feature complex query
+Session: test_3b694618
+
+  Turn 1: Turn 1
+  USER: 250k income, conventional, platinum, lounge + dining + 0% EMI
+  BOT:  Thought process:
+1. The user is looking for credit cards that offer VIP lounge access, specifically the Balaka VIP Lounge.
+2. They have a monthly income of BDT 300,000 and are interested in cards with benefits related to dining, travel, and entertainment.
+3. Cards should include features such as:
+   - VIP lounge access
+   - Dining discounts (BOGO)
+   - Travel benefits
+4. Based on the provided info...
+  RESULT: ❌ FAIL  (67.05s)
+    ⚠ Missing expected: '250000'
+
+────────────────────────────────────────────────────────────────────────────────
+[✅ PASS]  Business Logic > Collateralized vs unsecured choice
+Session: test_f4d09b0b
+
+  Turn 1: Turn 1
+  USER: Can I get higher credit limit with collateral?
+  BOT:  ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insuranc...
+  RESULT: ✅ PASS  (11.65s)
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Cardholder Scenarios > Card upgrade inquiry
+Session: test_a5edf442
+
+  Turn 1: Turn 1
+  USER: I have a gold card. Can I upgrade to platinum?
+  BOT:  ============================================================
+PRODUCT: Visa Platinum Credit Card
+============================================================
+
+[Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insuranc...
+  RESULT: ❌ FAIL  (11.1s)
+    ⚠ Missing expected: 'upgrade'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Cardholder Scenarios > Rewards redemption query
+Session: test_efeb869a
+
+  Turn 1: Turn 1
+  USER: How can I redeem my reward points?
+  BOT:  ============================================================
+PRODUCT: Visa Gold Credit Card
+============================================================
+
+[Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credi...
+  RESULT: ❌ FAIL  (11.26s)
+    ⚠ Missing expected: 'redeem'
+    ⚠ Missing expected: 'voucher'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Comparison Variants > Three-way comparison attempt
+Session: test_841faf85
+
+  Turn 1: Turn 1
+  USER: Compare Visa Platinum, JCB Platinum, and Mastercard Platinum
+  BOT:  Thank you for sharing that! While I understand your interest in comparing different credit card options, I'd be happy to assist you with any questions about banking or credit cards we offer. Could you let me know if you're looking for information on specific features or benefits of our products?
+  RESULT: ❌ FAIL  (15.16s)
+    ⚠ Missing expected: 'visa'
+    ⚠ Missing expected: 'jcb'
+    ⚠ Missing expected: 'mastercard'
+    ⚠ Missing expected: 'comparison'
+
+────────────────────────────────────────────────────────────────────────────────
+[❌ FAIL]  Comparison Variants > Feature-specific comparison
+Session: test_50bb5c44
+
+  Turn 1: Turn 1
+  USER: Which has better lounge access: Visa Platinum or JCB Platinum?
+  BOT:  **📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Platinum</th>
+<th>Visa Gold</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong></td>
+<td>50 days</td>
+<td>50 days</td>
+</tr><tr>
+<td><strong>Reward Points</strong></td>
+<td>1 pt/BDT ...
+  RESULT: ❌ FAIL  (11.58s)
+    ⚠ Missing expected: 'jcb'
