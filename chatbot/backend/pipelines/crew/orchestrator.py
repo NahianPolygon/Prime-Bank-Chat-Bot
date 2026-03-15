@@ -24,12 +24,16 @@ def _format_products(raw: str, query: str, intent_type: str) -> str:
     """Convert raw RAG text to clean customer-facing response."""
 
     # Trim raw to avoid token overflow while keeping key sections
-    if intent_type == "search_by_category":
-        raw_trimmed = raw[:6000] if len(raw) > 6000 else raw
-    else:
-        raw_trimmed = raw[:3500] if len(raw) > 3500 else raw
+    raw_trimmed = raw[:3500] if len(raw) > 3500 else raw
 
     instructions = {
+        "search_by_category": (
+            "The customer wants to see ALL cards in a category (brand, tier, or banking type). "
+            "List EVERY product found in the data. For each: write its exact name as after 'PRODUCT:', "
+            "then give credit limit, annual fee, and 2-3 key highlights in one line. "
+            "Show ALL products — do not skip any. "
+            "End by asking: Would you like full details on any of these cards?"
+        ),
         "product_info": (
             "Present each PRODUCT found in the data above. "
             "For each: state its exact name as written after 'PRODUCT:', "
@@ -55,19 +59,6 @@ def _format_products(raw: str, query: str, intent_type: str) -> str:
             "End by asking: Would you like to apply for or learn more about any of these?"
         ),
     }
-
-    try:
-        import os
-        prompt_path = os.path.join(os.path.dirname(__file__), '..', '..', 'prompts', 'search_by_category.txt')
-        with open(prompt_path, 'r', encoding='utf-8') as f:
-            instructions["search_by_category"] = f.read().strip()
-            
-        prompt_path_eh = os.path.join(os.path.dirname(__file__), '..', '..', 'prompts', 'existing_cardholder.txt')
-        with open(prompt_path_eh, 'r', encoding='utf-8') as f:
-            instructions["existing_cardholder"] = f.read().strip()
-    except Exception as e:
-        instructions["search_by_category"] = "List the exact names of the products found. Do not include detailed features. End by asking if they want details."
-        instructions["existing_cardholder"] = "Provide the service info needed by the cardholder using the text provided."
 
     rule = instructions.get(intent_type, instructions["product_info"])
 
@@ -112,16 +103,33 @@ class BankChatbotCrew:
         needs_eligibility = intent_type == "eligibility_check"
         print(f"\n🎯 intent={intent_type}")
 
+        # ── Cardholder service ───────────────────────────────────────────────
+        if intent_type == "existing_cardholder":
+            agent = existing_cardholder_agent()
+            task  = cardholder_service_task(agent, enriched_query)
+            result = clean_response(str(Crew(agents=[agent], tasks=[task], verbose=True, max_iter=3, memory=False).kickoff()))
+            return result, None
+
         # ── Retrieve products ────────────────────────────────────────────────
         raw = ""
-        product_types = ("product_info", "comparison", "feature_inquiry", "product_search_by_income", "search_by_category", "existing_cardholder")
+        product_types = ("product_info", "comparison", "feature_inquiry", "product_search_by_income", "search_by_category")
 
         if intent_type in product_types:
             if intent_type == "comparison" and state.has_products():
                 raw = state.products_text or ""
             else:
                 search_q = enriched_query
-                if intent_type == "feature_inquiry":
+                if intent_type == "search_by_category":
+                    # Build focused query from category signals
+                    brand = intent.get("card_brand", "")
+                    tier  = intent.get("preferred_tier", "")
+                    bt    = intent.get("banking_type", "")
+                    bt_str = "islami hasanah" if bt == "islami" else ("conventional" if bt == "conventional" else "")
+                    brand_str = "" if brand in ("unknown", "") else brand
+                    tier_str  = "" if tier  in ("unknown", "") else tier
+                    search_q = " ".join(filter(None, [brand_str, tier_str, bt_str, "credit card overview features"]))
+
+                elif intent_type == "feature_inquiry":
                     features = intent.get("specific_features", [])
                     if features:
                         # Use short focused query: feature names + card type
@@ -135,7 +143,7 @@ class BankChatbotCrew:
                     raw = rag_search_impl(
                         query=search_q,
                         banking_type=intent.get("banking_type", ""),
-                        tier=intent.get("tier", ""),
+                        tier=intent.get("preferred_tier") or intent.get("tier", ""),
                         top_k=15 if intent_type == "search_by_category" else (10 if needs_comparison else 6),
                         customer_income=intent.get("customer_income"),
                     )
@@ -147,16 +155,54 @@ class BankChatbotCrew:
                 raw = rag_search_impl(
                     query=f"{enriched_query} eligibility requirements",
                     banking_type=intent.get("banking_type", ""),
-                    tier=intent.get("tier", ""),
+                    tier=intent.get("preferred_tier") or intent.get("tier", ""),
                     top_k=6,
                 )
             except Exception as e:
                 print(f"⚠️ RAG eligibility failed: {e}")
 
+        # ── Post-filter for search_by_category ──────────────────────────────
+        # RAG embeddings don't respect brand — filter blocks by product_name
+        if intent_type == "search_by_category" and raw and raw.strip() != "NO_PRODUCTS_FOUND":
+            brand  = (intent.get("card_brand") or "").lower().strip()
+            tier   = (intent.get("preferred_tier") or "").lower().strip()
+
+            # brand aliases: "mastercard" matches "Mastercard World", "Mastercard Platinum"
+            # tier aliases: "gold" matches "Visa Gold", "JCB Gold", "Visa Hasanah Gold"
+            # combined: brand="visa" + tier="platinum" → only "Visa Platinum Credit Card"
+            brand_map = {"mastercard": "mastercard", "visa": "visa", "jcb": "jcb"}
+            tier_map  = {"gold": "gold", "platinum": "platinum", "world": "world", "silver": "silver"}
+
+            brand_kw = brand_map.get(brand, "")
+            tier_kw  = tier_map.get(tier, "")
+
+            if brand_kw or tier_kw:
+                # Split raw into per-product blocks and keep only matching ones
+                blocks, current = [], []
+                for line in raw.split("\n"):
+                    if line.startswith("PRODUCT:"):
+                        if current:
+                            blocks.append("\n".join(current))
+                        current = [line]
+                    elif current:
+                        current.append(line)
+                if current:
+                    blocks.append("\n".join(current))
+
+                def _matches(block: str) -> bool:
+                    # Extract product name from first line: "PRODUCT: Mastercard World Credit Card"
+                    first = block.split("\n")[0].replace("PRODUCT:", "").strip().lower()
+                    brand_ok = (not brand_kw) or (brand_kw in first)
+                    tier_ok  = (not tier_kw)  or (tier_kw  in first)
+                    return brand_ok and tier_ok
+
+                filtered = [b for b in blocks if _matches(b)]
+                raw = "\n\n".join(filtered) if filtered else raw
+
         cleaned = clean_response(raw) if raw else ""
 
         # ── Direct LLM format for simple product display ─────────────────────
-        if intent_type in ("product_info", "feature_inquiry", "product_search_by_income", "search_by_category", "existing_cardholder"):
+        if intent_type in ("product_info", "feature_inquiry", "product_search_by_income", "search_by_category"):
             if not raw or not raw.strip():
                 return "I couldn't find matching products. Could you rephrase or tell me more about what you're looking for?", None
             # Extract original customer question from enriched block

@@ -173,7 +173,7 @@ class DynamicClarificationBuilder:
             "employment_type":  "What's their employment type? (salaried, self-employed, business owner, student, etc.)",
         }
         return ollama_chat(
-            system="Prime Bank assistant. Ask one natural, conversational question in 1-2 sentences. Be casual and friendly.",
+            system="Prime Bank assistant. Ask one short, direct, polite question. Do NOT use greetings like 'Hey there' or 'Hello'.",
             user=f"Known: {known}\nAsk about: {hints.get(field, field)}",
             temperature=0.6, max_tokens=60,
         ) or f"Could you share your {field.replace('_', ' ')}?"

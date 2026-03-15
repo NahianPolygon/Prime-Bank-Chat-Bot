@@ -156,10 +156,14 @@ class CrewPipeline:
         if intent.get("card_brand") and intent.get("card_brand") != "unknown":
             state.card_brand = intent["card_brand"]
 
+        # Detect "how to apply" from query — used in multiple checks below
+        _is_apply_query = any(s in query.lower() for s in
+            ("apply", "application", "how to get", "sign up", "sign-up", "register", "enroll"))
+
         # ── How-to-apply: intent classifier already detects this as product_info
         # with a how-to-apply flavour via specific_product. We check the LLM intent
         # rather than keyword-scanning the query.
-        if intent_type == "product_info" and intent.get("is_how_to_apply"):
+        if intent_type == "product_info" and (intent.get("is_how_to_apply") or _is_apply_query):
             product = intent.get("specific_product") or state.recommended_product
             if not product and state.alternative_products:
                 # Multiple products shown — ask which one
@@ -171,10 +175,19 @@ class CrewPipeline:
                 return self._respond(result, ["RAG", "Formatter"], intent)
 
         # After eligibility → how to apply
-        if state.eligibility_done and state.recommended_product and intent.get("is_how_to_apply"):
+        if state.eligibility_done and state.recommended_product and _is_apply_query:
             state.eligibility_done = False
             result = _get_how_to_apply(state.recommended_product, state)
             return self._respond(result, ["RAG", "Formatter"], intent)
+
+        # ── Category browse (show all Mastercards, gold cards, etc.) ────────
+        if intent_type == "search_by_category":
+            enriched = build_context_block(query, history, intent, state)
+            response, retrieved = self.crew.run_agents(enriched_query=enriched, intent_type="search_by_category", intent=intent, state=state)
+            if retrieved:
+                state.products_text = retrieved
+                self._store_products(retrieved, state)
+            return self._respond(response, ["Category Search", "RAG"], intent)
 
         # ── Feature inquiry ───────────────────────────────────────────────────
         if intent_type == "feature_inquiry":
@@ -217,6 +230,11 @@ class CrewPipeline:
                 if rec:
                     state.recommended_product = rec
                 return self._respond(table, ["Comparator"], intent)
+
+        # ── Direct how-to-apply (first message or mid-conversation) ─────────
+        if _is_apply_query and intent.get("specific_product"):
+            result = _get_how_to_apply(resolve_product_name(intent["specific_product"]), state)
+            return self._respond(result, ["RAG", "Formatter"], intent)
 
         # ── Vague → profiling ─────────────────────────────────────────────────
         is_vague, missing = self.clarification_builder.needs_clarification(intent_type, intent, conversation_context={"query": query})
@@ -366,26 +384,35 @@ class CrewPipeline:
     # ── Profile collection ────────────────────────────────────────────────────
 
     def _collect_profile_info(self, query, state):
-        known = ", ".join(f"{k}={v}" for k, v in state.collected_profile.items() if v) or "nothing yet"
+        known_parts = [f"{k}={v}" for k, v in state.collected_profile.items() if v not in (None, "")]
+        known = ", ".join(known_parts) or "nothing yet"
         missing = ", ".join(state.missing_profile_fields)
         raw = ollama_chat(
-            system="Extract profile data. Return ONLY JSON, no markdown.",
+            system="Extract profile data from the customer message. Return ONLY JSON, no markdown.",
             user=(
-                f'Customer: "{query}"\nKnown: {known}\nExtract: {missing}\n\n'
-                "- banking_type: 'conventional'/'islamic'/null\n"
-                "- primary_use_case: 'travel'/'dining'/'business'/'rewards'/'lifestyle'/null\n"
-                "- annual_income: BDT number. Monthly×12. 300k=300000, 2lakh=200000. null if absent\n"
-                "- employment_type: 'salaried'/'business_owner'/'self_employed'/'student'/null\n"
-                "Return JSON with the extracted values.\n"
+                f'Customer said: "{query}"\n'
+                f'Already known: {known}\n'
+                f'Need to extract: {missing}\n\n'
+                "Extract ONLY what the customer mentioned. Map to these values:\n"
+                "- banking_type: \'conventional\' or \'islami\' or null\n"
+                "- primary_use_case: \'travel\'/\'dining\'/\'shopping\'/\'business\'/\'rewards\'/\'lifestyle\' or null\n"
+                "  everyday/general/normal use → \'shopping\'\n"
+                "  ummm maybe shopping → \'shopping\'\n"
+                "- annual_income: integer BDT. If monthly multiply by 12. null if not mentioned\n""  Examples: 200k monthly=2400000, 100k monthly=1200000, 300k monthly=3600000\n"
+                "- employment_type: \'salaried\'/\'business_owner\'/\'self_employed\'/\'student\' or null\n"
+                "Return only the fields listed in \'Need to extract\' above.\n"
+                "Example: {\"primary_use_case\": \"shopping\", \"annual_income\": null}"
             ),
-            temperature=0.1, max_tokens=120,
+            temperature=0.0, max_tokens=120,
         )
         extracted = parse_json(raw) or {}
-        print(f"📊 Profile: {extracted}")
+        print(f"📊 Profile extracted: {extracted}")
         for field in list(state.missing_profile_fields):
-            if extracted.get(field) is not None:
-                state.collected_profile[field] = extracted[field]
+            val = extracted.get(field)
+            if val is not None and val != "null" and val != "":
+                state.collected_profile[field] = val
                 state.missing_profile_fields.remove(field)
+                print(f"✓ Collected {field}={val}, remaining: {state.missing_profile_fields}")
 
     # ── Comparison helpers ────────────────────────────────────────────────────
 

@@ -33,15 +33,18 @@ Understand WHAT the customer wants. Output ONLY valid JSON.
 INTENT TYPES (choose ONE):
   "greeting"                 — Hello, hi, good morning
   "small_talk"               — Weather, jokes, off-topic chat
-  "feature_inquiry"          — Asks about a specific feature, benefit, condition, or service
+  "feature_inquiry"          — Asks about a specific feature, benefit, condition, or service.
+                               The customer wants to know WHICH CARDS have a particular benefit.
                                Examples: "cards with dining", "lounge access", "annual fee waiver condition",
                                "airport welcome service", "best rewards", "0% installment", "insurance coverage"
-                               NOTE: "conventional" and "Islamic/Shariah" are banking TYPES, not features.
-                               NOTE: Brands (Visa, Mastercard, JCB) and Tiers (Gold, Platinum) are CATEGORIES, not features.
-                               NOTE: Services for existing cards (PIN, activation, block) are NOT features.
+                               NOTE: "conventional" and "Islamic/Shariah" are banking TYPES not features.
+                               NOTE: Brands and Tiers are CATEGORIES not features.
                                "I need a conventional card" → product_info, NOT feature_inquiry
-                               "Show me Mastercards" → search_by_category, NOT feature_inquiry
-                               "setup my pin" → existing_cardholder, NOT feature_inquiry
+                               "I want an Islamic card" → product_info, NOT feature_inquiry
+                               "what visa cards do you offer?" → search_by_category, NOT feature_inquiry
+                               "what gold cards are there?" → search_by_category, NOT feature_inquiry
+                               IMPORTANT: Classify based ONLY on the current query. Do NOT inherit
+                               features from conversation history when the current query is about a category.
   "comparison"               — Comparing 2+ named products
   "eligibility_check"        — Customer asks if THEY personally qualify
   "product_search_by_income" — Customer states their income/salary and wants card recommendations
@@ -52,31 +55,43 @@ INTENT TYPES (choose ONE):
                                "I earn 300k monthly, what cards?" → product_search_by_income
                                "Monthly income 100k. Which card?" → product_search_by_income
                                "I make 50k a month, recommend me something" → product_search_by_income
-  "search_by_category"       — Customer asks for a list of multiple cards based on a broad category (Brand, Tier, or Type).
-                               Brands: Visa, Mastercard, JCB. Tiers: Gold, Platinum, World.
-                               Examples: "show me all the mastercards", "list all your gold cards", 
-                               "what Islamic cards do you have", "what Visa cards do you offer", "tell me about JCB cards"
-  "product_info"             — General single product info, or "I need a credit card"
-  "existing_cardholder" — The customer is speaking as someone who ALREADY OWNS a Prime Bank
-                        card and needs help managing or using it. Their concern is about
-                        their own card account, not about choosing or applying for a card.
-                        
-                        The distinction:
-                        - "What cards do you offer?" → they don't have one yet → product_info
-                        - "My card was stolen" → they have one and need help → existing_cardholder
-                        - "How do I activate it?" → they received a card → existing_cardholder
-                        - "What are the lounge benefits?" → researching cards → feature_inquiry
-                        - "What offers am I getting?" → asking about their own card → existing_cardholder
-                        
-                        Service areas this covers: card activation, PIN management,
-                        foreign currency endorsement, blocking a lost or stolen card,
-                        replacing a damaged card, paying bills, checking credit limit,
-                        viewing transaction history, accessing privilege offers and EMI
-                        deals on their card, and reading FAQs or terms and conditions.
-                        
-                        Classify as existing_cardholder whenever the customer's question
-                        only makes sense if they already hold a card — not when they are
-                        comparing, researching, or deciding whether to get one.
+  "product_info"             — General product info with NO income mentioned.
+                               Also use when customer asks HOW TO APPLY or WHAT DOCUMENTS for a specific card.
+                               In that case set is_how_to_apply=true and extract specific_product.
+                               Examples:
+                               "how to apply for Visa Platinum" → product_info, specific_product="Visa Platinum Credit Card", is_how_to_apply=true
+                               "what documents do I need for JCB Gold" → product_info, specific_product="JCB Gold Credit Card", is_how_to_apply=true
+                               "how do I get a Mastercard World" → product_info, specific_product="Mastercard World Credit Card", is_how_to_apply=true
+                               "apply for Hasanah card" → product_info, specific_product="Visa Hasanah Gold Credit Card", is_how_to_apply=true
+  "search_by_category"       — Customer wants to browse or list ALL cards in a category (Brand, Tier, or Type).
+                               Key signal: the question is about a CATEGORY of cards, not a specific product or feature.
+                               Use ONLY the CURRENT QUERY to classify — ignore conversation history features.
+
+                               Brand queries (card_brand):
+                               "what visa cards do you offer?" → search_by_category, card_brand="visa"
+                               "show me all mastercards" → search_by_category, card_brand="mastercard"
+                               "tell me about JCB cards" → search_by_category, card_brand="jcb"
+                               "what mastercard options do you have?" → search_by_category, card_brand="mastercard"
+                               "and what visa cards do u offer?" → search_by_category, card_brand="visa"
+
+                               Tier queries (preferred_tier):
+                               "what gold cards are there?" → search_by_category, preferred_tier="gold"
+                               "list all your gold cards" → search_by_category, preferred_tier="gold"
+                               "how many platinum cards?" → search_by_category, preferred_tier="platinum"
+                               "show me world tier cards" → search_by_category, preferred_tier="world"
+
+                               Banking type queries:
+                               "what Islamic cards do you have?" → search_by_category, banking_type="islami"
+                               "show all conventional cards" → search_by_category, banking_type="conventional"
+
+                               Combined:
+                               "show platinum visa cards" → search_by_category, card_brand="visa", preferred_tier="platinum"
+                               "gold JCB cards" → search_by_category, card_brand="jcb", preferred_tier="gold"
+
+                               CRITICAL: Do NOT extract specific_features for search_by_category queries.
+                               "what visa cards do you offer?" → features=[] NOT features=["lounge"] or anything else
+  "existing_cardholder"      — Questions about their own existing card
+
 ENTITY EXTRACTION:
 
 BANKING TYPE — only if explicitly mentioned:
@@ -100,14 +115,15 @@ CUSTOMER INCOME — convert to ANNUAL BDT:
     "300k monthly"             → 300000 × 12 = 3600000
     "2 lakh per month"         → 200000 × 12 = 2400000   ← NOT 2000000
     "2 lakh monthly"           → 200000 × 12 = 2400000
-    "50 lakh annual"           → 5000000  (no multiply)   ← NOT 60000000
-    "30 lakh annual revenue"   → 3000000  (no multiply)   ← NOT 36000000
-    "annual income 5 lakh"     → 500000   (no multiply)
-    "My annual income is 50 lakh" → 5000000  (no multiply)   ← NOT 60000000
-    "100k"                     → 100000 × 12 = 1200000    (no period word → monthly)
-    "5 lakh"                   → 500000 × 12 = 6000000    (no period word → monthly)
+    "50 lakh annual"           → 5000000  (annual word → no multiply)   ← NOT 60000000
+    "30 lakh annual revenue"   → 3000000  (annual word → no multiply)   ← NOT 36000000
+    "annual income 5 lakh"     → 500000   (annual word → no multiply)
+    "My annual income is 50 lakh" → 5000000 (annual word → no multiply) ← NOT 60000000
+    "100k"                     → 100000 × 12 = 1200000    (no period word → assume monthly)
+    "5 lakh"                   → 500000 × 12 = 6000000    (no period word → assume monthly)
     "salary is 2 lakh per month" → 200000 × 12 = 2400000  (per month → monthly)
     "50k monthly I want dining" → 50000 × 12 = 600000     (monthly → extract income even mid-sentence)
+    "earn 40 lakh yearly"      → 4000000  (yearly = annual → no multiply)
     IMPORTANT: Extract income even when it appears alongside feature requests.
     "300k monthly, lounge and dining" → customer_income=3600000 AND features=["lounge","dining"]
 
@@ -149,7 +165,8 @@ OUTPUT — raw JSON only, no markdown:
   "search_dimension": "relevance",
   "needs_clarification": false,
   "relevance_score": 85,
-  "is_off_topic": false
+  "is_off_topic": false,
+  "is_how_to_apply": false
 }}
 """
 
@@ -219,7 +236,7 @@ OUTPUT — raw JSON only, no markdown:
         specific_features = [str(f).strip().lower() for f in specific_features if f]
         # Remove non-credit-card features the LLM may have hallucinated
         # Only exclude clearly non-credit-card topics
-        invalid_features = {"car_loan","mortgage","savings","weather","joke"}
+        invalid_features = {"car_loan","mortgage","savings","weather","joke","loan"}
         specific_features = [f for f in specific_features if not any(inv in f for inv in invalid_features)]
 
         comparison_products = parsed.get("comparison_products", [])
@@ -234,8 +251,9 @@ OUTPUT — raw JSON only, no markdown:
         customer_age = int(customer_age) if isinstance(customer_age, (int, float)) and customer_age else None
 
         # ── Intent promotion ──────────────────────────────────────────────────
-        # Income + features present → product_search_by_income (income is stronger signal)
-        if intent_type == "feature_inquiry" and customer_income:
+        # Income present in ANY intent → product_search_by_income (income is the strongest signal)
+        # Covers: feature_inquiry + income, product_info + income, etc.
+        if customer_income and intent_type not in ("comparison", "eligibility_check", "existing_cardholder", "greeting", "small_talk"):
             intent_type = "product_search_by_income"
 
         # ── Validation ────────────────────────────────────────────────────────
@@ -255,6 +273,10 @@ OUTPUT — raw JSON only, no markdown:
             needs_clarification = True
 
         # Enum guards
+        valid_intents = ("greeting","small_talk","feature_inquiry","comparison","eligibility_check",
+                         "product_search_by_income","search_by_category","product_info","existing_cardholder","eligibility_matching")
+        if intent_type not in valid_intents:
+            intent_type = "product_info"
         if banking_type not in ("conventional", "islami", "unknown"):
             banking_type = "unknown"
         if preferred_tier not in ("platinum", "gold", "silver", "unknown"):
@@ -280,6 +302,7 @@ OUTPUT — raw JSON only, no markdown:
             "customer_tenure_months": None,
             "relevance_score": int(parsed.get("relevance_score", 85)),
             "is_off_topic": bool(parsed.get("is_off_topic", False)),
+            "is_how_to_apply": bool(parsed.get("is_how_to_apply", False)),
         }
 
         print(f"🎯 Intent: {intent_type} | Income: {customer_income} | Features: {specific_features} | Product: '{specific_product}'")
