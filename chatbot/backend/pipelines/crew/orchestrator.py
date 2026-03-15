@@ -61,8 +61,13 @@ def _format_products(raw: str, query: str, intent_type: str) -> str:
         prompt_path = os.path.join(os.path.dirname(__file__), '..', '..', 'prompts', 'search_by_category.txt')
         with open(prompt_path, 'r', encoding='utf-8') as f:
             instructions["search_by_category"] = f.read().strip()
+            
+        prompt_path_eh = os.path.join(os.path.dirname(__file__), '..', '..', 'prompts', 'existing_cardholder.txt')
+        with open(prompt_path_eh, 'r', encoding='utf-8') as f:
+            instructions["existing_cardholder"] = f.read().strip()
     except Exception as e:
         instructions["search_by_category"] = "List the exact names of the products found. Do not include detailed features. End by asking if they want details."
+        instructions["existing_cardholder"] = "Provide the service info needed by the cardholder using the text provided."
 
     rule = instructions.get(intent_type, instructions["product_info"])
 
@@ -107,16 +112,9 @@ class BankChatbotCrew:
         needs_eligibility = intent_type == "eligibility_check"
         print(f"\n🎯 intent={intent_type}")
 
-        # ── Cardholder service ───────────────────────────────────────────────
-        if intent_type == "existing_cardholder":
-            agent = existing_cardholder_agent()
-            task  = cardholder_service_task(agent, enriched_query)
-            result = clean_response(str(Crew(agents=[agent], tasks=[task], verbose=True, max_iter=3, memory=False).kickoff()))
-            return result, None
-
         # ── Retrieve products ────────────────────────────────────────────────
         raw = ""
-        product_types = ("product_info", "comparison", "feature_inquiry", "product_search_by_income", "search_by_category")
+        product_types = ("product_info", "comparison", "feature_inquiry", "product_search_by_income", "search_by_category", "existing_cardholder")
 
         if intent_type in product_types:
             if intent_type == "comparison" and state.has_products():
@@ -158,7 +156,7 @@ class BankChatbotCrew:
         cleaned = clean_response(raw) if raw else ""
 
         # ── Direct LLM format for simple product display ─────────────────────
-        if intent_type in ("product_info", "feature_inquiry", "product_search_by_income", "search_by_category"):
+        if intent_type in ("product_info", "feature_inquiry", "product_search_by_income", "search_by_category", "existing_cardholder"):
             if not raw or not raw.strip():
                 return "I couldn't find matching products. Could you rephrase or tell me more about what you're looking for?", None
             # Extract original customer question from enriched block

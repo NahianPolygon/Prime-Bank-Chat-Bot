@@ -38,8 +38,10 @@ INTENT TYPES (choose ONE):
                                "airport welcome service", "best rewards", "0% installment", "insurance coverage"
                                NOTE: "conventional" and "Islamic/Shariah" are banking TYPES, not features.
                                NOTE: Brands (Visa, Mastercard, JCB) and Tiers (Gold, Platinum) are CATEGORIES, not features.
+                               NOTE: Services for existing cards (PIN, activation, block) are NOT features.
                                "I need a conventional card" → product_info, NOT feature_inquiry
                                "Show me Mastercards" → search_by_category, NOT feature_inquiry
+                               "setup my pin" → existing_cardholder, NOT feature_inquiry
   "comparison"               — Comparing 2+ named products
   "eligibility_check"        — Customer asks if THEY personally qualify
   "product_search_by_income" — Customer states their income/salary and wants card recommendations
@@ -55,8 +57,26 @@ INTENT TYPES (choose ONE):
                                Examples: "show me all the mastercards", "list all your gold cards", 
                                "what Islamic cards do you have", "what Visa cards do you offer", "tell me about JCB cards"
   "product_info"             — General single product info, or "I need a credit card"
-  "existing_cardholder"      — Questions about their own existing card
-
+  "existing_cardholder" — The customer is speaking as someone who ALREADY OWNS a Prime Bank
+                        card and needs help managing or using it. Their concern is about
+                        their own card account, not about choosing or applying for a card.
+                        
+                        The distinction:
+                        - "What cards do you offer?" → they don't have one yet → product_info
+                        - "My card was stolen" → they have one and need help → existing_cardholder
+                        - "How do I activate it?" → they received a card → existing_cardholder
+                        - "What are the lounge benefits?" → researching cards → feature_inquiry
+                        - "What offers am I getting?" → asking about their own card → existing_cardholder
+                        
+                        Service areas this covers: card activation, PIN management,
+                        foreign currency endorsement, blocking a lost or stolen card,
+                        replacing a damaged card, paying bills, checking credit limit,
+                        viewing transaction history, accessing privilege offers and EMI
+                        deals on their card, and reading FAQs or terms and conditions.
+                        
+                        Classify as existing_cardholder whenever the customer's question
+                        only makes sense if they already hold a card — not when they are
+                        comparing, researching, or deciding whether to get one.
 ENTITY EXTRACTION:
 
 BANKING TYPE — only if explicitly mentioned:
