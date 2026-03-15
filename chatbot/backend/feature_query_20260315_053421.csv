@@ -1,0 +1,61 @@
+"customer_query","intent_detected","full_bot_response","rag_chunks"
+"Which cards offer airport lounge access?","feature_inquiry","Visa Hasanah Platinum Credit Card:
+- **LoungeKey Global Access**: Worldwide network with 1,400+ partner lounges globally, priority seating available.
+- **Balaka VIP Lounge Access**: Exclusive lounge entrance, you + 1 companion access.
+
+Mastercard World Credit Card:
+- **LoungeKey Global Access**: Worldwide network with 1,400+ partner lounges globally, premium lounges in major hubs, priority seating available.
+
+Would you like to know more about any of these cards?",""
+"Do you have any cards with VIP lounge benefits?","feature_inquiry","PRODUCT: Visa Hasanah Platinum Credit Card
+- **Balaka VIP Lounge Access**: Exclusive lounge entrance, You + 1 companion access (without purchase), Additional companions available with spend criteria, Valid flight boarding pass required, Presentation of Platinum card at entrance
+
+PRODUCT: Mastercard World Credit Card
+- **Travel**: Balaka VIP + LoungeKey + 1,400+ lounges
+
+PRODUCT: JCB Platinum Credit Card
+- **Balaka VIP Lounge Benefits**: Exclusive lounge entrance, You + 1 companion access, Luxury seating and amenities, Complimentary beverages and snacks, WiFi and business facilities, Shower facilities available, News and entertainment, Professional environment
+
+Would you like to know more about any of these cards?",""
+"What cards include Balaka lounge access?","feature_inquiry","PRODUCT: Visa Hasanah Platinum Credit Card  
+**Benefit Description:** Balaka VIP Lounge Access
+
+PRODUCT: Mastercard World Credit Card  
+**Benefit Description:** Travel: Balaka VIP + LoungeKey + 1,400+ lounges
+
+Would you like to know more about any of these cards?",""
+"I need a card with priority lounge access","feature_inquiry","Visa Hasanah Platinum Credit Card
+- **Balaka VIP Lounge Access**: Exclusive lounge entrance, You + 1 companion (without purchase), Additional companions available with spend criteria, Valid airline boarding pass required, Presentation of Platinum card at entrance
+
+Mastercard World Credit Card
+- **Travel**: Balaka VIP + LoungeKey + 1,400+ lounges
+
+Would you like to know more about any of these cards?",""
+"LoungeKey feature - which cards have it?","feature_inquiry","Mastercard World Credit Card
+- LoungeKey Global Access: Worldwide Network with 1,400+ partner lounges globally; Priority seating available; Up to 2 free visits per year standard
+
+Would you like to know more about any of these cards?",""
+"Cards with dining discounts?","feature_inquiry","JCB Platinum Credit Card - Year-round BOGO at 6 luxury restaurants
+
+Would you like to know more about any of these cards?",""
+"Which credit cards have buy one get one dining offer?","feature_inquiry","**Mastercard World Credit Card**
+- **Reward Points:** Double earning! 2 points per BDT 50 spent
+
+**Visa Platinum Credit Card**
+- **Dining:** Year-round BOGO at luxury restaurants
+
+Would you like to know more about any of these cards?",""
+"I want a card with year-round dining benefits","feature_inquiry","JCB Platinum Credit Card - Year-round BOGO at 6 luxury restaurants.
+
+Would you like to know more about any of these cards?",""
+"Do any cards offer restaurant cashback?","feature_inquiry","Visa Gold Credit Card:
+- **Reward Points:** 1 point per BDT 50 spent
+
+Would you like to know more about any of these cards?",""
+"Best card for restaurant BOGO offers?","feature_inquiry","**Mastercard World Credit Card**
+- **Reward Points:** Double earning! 2 points per BDT 50 spent
+
+**Visa Platinum Credit Card**
+- **Dining:** Year-round BOGO at luxury restaurants
+
+Would you like to know more about any of these cards?",""

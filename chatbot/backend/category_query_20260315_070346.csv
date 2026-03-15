@@ -1,0 +1,48 @@
+"customer_query","intent_detected","full_bot_response","rag_chunks"
+"Show me all the Mastercards you have","feature_inquiry","Based on the provided product data, there are no Mastercard products listed that have a Premium Dining Program.
+
+Would you like to know more about any of the other cards mentioned in the data?",""
+"What Visa cards do you offer?","feature_inquiry","Visa Platinum Credit Card
+
+- Exclusive Balaka VIP lounge access for you and a companion
+- LoungeKey access to 1,400+ global lounges
+- Year-round BOGO dining at premium restaurants
+- Comprehensive insurance coverage
+
+Would you like to know more about any of these cards?",""
+"Tell me about your JCB credit cards","feature_inquiry","Based on the provided product data, there are no specific JCB credit card details mentioned for a ""Premium Dining Program"" feature.
+
+Would you like to know more about any of the other cards listed in the data?",""
+"List all your Mastercards","feature_inquiry","Based on the provided product data, here are the Mastercards that offer specific benefits:
+
+1. **Mastercard World Credit Card**
+   - **Benefit Description:** Exclusive access to global privileges including Balaka VIP lounge for you and two companions, LoungeKey access to 1,400+ premium lounges, year-round BOGO at Dhaka's finest restaurants, and double reward points.
+
+2. **Mastercard Platinum Credit Card**
+   - **Benefit Description:** Combines premium global access with lifestyle privileges including LoungeKey + Priority Pass, exclusive Balaka VIP with companion, year-round BOGO at premium restaurants, and comprehensive insurance.
+
+Would you like to know more about any of these cards?",""
+"I want to see all your Visa credit cards","search_by_category","The exact names of the Visa credit cards available are:
+
+- Visa Gold Credit Card
+- Visa Platinum Credit Card
+- Visa Hasanah Gold Credit Card
+- Visa Hasanah Platinum Credit Card
+
+Would you like more details on any of these products?",""
+"Show me all the gold cards","feature_inquiry","**Visa Gold Credit Card**
+- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Interest-Free Period:** 50 days (longest in market)
+- **Reward Points:** 1 point per BDT 50 spent
+- **Insurance:** Triple Benefit coverage (BDT 5 lac max)
+- **Dining & Travel:** Year-round exclusive discounts
+
+**JCB Gold Credit Card**
+- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Interest-Free:** 50 days (full balance covered)
+- **Reward Points:** 1 point per BDT 50 spent
+- **VIP Access:** Balaka lounge with fee waiver option
+- **Dining:** Year-round exclusive discounts
+- **Insurance:** Triple Benefit coverage (BDT 5 lac max)
+
+Would you like to know more about any of these cards?",""

@@ -9,7 +9,7 @@ from pipelines.crew.eligibility import (
     build_eligibility_profile,
 )
 from pipelines.crew.helpers import greet, chat, build_context_block
-from pipelines.crew.eligibility_matching import run_eligibility_matching
+from pipelines.crew.eligibility_matching import run_eligibility_matching, run_eligibility_info
 from pipelines.rag.search import rag_search_impl, resolve_product_name, get_all_product_names
 from utils.ollama import ollama_chat, parse_json
 
@@ -104,8 +104,10 @@ class CrewPipeline:
                     formatted = _format_products(matched_cards, query, "product_info")
                     return self._respond(f"Based on your profile, here are the best cards for you:\n\n{formatted}", ["Smart Profiler", "RAG"], state.intent)
             else:
-                msg = self.clarification_builder.get_dynamic_clarification_message(
-                    state.missing_profile_fields, state.collected_profile, state.intent.get("intent_type", "product_info")
+                # Ask one field at a time — first missing field only
+                next_field = state.missing_profile_fields[0]
+                msg = self.clarification_builder.generate_contextual_question(
+                    next_field, state.collected_profile
                 )
                 return self._respond(msg, ["Smart Profiler"], state.intent, needs_clarification=True)
 
@@ -144,9 +146,9 @@ class CrewPipeline:
         if state.has_products() and intent.get("preferences_changed"):
             state.reset_products()
 
-        if intent.get("needs_clarification"):
-            state.intent = intent
-            return self._respond(intent["clarification_question"], ["Intent Classifier"], intent, needs_clarification=True)
+        # NOTE: do NOT short-circuit on intent["needs_clarification"] here.
+        # The intent classifier's needs_clarification flag is unreliable for product_info.
+        # All profiling decisions are made by clarification_builder.needs_clarification() below.
 
         state.intent = intent
         if intent.get("preferred_tier") and intent.get("preferred_tier") != "unknown":
@@ -217,7 +219,7 @@ class CrewPipeline:
                 return self._respond(table, ["Comparator"], intent)
 
         # ── Vague → profiling ─────────────────────────────────────────────────
-        is_vague, missing = self.clarification_builder.needs_clarification(intent_type, intent)
+        is_vague, missing = self.clarification_builder.needs_clarification(intent_type, intent, conversation_context={"query": query})
         if is_vague:
             if (state.preferred_tier and state.preferred_tier != "unknown") or (state.card_brand and state.card_brand != "unknown"):
                 q = " ".join(filter(None, [state.card_brand, state.preferred_tier, "credit card"]))
@@ -229,7 +231,9 @@ class CrewPipeline:
                     return self._respond(formatted, ["Brand/Tier RAG"], intent)
             state.profiling_needed = True
             state.missing_profile_fields = missing
-            msg = self.clarification_builder.get_dynamic_clarification_message(missing, state.collected_profile, intent_type)
+            # Ask only the first missing field to keep conversation natural
+            first_field = missing[0]
+            msg = self.clarification_builder.generate_contextual_question(first_field, state.collected_profile)
             return self._respond(msg, ["Smart Profiler"], intent, needs_clarification=True)
 
         # ── Eligibility check ─────────────────────────────────────────────────
@@ -248,6 +252,23 @@ class CrewPipeline:
                         break
 
         if intent_type == "eligibility_check":
+            # Distinguish two sub-modes:
+            # 1. "What are the requirements for X?" → info query, answer directly
+            # 2. "Am I eligible?" / "Do I qualify?" → personal check, start collection
+            q_lower = query.lower()
+            is_personal_check = any(w in q_lower for w in (
+                "am i", "do i", "can i", "will i", "would i", "i qualify", "i eligible",
+                "my eligibility", "check my", "for me"
+            ))
+            specific_product = intent.get("specific_product", "")
+            if not is_personal_check and specific_product:
+                # Info query — fetch requirements and present them directly
+                result = run_eligibility_info(
+                    product_name=specific_product,
+                    banking_type=intent.get("banking_type", ""),
+                )
+                return self._respond(result["result"], ["Eligibility", "RAG"], intent)
+            # Personal eligibility check — start multi-turn collection
             question = start_eligibility_collection(intent, state)
             state._current_field = "age"
             return self._respond(question, ["Eligibility"], intent, needs_clarification=True)
@@ -347,7 +368,6 @@ class CrewPipeline:
     def _collect_profile_info(self, query, state):
         known = ", ".join(f"{k}={v}" for k, v in state.collected_profile.items() if v) or "nothing yet"
         missing = ", ".join(state.missing_profile_fields)
-        fields_json = ", ".join(f'"{f}": null' for f in state.missing_profile_fields)
         raw = ollama_chat(
             system="Extract profile data. Return ONLY JSON, no markdown.",
             user=(
@@ -356,7 +376,7 @@ class CrewPipeline:
                 "- primary_use_case: 'travel'/'dining'/'business'/'rewards'/'lifestyle'/null\n"
                 "- annual_income: BDT number. Monthly×12. 300k=300000, 2lakh=200000. null if absent\n"
                 "- employment_type: 'salaried'/'business_owner'/'self_employed'/'student'/null\n"
-                f"Return: {{{fields_json}}}"
+                "Return JSON with the extracted values.\n"
             ),
             temperature=0.1, max_tokens=120,
         )

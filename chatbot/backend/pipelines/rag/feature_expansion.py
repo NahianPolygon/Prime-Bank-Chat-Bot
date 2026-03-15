@@ -284,53 +284,34 @@ OUTPUT JSON:
         customer_profile: Dict
     ) -> str:
         """
-        Intelligently combine feature expansions with priority weighting.
+        Create a short, focused search query from feature names.
+        
+        Avoids embedding confusion from verbose keyword strings.
+        Simple is better for semantic search.
         
         Args:
             expansions: [(feature, expansion_dict, strength_score), ...]
             customer_profile: Customer context
         
         Returns:
-            Combined search query string
+            Short focused search query
         """
         
         # Sort by intent strength (highest first)
         expansions.sort(key=lambda x: x[2], reverse=True)
         
-        all_keywords = []
+        # Just use feature names + banking type + tier — short and focused
+        # Avoid verbose keyword expansion that confuses embedders
+        features = [expansion[0] for expansion in expansions]
+        query_parts = features  # Just the feature names
         
-        for feature, expansion, strength in expansions:
-            # Add core keywords (always included)
-            core = expansion.get("core_keywords", [])
-            all_keywords.extend(core)
-            
-            # Add synonyms for high-strength features
-            if strength > 0.7:
-                synonyms = expansion.get("synonyms", [])
-                all_keywords.extend(synonyms[:3])  # Top 3 synonyms
-            
-            # Add regional terms (important for local context)
-            regional = expansion.get("regional_terms", [])
-            all_keywords.extend(regional)
-            
-            # Add related benefits for very high strength
-            if strength > 0.9:
-                related = expansion.get("related_benefits", [])
-                all_keywords.extend(related[:2])  # Top 2 related
+        # Add customer context if available
+        income = customer_profile.get("annual_income") or customer_profile.get("customer_income")
+        if income:
+            tier = "platinum" if income > 1500000 else "gold"
+            query_parts.append(tier)
         
-        # Deduplicate while preserving order
-        seen = set()
-        unique_keywords = []
-        for kw in all_keywords:
-            kw_lower = kw.lower()
-            if kw_lower not in seen:
-                seen.add(kw_lower)
-                unique_keywords.append(kw)
-        
-        # Limit to optimal length (15-20 keywords for embedding match)
-        optimal_keywords = unique_keywords[:18]
-        
-        return " ".join(optimal_keywords)
+        return " ".join(query_parts)
     
     def _add_contextual_boosting(
         self,

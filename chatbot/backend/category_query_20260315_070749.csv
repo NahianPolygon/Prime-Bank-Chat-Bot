@@ -1,0 +1,53 @@
+"customer_query","intent_detected","full_bot_response","rag_chunks"
+"Show me all the Mastercards you have","search_by_category","Mastercard World Credit Card  
+Mastercard Platinum Credit Card  
+
+Would you like details on any of these products?",""
+"What Visa cards do you offer?","feature_inquiry","Visa Gold Credit Card:
+- 50 days interest-free shopping
+- Attractive reward points
+- VIP lounge access
+- Comprehensive insurance coverage
+
+Would you like to know more about any of these cards?",""
+"Tell me about your JCB credit cards","feature_inquiry","Based on the provided product data, there are no specific JCB credit card details mentioned that include a Premium Dining Program. Therefore, I cannot list any JCB credit cards with this feature.
+
+Would you like to know more about any of the other cards mentioned in the data?",""
+"List all your Mastercards","search_by_category","Mastercard Platinum Credit Card
+
+Would you like details on any of these products?",""
+"I want to see all your Visa credit cards","feature_inquiry","Based on the provided product data, there is only one Visa credit card mentioned:
+
+PRODUCT: Visa Gold Credit Card
+
+Visa Gold Credit Card combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.
+
+Would you like to know more about any of these cards?",""
+"Show me all the gold cards","product_info","Certainly! Here are the gold credit card options available:
+
+1. **Visa Gold Credit Card**
+   - **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+   - **Interest-Free Period:** 50 days
+   - **Top Benefits:**
+     - Attractive reward points (1 point per BDT 50 spent)
+     - VIP lounge access
+     - Comprehensive insurance coverage
+
+2. **Visa Hasanah Platinum Credit Card**
+   - **Credit Limit:** Not specified in the data
+   - **Interest-Free Period:** Not specified in the data
+   - **Top Benefits:**
+     - Milestone bonus points on reaching annual thresholds
+     - Referral program for additional points
+     - Premium reward point calculation (1 point per BDT 50 spent)
+     - Custom redemption options
+
+3. **JCB Gold Credit Card**
+   - **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+   - **Interest-Free Period:** 50 days
+   - **Top Benefits:**
+     - Exclusive VIP lounge access with fee waiver option
+     - Year-round dining discounts
+     - Comprehensive insurance coverage
+
+Would you like details on any of these cards?",""

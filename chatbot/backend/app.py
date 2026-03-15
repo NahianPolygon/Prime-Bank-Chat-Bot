@@ -35,6 +35,7 @@ class ChatResponse(BaseModel):
     agent_chain: Optional[List[str]] = None
     products_found: Optional[List[str]] = None
     detected_intent: Optional[Dict[str, Any]] = None  # ← ADDED FOR SEMANTIC TESTING
+    is_clarification_asked: Optional[bool] = False  # ← TRACK IF CLARIFICATION WAS TRIGGERED
     session_id: str
     timestamp: str
     success: bool
@@ -225,6 +226,7 @@ async def chat(request: ChatRequest) -> ChatResponse:
                 agent_chain=result.get('agent_chain', []),
                 products_found=result.get('products_found', []),
                 detected_intent=detected_intent,  # ← NOW INCLUDED IN RESPONSE
+                is_clarification_asked=result.get('needs_clarification', False),  # ← TRACK CLARIFICATION
                 session_id=session_id,
                 timestamp=datetime.now().isoformat(),
                 success=True
@@ -249,6 +251,7 @@ async def chat(request: ChatRequest) -> ChatResponse:
                 agent_chain=["RAG"],
                 products_found=[s.get('product_name', 'Unknown') for s in result['sources']],
                 detected_intent=None,  # RAG mode doesn't have intent classification
+                is_clarification_asked=False,  # RAG mode doesn't do clarification
                 session_id=session_id,
                 timestamp=datetime.now().isoformat(),
                 success=result['success']

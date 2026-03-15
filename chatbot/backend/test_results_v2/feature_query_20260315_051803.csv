@@ -1,0 +1,184 @@
+test_id,query,banking_type,is_feature_inquiry,extracted_features,passed,response_time,answer
+FQ_001,Which cards offer reward points?,conventional,True,"[""rewards""]",True,23.3,"The cards that offer reward points are:
+
+- **Visa Platinum Credit Card**: Reward Points & Redemption
+
+- **JCB Gold Credit Card**: Reward Points Program
+
+- **JCB Platinum Credit Card**: Reward Points Program
+
+- **Visa Gold Credit Card**: Reward Points Program
+
+Would you like to know more about any of"
+FQ_002,Cards with 2 points per BDT 50 spending,conventional,True,"[""rewards""]",True,14.8,"Based on the provided product data, there is no card that matches the feature ""2 points per BDT 50 spending.""
+
+Would you like to know more about any of these cards?"
+FQ_003,Best rewards card for shopping,conventional,True,"[""best_rewards""]",True,15.82,"Visa Platinum Credit Card
+
+- **Reward Points:** 1 point per BDT 50 spent
+
+Would you like to know more about any of these cards?"
+FQ_004,High point earning cards,conventional,True,"[""high_point_earning""]",True,17.03,"Based on the provided product data, the card that offers high point earning is:
+
+**Mastercard World Credit Card**
+- **Reward Points:** 2 points per BDT 50 spent (double earning!)
+
+Would you like to know more about this card or any other?"
+FQ_005,Cards with Balaka VIP lounge access,conventional,True,"[""lounge""]",True,19.88,"PRODUCT: Visa Hasanah Platinum Credit Card
+- **Balaka VIP Lounge Access**
+  - Exclusive lounge entrance
+  - You + 1 companion (without purchase)
+  - Additional companions available with spend criteria
+  - Valid airline boarding pass required
+  - Presentation of Platinum card at entrance
+
+PRODUCT: Ma"
+FQ_006,What is LoungeKey on credit cards?,conventional,True,"[""lounge""]",True,20.24,"PRODUCT: Mastercard World Credit Card
+
+**LoungeKey Global Access**
+
+Worldwide Network:
+- 1,400+ partner lounges globally
+- Multiple airports covered
+- Premium lounges in major hubs
+- Priority seating available
+
+Visit Benefits:
+- Standard: Per LoungeKey terms
+- Fee Waiver: Spend USD 500 during travel"
+FQ_007,Airport lounge access cards,conventional,True,"[""lounge""]",True,20.85,"Visa Hasanah Platinum Credit Card:
+- **LoungeKey Global Access**: 
+  - Worldwide Network: 1,400+ partner lounges globally
+  - Up to 2 free visits per year standard
+
+Mastercard World Credit Card:
+- **LoungeKey Global Access**:
+  - Worldwide Network: 1,400+ partner lounges globally
+  - Standard: Per L"
+FQ_008,VIP lounge for me and companions,conventional,True,"[""lounge""]",True,18.96,"PRODUCT: Visa Hasanah Platinum Credit Card
+- **Benefit Description:** Exclusive lounge entrance, You + 1 companion access (without purchase), Additional companions available with spend criteria
+
+PRODUCT: Mastercard World Credit Card
+- **Benefit Description:** Balaka VIP + LoungeKey + 1,400+ lounges
+"
+FQ_009,Premium travel benefits credit cards,conventional,True,"[""travel""]",True,16.35,"Visa Platinum Credit Card
+
+**Benefit Description:** 
+- **Travel Privileges:** LoungeKey + Balaka VIP + Airport Welcome
+
+Would you like to know more about any of these cards?"
+FQ_010,Airport welcome service on cards,conventional,True,"[""airport_welcome""]",True,16.93,"The card that offers the Airport Welcome Service is:
+
+- **Visa Gold Credit Card**
+  - Quick claim settlement with documentation required
+
+Would you like to know more about any of these cards?"
+FQ_011,Cards with BOGO dining offers,conventional,True,"[""bogo""]",True,18.06,"**Mastercard World Credit Card**
+- **Reward Points:** Double earning! 2 points per BDT 50 spent
+
+**Visa Platinum Credit Card**
+- **Dining:** Year-round BOGO at luxury restaurants
+
+Would you like to know more about any of these cards?"
+FQ_012,Year-round dining discounts,conventional,True,"[""dining""]",True,14.46,"JCB Platinum Credit Card - Year-round BOGO at 6 luxury restaurants
+
+Would you like to know more about any of these cards?"
+FQ_013,Restaurant BOGO offers on credit cards,conventional,True,"[""bogo""]",True,17.69,"**Mastercard World Credit Card**
+- Year-round BOGO at 6 luxury restaurants
+
+**Visa Platinum Credit Card**
+- Year-round BOGO at luxury restaurants
+
+Would you like to know more about any of these cards?"
+FQ_014,Which card gives free meals at restaurants?,conventional,True,"[""dining""]",True,14.67,"JCB Platinum Credit Card - Year-round BOGO at 6 luxury restaurants.
+
+Would you like to know more about any of these cards?"
+FQ_015,Cards with 50-day interest-free period,conventional,True,"[""interest_free""]",True,18.98,"PRODUCT: JCB Platinum Credit Card
+- **50-Day Interest-Free Period**
+
+PRODUCT: Visa Platinum Credit Card
+- **50-Day Interest-Free Period**
+
+PRODUCT: Mastercard Platinum Credit Card
+- **50-Day Interest-Free Period**
+
+Would you like to know more about any of these cards?"
+FQ_016,Longest interest-free credit period,conventional,True,"[""interest_free""]",True,17.65,"The JCB Gold Credit Card has a 50-day interest-free period.
+
+Would you like to know more about any of these cards?"
+FQ_017,Interest-free purchase cards,conventional,True,"[""interest_free""]",True,17.83,"JCB Gold Credit Card
+- 50-day interest-free period on outstanding balance after a grace period
+
+Would you like to know more about any of these cards?"
+FQ_018,Cards with 0% EMI facility,conventional,True,"[""emi""]",True,16.81,"Visa Platinum Credit Card
+- 0% Interest EMI Scheme
+
+Would you like to know more about any of these cards?"
+FQ_019,Up to 36-month installment plans,conventional,True,"[""emi""]",True,16.8,"Visa Platinum Credit Card
+
+- **0% Interest EMI Scheme**
+
+Would you like to know more about any of these cards?"
+FQ_020,Flexible payment installment cards,conventional,True,"[""emi""]",True,16.75,"Visa Platinum Credit Card
+
+- **0% Interest EMI Scheme**
+
+Would you like to know more about any of these cards?"
+FQ_021,Triple Benefit Insurance on credit cards,conventional,True,"[""insurance""]",True,15.73,"Visa Platinum Credit Card:
+- Triple Benefit coverage (BDT 10 lac max)
+
+Would you like to know more about any of these cards?"
+FQ_022,Accidental death coverage insurance,conventional,True,"[""insurance""]",True,34.56,"Visa Platinum Credit Card
+
+**Insurance:** Comprehensive insurance—Triple Benefit coverage (BDT 10 lac max)
+
+Would you like to know more about any of these cards?"
+FQ_023,Critical illness coverage cards,conventional,True,"[""insurance""]",True,35.18,"The product data does not mention critical illness coverage for any of the credit cards listed. Therefore, there are no cards in the provided data that have this feature.
+
+Would you like to know more about any of these cards?"
+FQ_024,Takaful insurance on Islamic cards,islami,True,"[""takaful""]",True,18.69,"**Visa Hasanah Gold Credit Card**
+- **Islamic Insurance:** Takaful Triple Benefit
+
+**Visa Hasanah Platinum Credit Card**
+- **Islamic Insurance:** Takaful Triple Benefit (enhanced BDT 10 lac)
+
+Would you like to know more about any of these cards?"
+FQ_025,Highest unsecured credit limit cards,conventional,True,"[""credit_limit""]",True,17.16,"Based on the provided product data, there are no credit card products that specifically mention ""unsecured credit limit"" as a feature. However, I can provide information on the credit limits for each card:
+
+1. JCB Platinum Credit Card: Premium Credit Limits not specified.
+2. Mastercard Platinum Cred"
+FQ_026,BDT 1 million credit limit cards,conventional,True,"[""credit_limit""]",True,33.89,"The card with a BDT 1 million credit limit is:
+
+- JCB Platinum Credit Card
+
+Would you like to know more about this card?"
+FQ_027,Cash advance on credit cards,conventional,True,"[""cash_advance""]",True,38.57,"Visa Hasanah Gold Credit Card
+- Quick Access to Funds: Up to 50% of credit limit
+
+Visa Gold Credit Card
+- Cash Advance Fee: 3% (Minimum BDT 300)
+
+JCB Gold Credit Card
+- Cash Advance Fee: 3% (Minimum BDT 300)
+
+Would you like to know more about any of these cards?"
+FQ_028,Annual fee waiver condition,conventional,True,"[""fee_waiver""]",True,36.36,"PRODUCT: JCB Gold Credit Card
+- Annual Fee: Waived on 15+ purchases
+
+PRODUCT: Visa Hasanah Gold Credit Card
+- Annual Fee: Waived on 15 purchases
+
+Would you like to know more about any of these cards?"
+FQ_029,Free supplementary cards,conventional,True,"[""supplementary_card""]",True,36.52,"PRODUCT: Visa Hasanah Gold Credit Card
+
+**Free Supplementary Cards:** First 2 cards free with this card.
+
+Would you like to know more about any of these cards?"
+FQ_030,Shariah-compliant credit cards,islami,True,"[""shariah_compliant""]",True,57.31,"**Visa Hasanah Gold Credit Card**
+- Shariah-compliant: Ujrah-based (no Riba/interest)
+- Credit Limit: BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+- Reward Points: 1 point per BDT 50 spent
+- Exclusive Privileges: Balaka VIP lounge access
+
+**Visa Hasanah Platinum Credit Card**
+- Shariah-c"

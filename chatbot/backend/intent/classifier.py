@@ -1,234 +1,124 @@
 """
 Semantic Intent Classifier for Prime Bank Chatbot
 ==================================================
-This classifier understands WHAT the user wants, not just keywords.
-Uses LLM-based semantic understanding with strict validation.
-
-Key Principles:
-1. Detect user's TRUE intent (comparison, feature search, eligibility, etc.)
-2. Extract entities accurately (income, features, products, banking type)
-3. No keyword matching - pure semantic understanding
-4. Clear, unambiguous intent categories
+Fixes applied:
+- banking_type: now returns "islami" (not "islamic") to match ChromaDB filter
+- income parse: clearer prompt examples fix "2 lakh/month" and "annual" cases
+- income + features: post-process promotes to product_search_by_income
 """
 
 from utils.ollama import ollama_chat, parse_json
 
 
 class IntentClassifier:
-    """
-    Semantic intent classifier that understands user goals.
-    
-    Intent Types:
-    - greeting: Social greeting
-    - small_talk: Casual conversation
-    - feature_inquiry: Asking about specific features (dining, lounge, etc.)
-    - comparison: Comparing 2+ products
-    - eligibility_check: Asking if they qualify for a product
-    - product_search_by_income: Showing products based on income
-    - eligibility_matching: Income + feature combination
-    - product_info: General product information
-    - existing_cardholder: Questions about their existing card
-    """
 
     @staticmethod
     def classify(query: str, history: list, previous_intent: dict) -> dict:
-        """
-        Classify user intent using semantic understanding.
-        
-        Args:
-            query: User's current message
-            history: Conversation history (list of dicts with 'role' and 'content')
-            previous_intent: Previously detected intent (for context)
-            
-        Returns:
-            Intent dict with detected intent_type, entities, and metadata
-        """
-        
-        # Build conversation context
+
         history_block = ""
-        if history and len(history) > 0:
-            recent_history = history[-4:]  # Last 2 exchanges
-            history_lines = [
-                f"{msg['role'].upper()}: {msg['content'][:100]}" 
-                for msg in recent_history
-            ]
-            history_block = "CONVERSATION HISTORY:\n" + "\n".join(history_lines) + "\n\n"
-        
-        # Build previous context
+        if history:
+            recent = history[-4:]
+            lines = [f"{m['role'].upper()}: {m['content'][:100]}" for m in recent]
+            history_block = "CONVERSATION HISTORY:\n" + "\n".join(lines) + "\n\n"
+
         prev_context = ""
         if previous_intent and previous_intent.get("intent_type"):
             prev_context = f"PREVIOUS INTENT: {previous_intent.get('intent_type')}\n\n"
-        
-        # Create semantic classification prompt
-        system_prompt = """You are an intent classifier for a bank credit card chatbot.
-Output ONLY valid JSON. No markdown. No explanations."""
 
         user_prompt = f"""You are a semantic intent classifier for a banking chatbot.
-
-Your job: Understand WHAT the customer wants, not just match keywords.
-
-Output ONLY valid JSON. No markdown. No explanations. Just the JSON object.
+Understand WHAT the customer wants. Output ONLY valid JSON.
 
 {history_block}{prev_context}CURRENT QUERY: "{query}"
 
-═══════════════════════════════════════════════════════════════════
-SEMANTIC INTENT CLASSIFICATION
-═══════════════════════════════════════════════════════════════════
+INTENT TYPES (choose ONE):
+  "greeting"                 — Hello, hi, good morning
+  "small_talk"               — Weather, jokes, off-topic chat
+  "feature_inquiry"          — Asks about a specific feature, benefit, condition, or service
+                               Examples: "cards with dining", "lounge access", "annual fee waiver condition",
+                               "airport welcome service", "best rewards", "0% installment", "insurance coverage"
+                               NOTE: "conventional" and "Islamic/Shariah" are banking TYPES, not features.
+                               NOTE: Brands (Visa, Mastercard, JCB) and Tiers (Gold, Platinum) are CATEGORIES, not features.
+                               "I need a conventional card" → product_info, NOT feature_inquiry
+                               "Show me Mastercards" → search_by_category, NOT feature_inquiry
+  "comparison"               — Comparing 2+ named products
+  "eligibility_check"        — Customer asks if THEY personally qualify
+  "product_search_by_income" — Customer states their income/salary and wants card recommendations
+                               ALWAYS use this when income is mentioned with a card request.
+                               Examples:
+                               "My annual income is 50 lakh. Suggest a card." → product_search_by_income
+                               "My salary is 2 lakh per month. Best card?" → product_search_by_income
+                               "I earn 300k monthly, what cards?" → product_search_by_income
+                               "Monthly income 100k. Which card?" → product_search_by_income
+                               "I make 50k a month, recommend me something" → product_search_by_income
+  "search_by_category"       — Customer asks for a list of multiple cards based on a broad category (Brand, Tier, or Type).
+                               Brands: Visa, Mastercard, JCB. Tiers: Gold, Platinum, World.
+                               Examples: "show me all the mastercards", "list all your gold cards", 
+                               "what Islamic cards do you have", "what Visa cards do you offer", "tell me about JCB cards"
+  "product_info"             — General single product info, or "I need a credit card"
+  "existing_cardholder"      — Questions about their own existing card
 
-Read the query and understand what the customer is trying to accomplish.
+ENTITY EXTRACTION:
 
-═══════════════════════════════════════════════════════════════════
-INTENT TYPES (Choose ONE):
-═══════════════════════════════════════════════════════════════════
+BANKING TYPE — only if explicitly mentioned:
+  "Islamic"/"Shariah"/"Hasanah"/"Riba-free"/"Ujrah" → "islami"
+  "conventional"/"traditional"/"regular"             → "conventional"
+  Not mentioned                                       → "unknown"
+  ALWAYS write "islami" never "islamic"
+  IMPORTANT: banking type is NOT a feature. A query like "I need a conventional card"
+  has intent_type="product_info" and banking_type="conventional". Do NOT put
+  "conventional" or "islamic" into specific_features.
 
-1. "greeting"
-   When: Customer is greeting, saying hello, starting conversation
-   Examples: "Hello", "Hi there", "Good morning", "Hey"
+CUSTOMER INCOME — convert to ANNUAL BDT:
+  Step 1 — find raw number: "300k"=300000, "2 lakh"=200000, "50 lakh"=5000000
+  Step 2 — detect period from words present in query:
+    "per month" OR "monthly" OR "/month"          → MONTHLY → multiply by 12
+    "per year" OR "annually" OR "annual" OR "yearly" → ANNUAL → do NOT multiply
+    no period word at all                          → assume MONTHLY → multiply by 12
+  Step 3 — calculate:
 
-2. "small_talk"
-   When: Casual conversation not about banking
-   Examples: "How are you?", "What's the weather?", "Tell me a joke"
+  EXAMPLES (memorise these):
+    "300k monthly"             → 300000 × 12 = 3600000
+    "2 lakh per month"         → 200000 × 12 = 2400000   ← NOT 2000000
+    "2 lakh monthly"           → 200000 × 12 = 2400000
+    "50 lakh annual"           → 5000000  (no multiply)   ← NOT 60000000
+    "30 lakh annual revenue"   → 3000000  (no multiply)   ← NOT 36000000
+    "annual income 5 lakh"     → 500000   (no multiply)
+    "My annual income is 50 lakh" → 5000000  (no multiply)   ← NOT 60000000
+    "100k"                     → 100000 × 12 = 1200000    (no period word → monthly)
+    "5 lakh"                   → 500000 × 12 = 6000000    (no period word → monthly)
+    "salary is 2 lakh per month" → 200000 × 12 = 2400000  (per month → monthly)
+    "50k monthly I want dining" → 50000 × 12 = 600000     (monthly → extract income even mid-sentence)
+    IMPORTANT: Extract income even when it appears alongside feature requests.
+    "300k monthly, lounge and dining" → customer_income=3600000 AND features=["lounge","dining"]
 
-3. "feature_inquiry"
-   When: Customer asks about cards with SPECIFIC features
-   Examples:
-   - "Which cards have dining benefits?"
-   - "Cards with lounge access"
-   - "I want rewards points"
-   Must extract: specific_features (list of features mentioned)
+SPECIFIC FEATURES — list the features the customer is asking about:
+  Use short lowercase labels. Examples:
+  "lounge","dining","bogo","rewards","cashback","emi","insurance","travel",
+  "fee_waiver","airport_welcome","cash_advance","priority_pass","takaful",
+  "interest_free","minimum_payment","credit_limit","supplementary_card"
+  Be specific: "annual fee waiver condition" → ["fee_waiver"]
+               "airport welcome service" → ["airport_welcome"]
+               "cash advance" → ["cash_advance"]
+               "0% installment" → ["emi"]
+               "minimum payment" → ["minimum_payment"]
+  Exclude non-credit-card features: "car_loans","mortgage","savings"
 
-4. "comparison"
-   When: Customer wants to compare 2 or more specific products
-   Examples:
-   - "Compare Visa Platinum vs JCB Gold"
-   - "Which is better: Mastercard or Visa?"
-   - "Visa Platinum or JCB Platinum?"
-   Must extract: comparison_products (list of 2 product names)
+SPECIFIC PRODUCT — full name + "Credit Card":
+  "Visa Platinum" → "Visa Platinum Credit Card" | not mentioned → ""
 
-5. "eligibility_check"
-   When: Customer asks if THEY qualify or are eligible
-   Examples:
-   - "Am I eligible for Visa Platinum?"
-   - "Do I qualify for this card?"
-   - "Can I get a credit card?"
-   Must extract: specific_product (if mentioned)
+COMPARISON PRODUCTS — exactly 2 names (for comparison intent only):
+  "Compare Visa vs JCB" → ["Visa Platinum Credit Card","JCB Gold Credit Card"]
+  Otherwise → []
 
-6. "product_search_by_income"
-   When: Customer mentions their income/salary and asks what they can get
-   Examples:
-   - "I earn 300k monthly, what cards?"
-   - "Cards for 50k salary"
-   - "What can I get with 5 lakh income?"
-   Must extract: customer_income (in annual BDT)
+PREFERRED TIER: "platinum"|"gold"|"silver"|"unknown"
+CARD BRAND: "visa"|"mastercard"|"jcb"|"unknown"
 
-7. "eligibility_matching"
-   When: Customer gives BOTH income AND specific feature
-   Examples:
-   - "300k salary + lounge access"
-   - "Cards with dining for 50k monthly income"
-   Must extract: customer_income AND specific_features
-
-8. "product_info"
-   When: Customer asks about general product information
-   Examples:
-   - "Tell me about Visa Platinum"
-   - "What credit cards do you have?"
-   - "I need a credit card"
-   May extract: specific_product (if mentioned)
-
-9. "existing_cardholder"
-   When: Customer asks about THEIR existing card
-   Examples:
-   - "What offers do I get?"
-   - "My card is lost"
-   - "Check my bill"
-
-═══════════════════════════════════════════════════════════════════
-ENTITY EXTRACTION RULES
-═══════════════════════════════════════════════════════════════════
-
-1. BANKING TYPE:
-   Only extract if EXPLICITLY mentioned:
-   - "Islamic", "Shariah", "Hasanah" → "islamic"
-   - "Conventional", "traditional", "regular" → "conventional"
-   - Not mentioned → "unknown"
-
-2. CUSTOMER INCOME (CRITICAL - Calculate Annual):
-   Extract number AND convert to ANNUAL BDT:
-
-   STEP 1: Find the number
-   - "300k" → 300,000
-   - "5 lakh" → 500,000
-   - "300000" → 300,000
-
-   STEP 2: Determine if monthly or annual
-   - Has "monthly", "per month", "/month" → MONTHLY
-   - Has "annual", "yearly", "per year" → ANNUAL
-   - Just a number in income context → assume MONTHLY
-
-   STEP 3: Convert to annual
-   - If MONTHLY: number × 12
-   - If ANNUAL: number as-is
-
-   Examples:
-   - "300k monthly" → 300,000 × 12 = 3,600,000
-   - "300k per month" → 300,000 × 12 = 3,600,000
-   - "5 lakh" → 500,000 (no multiplication)
-   - "50 lakh annual" → 5,000,000 (no multiplication)
-
-   Output: Annual amount in BDT or null
-
-3. SPECIFIC FEATURES:
-   Extract list of features customer wants:
-   - "dining", "lounge", "travel", "rewards", "cashback", "emi", "insurance"
-
-   Examples:
-   - "cards with dining" → ["dining"]
-   - "lounge and rewards" → ["lounge", "rewards"]
-   - "I want travel benefits" → ["travel"]
-
-4. SPECIFIC PRODUCT:
-   Extract FULL product name with "Credit Card" suffix:
-   - "Visa Platinum" → "Visa Platinum Credit Card"
-   - "JCB Gold" → "JCB Gold Credit Card"
-   - Not mentioned → ""
-
-5. COMPARISON PRODUCTS:
-   Extract 2 product names for comparison:
-   - "Compare Visa vs JCB" → ["Visa Platinum Credit Card", "JCB Gold Credit Card"]
-   - Must be exactly 2 products
-   - Empty list if not comparison
-
-6. PREFERRED TIER:
-   Only if explicitly mentioned:
-   - "platinum", "gold", "silver" → extract that tier
-   - Not mentioned → "unknown"
-
-7. CARD BRAND:
-   Only if explicitly mentioned:
-   - "visa", "mastercard", "jcb" → extract that brand
-   - Not mentioned → "unknown"
-
-═══════════════════════════════════════════════════════════════════
-VALIDATION RULES
-═══════════════════════════════════════════════════════════════════
-
-1. If intent_type = "feature_inquiry", must have specific_features list
-2. If intent_type = "comparison", must have 2 comparison_products
-3. If intent_type = "eligibility_matching", must have customer_income AND specific_features
-4. If intent_type = "product_search_by_income", must have customer_income
-
-═══════════════════════════════════════════════════════════════════
-OUTPUT FORMAT
-═══════════════════════════════════════════════════════════════════
-
-Return ONLY this JSON structure (no markdown, no explanations):
-
+OUTPUT — raw JSON only, no markdown:
 {{
   "category": "greeting|small_talk|banking",
-  "intent_type": "<one of the 9 intent types>",
+  "intent_type": "<intent>",
   "product_type": "credit_card|general",
-  "banking_type": "conventional|islamic|unknown",
+  "banking_type": "conventional|islami|unknown",
   "preferred_tier": "platinum|gold|silver|unknown",
   "card_brand": "visa|mastercard|jcb|unknown",
   "specific_product": "",
@@ -241,34 +131,19 @@ Return ONLY this JSON structure (no markdown, no explanations):
   "relevance_score": 85,
   "is_off_topic": false
 }}
-
-CRITICAL JSON RULES - AVOID THESE ERRORS:
-- ❌ WRONG: "card_brand": "visa" | "jcb"  (pipe operator breaks JSON)
-- ✅ RIGHT: "card_brand": "unknown"  (use single value)
-- ❌ WRONG: ```json {{ ... }}```  (no markdown blocks)
-- ✅ RIGHT: {{ ... }}  (raw JSON only)
-
-Output ONLY the JSON object. No text. No markdown. No explanations.
 """
 
-
-        # Call LLM for classification
         raw_response = ollama_chat(
-            system=system_prompt,
+            system="You are an intent classifier for a bank credit card chatbot. Output ONLY valid JSON. No markdown. No explanations.",
             user=user_prompt,
-            temperature=0.0,  # Zero temperature for deterministic output
+            temperature=0.0,
             max_tokens=800,
         )
-        
-        # Clean response - remove any markdown or extra text
-        cleaned_response = raw_response.strip()
-        
-        # Remove markdown code blocks if present
-        if cleaned_response.startswith("```"):
-            # Extract JSON from markdown
-            lines = cleaned_response.split('\n')
-            json_lines = []
-            in_json = False
+
+        cleaned = raw_response.strip()
+        if cleaned.startswith("```"):
+            lines = cleaned.split('\n')
+            json_lines, in_json = [], False
             for line in lines:
                 if line.strip().startswith("```"):
                     if in_json:
@@ -277,25 +152,18 @@ Output ONLY the JSON object. No text. No markdown. No explanations.
                     continue
                 if in_json:
                     json_lines.append(line)
-            cleaned_response = '\n'.join(json_lines)
-        
-        # Parse JSON response
-        parsed = parse_json(cleaned_response)
-        
+            cleaned = '\n'.join(json_lines)
+
+        parsed = parse_json(cleaned)
+
         if not parsed or "intent_type" not in parsed:
-            print(f"⚠️ Intent classification failed. Raw response:")
-            print(f"   {raw_response[:500]}")
-            print(f"⚠️ Using fallback intent for query: {query[:100]}")
+            print(f"⚠️ Intent classification failed. Raw: {raw_response[:300]}")
             return IntentClassifier._fallback_intent(query)
-        
-        # Extract and validate fields
-        category = str(parsed.get("category", "banking")).strip().lower()
+
+        category    = str(parsed.get("category", "banking")).strip().lower()
         intent_type = str(parsed.get("intent_type", "product_info")).strip().lower()
-        
-        # Social queries (greeting, small_talk) get simplified response
-        is_social = category in ("greeting", "small_talk")
-        
-        if is_social:
+
+        if category in ("greeting", "small_talk"):
             return {
                 "category": category,
                 "intent_type": intent_type,
@@ -315,76 +183,65 @@ Output ONLY the JSON object. No text. No markdown. No explanations.
                 "relevance_score": 100,
                 "is_off_topic": False,
             }
-        
-        # Extract banking queries
-        banking_type = str(parsed.get("banking_type", "unknown")).strip().lower()
-        preferred_tier = str(parsed.get("preferred_tier", "unknown")).strip().lower()
-        card_brand = str(parsed.get("card_brand", "unknown")).strip().lower()
+
+        banking_type     = str(parsed.get("banking_type", "unknown")).strip().lower()
+        preferred_tier   = str(parsed.get("preferred_tier", "unknown")).strip().lower()
+        card_brand       = str(parsed.get("card_brand", "unknown")).strip().lower()
         specific_product = str(parsed.get("specific_product", "")).strip()
-        
-        # Extract lists
+
+        # Normalise: LLM may return "islamic" despite instructions — force "islami"
+        if banking_type == "islamic":
+            banking_type = "islami"
+
         specific_features = parsed.get("specific_features", [])
         if not isinstance(specific_features, list):
             specific_features = []
         specific_features = [str(f).strip().lower() for f in specific_features if f]
-        
+        # Remove non-credit-card features the LLM may have hallucinated
+        # Only exclude clearly non-credit-card topics
+        invalid_features = {"car_loan","mortgage","savings","weather","joke"}
+        specific_features = [f for f in specific_features if not any(inv in f for inv in invalid_features)]
+
         comparison_products = parsed.get("comparison_products", [])
         if not isinstance(comparison_products, list):
             comparison_products = []
         comparison_products = [str(p).strip() for p in comparison_products if p][:2]
-        
-        # Extract numeric fields
+
         customer_income = parsed.get("customer_income")
-        if customer_income and isinstance(customer_income, (int, float)):
-            customer_income = int(customer_income)
-        else:
-            customer_income = None
-        
+        customer_income = int(customer_income) if isinstance(customer_income, (int, float)) and customer_income else None
+
         customer_age = parsed.get("customer_age")
-        if customer_age and isinstance(customer_age, (int, float)):
-            customer_age = int(customer_age)
-        else:
-            customer_age = None
-        
-        # Validate based on intent type
+        customer_age = int(customer_age) if isinstance(customer_age, (int, float)) and customer_age else None
+
+        # ── Intent promotion ──────────────────────────────────────────────────
+        # Income + features present → product_search_by_income (income is stronger signal)
+        if intent_type == "feature_inquiry" and customer_income:
+            intent_type = "product_search_by_income"
+
+        # ── Validation ────────────────────────────────────────────────────────
         needs_clarification = False
-        
-        if intent_type == "feature_inquiry":
-            if not specific_features:
-                # No features extracted - this shouldn't be feature_inquiry
-                intent_type = "product_info"
-                needs_clarification = True
-        
+
+        if intent_type == "feature_inquiry" and not specific_features:
+            intent_type = "product_info"
+            needs_clarification = True
+
         elif intent_type == "comparison":
-            # If comparison intent but no products extracted, run dedicated extractor
             if len(comparison_products) < 2:
                 comparison_products = IntentClassifier.extract_comparison_products(query)
-            
             if len(comparison_products) < 2:
-                # Still no 2 products after extraction attempt
                 needs_clarification = True
-        
-        elif intent_type == "eligibility_matching":
-            if not (customer_income and specific_features):
-                # Need both income and features
-                needs_clarification = True
-        
-        elif intent_type == "product_search_by_income":
-            if not customer_income:
-                # Need income for income search
-                needs_clarification = True
-        
-        # Validate enum values
-        if banking_type not in ("conventional", "islamic", "unknown"):
+
+        elif intent_type == "product_search_by_income" and not customer_income:
+            needs_clarification = True
+
+        # Enum guards
+        if banking_type not in ("conventional", "islami", "unknown"):
             banking_type = "unknown"
-        
         if preferred_tier not in ("platinum", "gold", "silver", "unknown"):
             preferred_tier = "unknown"
-        
         if card_brand not in ("visa", "mastercard", "jcb", "unknown"):
             card_brand = "unknown"
-        
-        # Build final intent object
+
         intent = {
             "category": "banking",
             "intent_type": intent_type,
@@ -404,54 +261,29 @@ Output ONLY the JSON object. No text. No markdown. No explanations.
             "relevance_score": int(parsed.get("relevance_score", 85)),
             "is_off_topic": bool(parsed.get("is_off_topic", False)),
         }
-        
-        # Debug logging
+
         print(f"🎯 Intent: {intent_type} | Income: {customer_income} | Features: {specific_features} | Product: '{specific_product}'")
-        
         return intent
-    
+
     @staticmethod
     def extract_comparison_products(query: str) -> list:
-        """
-        Dedicated micro-prompt for extracting exactly 2 product names from comparison queries.
-        Runs only when comparison intent is detected but products weren't extracted.
-        
-        Args:
-            query: User's query mentioning products to compare
-            
-        Returns:
-            List of 2 product names with "Credit Card" suffix, or empty list if extraction fails
-        """
-        system_prompt = "Extract exactly 2 bank credit card names from the query. Output ONLY a JSON array with 2 strings. No markdown."
-        
-        user_prompt = f"""Query: "{query}"
-
+        raw = ollama_chat(
+            system="Extract exactly 2 bank credit card names. Output ONLY a JSON array with 2 strings. No markdown.",
+            user=f'''Query: "{query}"
 Examples:
 "Compare Visa Platinum vs JCB Platinum" → ["Visa Platinum Credit Card", "JCB Platinum Credit Card"]
 "Visa Gold or Mastercard World?" → ["Visa Gold Credit Card", "Mastercard World Credit Card"]
-"which is better mastercard platinum or jcb gold" → ["Mastercard Platinum Credit Card", "JCB Gold Credit Card"]
-
-Output ONLY the JSON array:"""
-        
-        raw = ollama_chat(
-            system=system_prompt,
-            user=user_prompt,
+Output ONLY the JSON array:''',
             temperature=0.0,
             max_tokens=60,
         )
-        
         parsed = parse_json(raw)
         if isinstance(parsed, list) and len(parsed) == 2:
             return [str(p).strip() for p in parsed if p]
-        
         return []
-    
+
     @staticmethod
     def _fallback_intent(query: str) -> dict:
-        """
-        Fallback intent when classification fails.
-        Assumes generic product inquiry with clarification needed.
-        """
         return {
             "category": "banking",
             "intent_type": "product_info",

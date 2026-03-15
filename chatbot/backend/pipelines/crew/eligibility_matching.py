@@ -46,6 +46,51 @@ def run_eligibility_matching(
     }
 
 
+def run_eligibility_info(product_name: str, banking_type: str = "") -> dict:
+    """
+    Fetch eligibility information for a specific product from RAG.
+    Used for info queries like "What are the eligibility requirements for X card?"
+    """
+    search_query = f"eligibility requirements {product_name}"
+    
+    try:
+        raw = rag_search_impl(
+            query=search_query,
+            banking_type=banking_type or "",
+            tier="",
+            top_k=5
+        )
+    except Exception as e:
+        raw = ""
+        print(f"⚠️ RAG failed in eligibility info: {e}")
+    
+    if not raw or raw.strip() == "NO_PRODUCTS_FOUND":
+        return {
+            "result": f"I couldn't find detailed eligibility information for {product_name}. Please visit a Prime Bank branch or contact our customer service for specific requirements.",
+            "product": product_name,
+        }
+    
+    result = ollama_chat(
+        system="Prime Bank eligibility specialist. Extract and present only the eligibility requirements and criteria from the product information.",
+        user=(
+            f"For the {product_name} card, provide the eligibility requirements including:\n"
+            f"- Minimum age\n"
+            f"- Minimum annual income\n"
+            f"- Employment requirements\n"
+            f"- Tenure or credit history requirements\n"
+            f"- Any other key eligibility criteria\n\n"
+            f"Product information:\n{raw}"
+        ),
+        temperature=0.2,
+        max_tokens=400,
+    ) or f"Please contact Prime Bank directly for specific eligibility requirements of {product_name}."
+    
+    return {
+        "result": result,
+        "product": product_name,
+    }
+
+
 # Stub for import compatibility
 def create_eligibility_matching_crew(*args, **kwargs):
     return None

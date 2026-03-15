@@ -1,0 +1,1378 @@
+test_id,type,query,passed,failure_reason,detected_intent,is_clarification_asked,extracted_entities,response_time_s,full_response,rag_chunks
+BANK_001,banking_type,I want an Islamic credit card,False,Response missing: 'Hasanah',product_info,True,"{""banking_type"": ""islami""}",16.8,"Hey there! Are you planning to use this card mainly for travel, or more for everyday shopping and dining out?","[{""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""What is Visa Hasanah Gold?"", ""sim"": 0.707, ""snippet"": ""**Visa Hasanah Gold Credit Card** offers:\n- **Shariah-Compliant:** Ujrah-based (no Riba/interest)\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""What is Visa Hasanah Platinum?"", ""sim"": 0.674, ""snippet"": ""**Visa Hasanah Platinum Credit Card** offers:\n- **Shariah-Compliant:** Ujrah-based (no Riba/interest)\n- **Credit Limit:** BDT 1,000,000 (unsecured) / ""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Overview"", ""sim"": 0.656, ""snippet"": ""# Visa Hasanah Gold Credit Card\n\n**Tagline:** Power Your Dreams & Enliven Your Lifestyle\n\nVisa Hasanah Gold Credit Card is Prime Bank's Shariah-based,""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Regulatory Information"", ""sim"": 0.594, ""snippet"": ""This credit card operates per Bangladesh Bank guidelines for Islamic banking products. Service charges (Ujrah) applied instead of interest as per Shar""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.\n\n---"", ""sim"": 0.526, ""snippet"": ""## What is Visa Gold Credit Card?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance\u2014it's the ultimate premium credit experience.\n\n---"", ""sim"": 0.502, ""snippet"": ""## What is Visa Platinum Credit Card?""}]"
+BANK_002,banking_type,Show me Shariah-compliant cards,False,Response missing: 'Hasanah',product_info,True,"{""banking_type"": ""islami""}",12.99,"Hey there! Are you planning to use this card mainly for travel, dining out, shopping, or maybe for business expenses?","[{""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""What is Visa Hasanah Gold?"", ""sim"": 0.47, ""snippet"": ""**Visa Hasanah Gold Credit Card** offers:\n- **Shariah-Compliant:** Ujrah-based (no Riba/interest)\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""What is Visa Hasanah Platinum?"", ""sim"": 0.461, ""snippet"": ""**Visa Hasanah Platinum Credit Card** offers:\n- **Shariah-Compliant:** Ujrah-based (no Riba/interest)\n- **Credit Limit:** BDT 1,000,000 (unsecured) / ""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Overview"", ""sim"": 0.454, ""snippet"": ""# Visa Hasanah Gold Credit Card\n\n**Tagline:** Power Your Dreams & Enliven Your Lifestyle\n\nVisa Hasanah Gold Credit Card is Prime Bank's Shariah-based,""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Why Visa Hasanah Platinum?"", ""sim"": 0.446, ""snippet"": ""\u2705 **Elite Premium Status**\n- Highest credit limit offered\n- Exclusive privileges\n- VIP recognition globally\n- Premium card positioning\n\n\u2705 **World-Clas""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Regulatory Information"", ""sim"": 0.437, ""snippet"": ""This credit card operates per Bangladesh Bank guidelines for Islamic banking products. Service charges (Ujrah) applied instead of interest as per Shar""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""FAQs"", ""sim"": 0.366, ""snippet"": ""**Q: What makes Platinum different from Gold?**\nA: Higher credit limit (BDT 10 lac vs 7 lac), premium BOGO dining, higher insurance (BDT 10 lac vs 5 l""}]"
+BANK_003,banking_type,I need a conventional credit card. What's available?,True,,product_info,True,"{""banking_type"": ""conventional""}",12.95,"Hey there! Are you planning to use this card mainly for travel, or more for everyday shopping and dining out?","[{""product"": ""Visa Gold Credit Card"", ""section"": ""Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.\n\n---"", ""sim"": 0.515, ""snippet"": ""## What is Visa Gold Credit Card?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""What is Visa Platinum Credit Card?"", ""sim"": 0.503, ""snippet"": ""**Visa Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (ful""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance\u2014it's the ultimate premium credit experience.\n\n---"", ""sim"": 0.491, ""snippet"": ""## What is Visa Platinum Credit Card?""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""What is Visa Gold Credit Card?"", ""sim"": 0.486, ""snippet"": ""**Visa Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free Period:** 50 days (lo""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""What is Visa Hasanah Gold?"", ""sim"": 0.454, ""snippet"": ""**Visa Hasanah Gold Credit Card** offers:\n- **Shariah-Compliant:** Ujrah-based (no Riba/interest)\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""What is Mastercard Platinum?"", ""sim"": 0.454, ""snippet"": ""**Mastercard Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 day""}]"
+BANK_004,banking_type,Visa Hasanah - is it Riba-free?,False,Response missing: 'Ujrah',product_info,False,{},12.07,"I understand your query about Visa Hasanah. For details on Riba-free options, including our Prime Bank credit cards, feel free to ask!","[{""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Overview"", ""sim"": 0.67, ""snippet"": ""# Visa Hasanah Gold Credit Card\n\n**Tagline:** Power Your Dreams & Enliven Your Lifestyle\n\nVisa Hasanah Gold Credit Card is Prime Bank's Shariah-based,""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""What is Visa Hasanah Gold?"", ""sim"": 0.554, ""snippet"": ""**Visa Hasanah Gold Credit Card** offers:\n- **Shariah-Compliant:** Ujrah-based (no Riba/interest)\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Why Visa Hasanah Gold?"", ""sim"": 0.549, ""snippet"": ""Why Visa Hasanah Gold?""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Visa Hasanah Platinum elevates Islamic banking to premium status. Operating on Ujrah principles (service fees, never interest), it combines world-class travel access, fine dining benefits, and full Takaful protection\u2014all authentically Islamic.\n\n---"", ""sim"": 0.543, ""snippet"": ""## What is Visa Hasanah Platinum?""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""What is Visa Hasanah Platinum?"", ""sim"": 0.541, ""snippet"": ""**Visa Hasanah Platinum Credit Card** offers:\n- **Shariah-Compliant:** Ujrah-based (no Riba/interest)\n- **Credit Limit:** BDT 1,000,000 (unsecured) / ""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""FAQs"", ""sim"": 0.537, ""snippet"": ""**Q: What makes Platinum different from Gold?**\nA: Higher credit limit (BDT 10 lac vs 7 lac), premium BOGO dining, higher insurance (BDT 10 lac vs 5 l""}]"
+BANK_005,banking_type,What is the Takaful insurance benefit?,True,,feature_inquiry,False,"{""specific_features"": [""insurance""]}",36.18,"The Visa Hasanah Gold Credit Card and Mastercard Platinum Credit Card both offer Takaful insurance benefits, as detailed below:
+
+### Visa Hasanah Gold Credit Card
+
+**Takaful Triple Benefit Insurance**
+
+- **Benefit 1: Death or Permanent Total Disability**
+  - **Trigger:** Cardholder death or PTD
+  - **Dues:** Entire outstanding waived
+  - **Benefit:** Nominee receives BDT 5 lakh
+  - **Maximum:** BDT 5 lakh
+
+- **Benefit 2: Accidental Death**
+  - **Trigger:** Death from accident
+  - **Benefit:** Nominee receives a lump sum of BDT 5 lakh
+  - **Amount:** BDT 5 lakh
+  - **Documentation:** Required proof of the accident
+
+- **Benefit 3: Critical Illness**
+  - **Trigger:** Diagnosis of critical illness (ages 18-64)
+  - **Benefit:** 50% of last month's outstanding balance
+  - **Maximum:** BDT 5 lakh
+  - **Critical Illnesses Covered:**
+    - Major cancer
+    - Stroke
+    - First heart attack
+    - Coronary artery surgery
+    - Serious coronary artery disease
+    - Heart valve surgery
+    - Pulmonary hypertension
+    - End-stage lung disease
+    - End-stage liver disease
+    - Fulminant hepatitis
+    - Kidney failure (requiring dialysis)
+    - Coma
+    - Aplastic anemia
+    - Organ/bone marrow transplant
+
+### Mastercard Platinum Credit Card
+
+**Enhanced Triple Benefit Insurance**
+
+- **Death/PTD:** BDT 10 lakh maximum
+- **Accidental Death:** BDT 10 lakh
+- **Critical Illness:** BDT 5 lakh maximum
+
+What would you like to do next?
+1. Compare the benefits of these cards.
+2. Learn more about other card features.
+3. Request a quote or application form for one of these cards.","[{""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Enhanced Takaful Insurance"", ""sim"": 0.832, ""snippet"": ""Enhanced Takaful Insurance""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""# 0% Interest EMI Scheme\n\n**Features:**\n- **Duration:** Up to 36 months\n- **Interest Rate:** 0% (Ujrah-based fees apply)\n- **Participating Merchants:** Renowned shops nationwide\n- **Eligibility:** Purchases over BDT 10,000\n\n**Example Calculations:**\n\n| Purchase | 12 Months | 24 Months | 36 Months |\n|----------|-----------|-----------|-----------|\n| BDT 100,000 | BDT 8,333/mo | BDT 4,167/mo | BDT 2,778/mo |\n| BDT 200,000 | BDT 16,667/mo | BDT 8,333/mo | BDT 5,556/mo |\n| BDT 500,000 | BDT 41,667/mo | BDT 20,833/mo | BDT 13,889/mo |\n\n**Process:**\n1. Visit participating shop\n2. Select 0% EMI option\n3. Swipe Hasanah Gold card\n4. Confirm monthly payment amount\n5. Complete purchase instantly\n6. Installments auto-deducted from linked account\n\n---"", ""sim"": 0.684, ""snippet"": ""## Takaful Triple Benefit Insurance""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Triple Benefit Insurance Coverage"", ""sim"": 0.523, ""snippet"": ""### Insurance Benefits\n\n**Benefit 1: Death or Permanent Total Disability**\n- **Trigger:** Cardholder death or PTD\n- **Dues:** Entire outstanding waive""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Key Features"", ""sim"": 0.51, ""snippet"": ""\u2705 **Substantial Credit Limit**\n- **Unsecured:** Up to BDT 7,00,000\n- **Collateralized:** Up to BDT 25,00,000\n- Flexible based on financial profile\n- E""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Takaful Triple Benefit Insurance"", ""sim"": 0.508, ""snippet"": ""### Coverage Details\n\n**Benefit 1: Death or Permanent Total Disability**\n- **Trigger:** Cardholder death or PTD\n- **Dues:** Entire outstanding waived\n""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""Triple Benefit Insurance Coverage"", ""sim"": 0.493, ""snippet"": ""### Insurance Benefits\n\n**Benefit 1: Death or Permanent Total Disability**\n- Entire outstanding waived\n- Nominee receives equal amount\n- Maximum: BDT ""}]"
+CMP_001,comparison,Compare Visa Platinum and JCB Platinum,True,,comparison,False,"{""preferred_tier"": ""platinum""}",10.25,"**📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Platinum</th>
+<th>JCB Platinum</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong></td>
+<td>50 days</td>
+<td>50 days</td>
+</tr><tr>
+<td><strong>Reward Points</strong></td>
+<td>1 pt/BDT 50</td>
+<td>1 pt/BDT 50</td>
+</tr><tr>
+<td><strong>Dining Benefits</strong></td>
+<td>BOGO dining</td>
+<td>BOGO dining</td>
+</tr><tr>
+<td><strong>Lounge Access</strong></td>
+<td>Balaka</td>
+<td>Balaka</td>
+</tr><tr>
+<td><strong>Travel Benefits</strong></td>
+<td>Airport Welcome</td>
+<td>Airport Welcome</td>
+</tr><tr>
+<td><strong>Insurance</strong></td>
+<td>Triple Benefit</td>
+<td>Triple Benefit</td>
+</tr><tr>
+<td><strong>EMI</strong></td>
+<td>Up to 36 mo, 0%</td>
+<td>Up to 36 mo, 0%</td>
+</tr><tr>
+<td><strong>Annual Fee</strong></td>
+<td>BDT 10,000*</td>
+<td>BDT 10,000*</td>
+</tr></table>
+<small>*Waived on 15+ purchases per month</small>
+
+**RECOMMENDATION FOR YOU**
+
+Based on your profile and annual income of **BDT N/A**:
+
+**→ JCB Platinum Credit Card is recommended** for you because:
+
+✅ Both cards offer excellent dining BOGO benefits
+✅ Visa provides better travel access with LoungeKey
+✅ Same interest-free period and reward structure
+✅ Better value for international transactions
+
+Would you like to proceed with **JCB Platinum Credit Card**?","[{""product"": ""JCB Platinum Credit Card"", ""section"": ""Why JCB Platinum?"", ""sim"": 0.742, ""snippet"": ""Why JCB Platinum?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Why Visa Platinum?"", ""sim"": 0.713, ""snippet"": ""Why Visa Platinum?""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""JCB Platinum delivers premium credit with exclusive lifestyle privileges. Featuring Balaka VIP lounge access, year-round BOGO at premium restaurants, 50-day interest-free period, and comprehensive insurance\u2014it's the ultimate premium JCB experience.\n\n---"", ""sim"": 0.655, ""snippet"": ""## What is JCB Platinum Credit Card?""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""Why JCB Gold?"", ""sim"": 0.583, ""snippet"": ""Why JCB Gold?""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Overview"", ""sim"": 0.581, ""snippet"": ""# JCB Platinum Credit Card\n\n**Tagline:** Explore the World of Privileges & Enliven Your Lifestyle\n\nJCB Platinum Credit Card from Prime Bank offers BDT""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance\u2014it's the ultimate premium credit experience.\n\n---"", ""sim"": 0.561, ""snippet"": ""## What is Visa Platinum Credit Card?""}]"
+CMP_002,comparison,Which is better - JCB Gold or Visa Gold?,True,,comparison,False,"{""preferred_tier"": ""gold""}",9.85,"**📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Gold</th>
+<th>JCB Gold</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong></td>
+<td>50 days</td>
+<td>50 days</td>
+</tr><tr>
+<td><strong>Reward Points</strong></td>
+<td>1 pt/BDT 50</td>
+<td>1 pt/BDT 50</td>
+</tr><tr>
+<td><strong>Dining Benefits</strong></td>
+<td>BOGO dining</td>
+<td>BOGO dining</td>
+</tr><tr>
+<td><strong>Lounge Access</strong></td>
+<td>Balaka</td>
+<td>Balaka</td>
+</tr><tr>
+<td><strong>Travel Benefits</strong></td>
+<td>Airport Welcome</td>
+<td>Airport Welcome</td>
+</tr><tr>
+<td><strong>Insurance</strong></td>
+<td>Triple Benefit</td>
+<td>Triple Benefit</td>
+</tr><tr>
+<td><strong>EMI</strong></td>
+<td>Up to 36 mo, 0%</td>
+<td>Up to 36 mo, 0%</td>
+</tr><tr>
+<td><strong>Annual Fee</strong></td>
+<td>BDT 10,000*</td>
+<td>BDT 10,000*</td>
+</tr></table>
+<small>*Waived on 15+ purchases per month</small>
+
+**RECOMMENDATION FOR YOU**
+
+Based on your profile and annual income of **BDT N/A**:
+
+**→ JCB Gold Credit Card is recommended** for you because:
+
+✅ Both cards offer excellent dining BOGO benefits
+✅ Visa provides better travel access with LoungeKey
+✅ Same interest-free period and reward structure
+✅ Better value for international transactions
+
+Would you like to proceed with **JCB Gold Credit Card**?","[{""product"": ""JCB Gold Credit Card"", ""section"": ""Why JCB Gold?"", ""sim"": 0.776, ""snippet"": ""Why JCB Gold?""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Why Visa Gold?"", ""sim"": 0.748, ""snippet"": ""Why Visa Gold?""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""JCB Gold delivers premium credit with meaningful lifestyle benefits. Featuring 50-day interest-free period, exclusive VIP lounge access, year-round dining discounts, and comprehensive insurance\u2014it's perfect for customers seeking premium JCB benefits with accessible pricing.\n\n---"", ""sim"": 0.685, ""snippet"": ""## What is JCB Gold Credit Card?""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.\n\n---"", ""sim"": 0.605, ""snippet"": ""## What is Visa Gold Credit Card?""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Why Visa Hasanah Gold?"", ""sim"": 0.602, ""snippet"": ""Why Visa Hasanah Gold?""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""What is JCB Gold Credit Card?"", ""sim"": 0.602, ""snippet"": ""**JCB Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (full balan""}]"
+CMP_003,comparison,Mastercard World vs Mastercard Platinum - differences?,True,,comparison,False,"{""preferred_tier"": ""platinum"", ""card_brand"": ""mastercard""}",9.87,"**📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Mastercard World</th>
+<th>Mastercard Platinum</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong></td>
+<td>50 days</td>
+<td>50 days</td>
+</tr><tr>
+<td><strong>Reward Points</strong></td>
+<td>1 pt/BDT 50</td>
+<td>1 pt/BDT 50</td>
+</tr><tr>
+<td><strong>Dining Benefits</strong></td>
+<td>BOGO dining</td>
+<td>BOGO dining</td>
+</tr><tr>
+<td><strong>Lounge Access</strong></td>
+<td>Balaka</td>
+<td>Balaka</td>
+</tr><tr>
+<td><strong>Travel Benefits</strong></td>
+<td>Airport Welcome</td>
+<td>Airport Welcome</td>
+</tr><tr>
+<td><strong>Insurance</strong></td>
+<td>Triple Benefit</td>
+<td>Triple Benefit</td>
+</tr><tr>
+<td><strong>EMI</strong></td>
+<td>Up to 36 mo, 0%</td>
+<td>Up to 36 mo, 0%</td>
+</tr><tr>
+<td><strong>Annual Fee</strong></td>
+<td>BDT 10,000*</td>
+<td>BDT 10,000*</td>
+</tr></table>
+<small>*Waived on 15+ purchases per month</small>
+
+**RECOMMENDATION FOR YOU**
+
+Based on your profile and annual income of **BDT N/A**:
+
+**→ Mastercard Platinum Credit Card is recommended** for you because:
+
+✅ Both cards offer excellent dining BOGO benefits
+✅ Visa provides better travel access with LoungeKey
+✅ Same interest-free period and reward structure
+✅ Better value for international transactions
+
+Would you like to proceed with **Mastercard Platinum Credit Card**?","[{""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Why Mastercard Platinum?"", ""sim"": 0.814, ""snippet"": ""Why Mastercard Platinum?""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Why Mastercard World?"", ""sim"": 0.742, ""snippet"": ""Why Mastercard World?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Mastercard Platinum combines premium global access with lifestyle privileges. With LoungeKey + Priority Pass, exclusive Balaka VIP with companion, year-round BOGO at premium restaurants, and comprehensive insurance\u2014it's elite credit perfected.\n\n---"", ""sim"": 0.725, ""snippet"": ""## What is Mastercard Platinum?""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Mastercard World delivers exclusive access to global privileges. With Balaka VIP lounge for you and two companions, LoungeKey access to 1,400+ premium lounges, year-round BOGO at Dhaka's finest restaurants, and double reward points\u2014it's premium credit perfected.\n\n---"", ""sim"": 0.652, ""snippet"": ""## What is Mastercard World?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance\u2014it's the ultimate premium credit experience.\n\n---"", ""sim"": 0.604, ""snippet"": ""## What is Visa Platinum Credit Card?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Why Visa Platinum?"", ""sim"": 0.543, ""snippet"": ""Why Visa Platinum?""}]"
+CMP_004,comparison,Visa Hasanah Platinum vs Visa Platinum - key differences?,False,Response missing: 'Hasanah',comparison,False,"{""preferred_tier"": ""platinum"", ""card_brand"": ""visa""}",10.08,"**📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Platinum</th>
+<th>Visa Platinum</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong></td>
+<td>50 days</td>
+<td>50 days</td>
+</tr><tr>
+<td><strong>Reward Points</strong></td>
+<td>1 pt/BDT 50</td>
+<td>1 pt/BDT 50</td>
+</tr><tr>
+<td><strong>Dining Benefits</strong></td>
+<td>BOGO dining</td>
+<td>BOGO dining</td>
+</tr><tr>
+<td><strong>Lounge Access</strong></td>
+<td>Balaka</td>
+<td>Balaka</td>
+</tr><tr>
+<td><strong>Travel Benefits</strong></td>
+<td>Airport Welcome</td>
+<td>Airport Welcome</td>
+</tr><tr>
+<td><strong>Insurance</strong></td>
+<td>Triple Benefit</td>
+<td>Triple Benefit</td>
+</tr><tr>
+<td><strong>EMI</strong></td>
+<td>Up to 36 mo, 0%</td>
+<td>Up to 36 mo, 0%</td>
+</tr><tr>
+<td><strong>Annual Fee</strong></td>
+<td>BDT 10,000*</td>
+<td>BDT 10,000*</td>
+</tr></table>
+<small>*Waived on 15+ purchases per month</small>
+
+**RECOMMENDATION FOR YOU**
+
+Based on your profile and annual income of **BDT N/A**:
+
+**→ Visa Platinum Credit Card is recommended** for you because:
+
+✅ Both cards offer excellent dining BOGO benefits
+✅ Visa provides better travel access with LoungeKey
+✅ Same interest-free period and reward structure
+✅ Better value for international transactions
+
+Would you like to proceed with **Visa Platinum Credit Card**?","[{""product"": ""Visa Platinum Credit Card"", ""section"": ""Why Visa Platinum?"", ""sim"": 0.731, ""snippet"": ""Why Visa Platinum?""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""# Decision Checklist\n\n- \u2713 Valid E-TIN obtained?\n- \u2713 Minimum tenure met (6 months salaried / 3 years self-employed)?\n- \u2713 Annual income typically BDT 12+ lakh?\n- \u2713 Excellent credit history?\n- \u2713 High transaction volume expected?\n- \u2713 Travel and dining interests align?\n\n# Quick Application Path\n\n1. **Visit Prime Bank** (Platinum specialist branch)\n2. **Request Platinum Card** application\n3. **Provide Comprehensive Documents** (identity, income, financials, E-TIN)\n4. **Meet Senior RM** (relationship manager discussion)\n5. **Submit Complete Application** with all supporting documents\n6. **Verification Period** (3-5 working days)\n7. **Approval & Card Customization** (design selection)\n8. **Card Pickup** from branch\n9. **Activation & First Use** immediately\n\n---"", ""sim"": 0.69, ""snippet"": ""## Why Visa Hasanah Platinum?""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Visa Hasanah Platinum elevates Islamic banking to premium status. Operating on Ujrah principles (service fees, never interest), it combines world-class travel access, fine dining benefits, and full Takaful protection\u2014all authentically Islamic.\n\n---"", ""sim"": 0.681, ""snippet"": ""## What is Visa Hasanah Platinum?""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Why Visa Hasanah Gold?"", ""sim"": 0.644, ""snippet"": ""Why Visa Hasanah Gold?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.573, ""snippet"": ""### Quick Application\n\n1. Visit Prime Bank (Platinum specialist branch preferred)\n2. Request Visa Platinum application\n3. Provide comprehensive docume""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Why Visa Gold?"", ""sim"": 0.561, ""snippet"": ""Why Visa Gold?""}]"
+EDGE_001,edge,jcb gold,False,Response missing: 'JCB Gold',feature_inquiry,False,"{""preferred_tier"": ""gold"", ""card_brand"": ""jcb"", ""specific_features"": [""dining""]}",25.06,"Based on the provided product data, none of the cards listed explicitly mention a feature called ""Premium Dining."" However, I can provide information about the features related to dining benefits available for each card:
+
+1. **JCB Platinum Credit Card**
+   - [Premium Dining Program]
+     - This card offers a Premium Dining Program.
+
+2. **Visa Platinum Credit Card**
+   - [Premium Dining Program]
+     - This card also offers a Premium Dining Program.
+
+3. **Mastercard Platinum Credit Card**
+   - [Premium Dining Program]
+     - This card includes a Premium Dining Program as well.
+
+4. **Visa Hasanah Platinum Credit Card**
+   - [Premium Dining Program]
+     - This card provides a Premium Dining Program too.
+
+5. **Mastercard World Credit Card**
+   - [Premium Dining Benefits]
+     - This card offers Premium Dining Benefits, though the specific details are not provided in the data.
+
+**What would you like to do?**
+- Learn more about the Premium Dining Programs offered by these cards.
+- Compare the benefits of each card's Premium Dining Program.
+- Get information on other features and benefits available with each card.","[{""product"": ""JCB Gold Credit Card"", ""section"": ""Why JCB Gold?"", ""sim"": 0.875, ""snippet"": ""Why JCB Gold?""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""JCB Gold delivers premium credit with meaningful lifestyle benefits. Featuring 50-day interest-free period, exclusive VIP lounge access, year-round dining discounts, and comprehensive insurance\u2014it's perfect for customers seeking premium JCB benefits with accessible pricing.\n\n---"", ""sim"": 0.766, ""snippet"": ""## What is JCB Gold Credit Card?""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Why JCB Platinum?"", ""sim"": 0.709, ""snippet"": ""Why JCB Platinum?""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""JCB Platinum delivers premium credit with exclusive lifestyle privileges. Featuring Balaka VIP lounge access, year-round BOGO at premium restaurants, 50-day interest-free period, and comprehensive insurance\u2014it's the ultimate premium JCB experience.\n\n---"", ""sim"": 0.655, ""snippet"": ""## What is JCB Platinum Credit Card?""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""What is JCB Gold Credit Card?"", ""sim"": 0.584, ""snippet"": ""**JCB Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (full balan""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""Overview"", ""sim"": 0.584, ""snippet"": ""# JCB Gold Credit Card\n\n**Tagline:** Power Your Dreams & Enliven Your Lifestyle\n\nJCB Gold Credit Card from Prime Bank offers BDT 700,000 unsecured and""}]"
+EDGE_002,edge,"Conventional cards with dining and lounge, I earn 40 lakh yearly",False,Response missing: 'lounge',product_search_by_income,False,"{""banking_type"": ""conventional"", ""specific_features"": [""dining"", ""lounge""], ""customer_income"": 5000000}",29.33,"Based on the given product data and the customer's statement of earning 40 lakh (BDT 4,000,000) yearly, we can determine which cards the customer qualifies for:
+
+### Mastercard World Credit Card
+
+**Credit Limit:**
+- BDT 1,000,000 unsecured
+- BDT 2,500,000 collateralized
+
+**Annual Fee:**
+- BDT 10,000 (waived on 15+ purchases)
+
+**Top 3 Benefits:**
+1. **Highest Reward Points Earning:** 
+   - 2 points per BDT 50 spent
+   - Annual earning potential: 24,000-96,000 points
+
+2. **Premium Credit Limit:**
+   - BDT 1,000,000 unsecured / BDT 2,500,000 collateralized (highest tier available)
+
+3. **Year-Round BOGO Dining:** 
+   - Buy One Get One Free at 6 luxury restaurants
+   - Monthly savings: BDT 8,000-12,000
+
+### What would you like to do?
+
+1. Apply for the Mastercard World Credit Card now.
+2. Compare this card with other options and get more information.
+3. Speak to a financial advisor for personalized advice.","[{""product"": ""Mastercard World Credit Card"", ""section"": ""What is Mastercard World?"", ""sim"": 0.501, ""snippet"": ""**Mastercard World Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Reward Points:** 2 points ""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Sample Premium Usage Scenarios"", ""sim"": 0.485, ""snippet"": ""### Scenario 1: Luxury Lifestyle\n\n**Profile:**\n- Monthly income: BDT 300,000\n- Dining budget: BDT 50,000/month\n- Travel budget: BDT 100,000/month\n- Sh""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.476, ""snippet"": ""| Service | Charge |\n|---------|--------|\n| **Annual Fee** | BDT 10,000 (waived on 15+ purchases) |\n| **Supplementary Card** | 1st 2 Free; BDT 1,000 e""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.47, ""snippet"": ""| Service | Charge |\n|---------|--------|\n| **Annual Fee** | BDT 10,000 (waived on 15+ purchases) |\n| **Supplementary Card** | 1st 2 Free; BDT 1,000 t""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Key Features"", ""sim"": 0.46, ""snippet"": ""\u2705 **Highest Reward Points Earning**\n- **2 points per BDT 50 spent** (double vs others)\n- POS and e-commerce transactions\n- Annual earning: 24,000-96,0""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Key Features"", ""sim"": 0.459, ""snippet"": ""\u2705 **Premium Credit Limit**\n- **Unsecured:** Up to BDT 10,00,000\n- **Collateralized:** Up to BDT 25,00,000\n- Highest tier available\n- Flexible increase""}]"
+EDGE_003,edge,mastercard vs visa comparison platinum tier,True,,comparison,False,"{""preferred_tier"": ""platinum""}",10.18,"**📊 PRODUCT COMPARISON**
+<table>
+<tr>
+<th>Aspect</th>
+<th>Visa Platinum</th>
+<th>Mastercard Platinum</th>
+</tr><tr>
+<td><strong>Unsecured Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Collateral Limit</strong></td>
+<td>N/A</td>
+<td>N/A</td>
+</tr><tr>
+<td><strong>Interest-Free</strong></td>
+<td>50 days</td>
+<td>50 days</td>
+</tr><tr>
+<td><strong>Reward Points</strong></td>
+<td>1 pt/BDT 50</td>
+<td>1 pt/BDT 50</td>
+</tr><tr>
+<td><strong>Dining Benefits</strong></td>
+<td>BOGO dining</td>
+<td>BOGO dining</td>
+</tr><tr>
+<td><strong>Lounge Access</strong></td>
+<td>Balaka</td>
+<td>Balaka</td>
+</tr><tr>
+<td><strong>Travel Benefits</strong></td>
+<td>Airport Welcome</td>
+<td>Airport Welcome</td>
+</tr><tr>
+<td><strong>Insurance</strong></td>
+<td>Triple Benefit</td>
+<td>Triple Benefit</td>
+</tr><tr>
+<td><strong>EMI</strong></td>
+<td>Up to 36 mo, 0%</td>
+<td>Up to 36 mo, 0%</td>
+</tr><tr>
+<td><strong>Annual Fee</strong></td>
+<td>BDT 10,000*</td>
+<td>BDT 10,000*</td>
+</tr></table>
+<small>*Waived on 15+ purchases per month</small>
+
+**RECOMMENDATION FOR YOU**
+
+Based on your profile and annual income of **BDT N/A**:
+
+**→ Mastercard Platinum Credit Card is recommended** for you because:
+
+✅ Both cards offer excellent dining BOGO benefits
+✅ Visa provides better travel access with LoungeKey
+✅ Same interest-free period and reward structure
+✅ Better value for international transactions
+
+Would you like to proceed with **Mastercard Platinum Credit Card**?","[{""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Why Mastercard Platinum?"", ""sim"": 0.765, ""snippet"": ""Why Mastercard Platinum?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Mastercard Platinum combines premium global access with lifestyle privileges. With LoungeKey + Priority Pass, exclusive Balaka VIP with companion, year-round BOGO at premium restaurants, and comprehensive insurance\u2014it's elite credit perfected.\n\n---"", ""sim"": 0.677, ""snippet"": ""## What is Mastercard Platinum?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance\u2014it's the ultimate premium credit experience.\n\n---"", ""sim"": 0.66, ""snippet"": ""## What is Visa Platinum Credit Card?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Why Visa Platinum?"", ""sim"": 0.631, ""snippet"": ""Why Visa Platinum?""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Why Mastercard World?"", ""sim"": 0.629, ""snippet"": ""Why Mastercard World?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.55, ""snippet"": ""### Quick Application\n\n1. Visit Prime Bank (Platinum specialist branch preferred)\n2. Request Visa Platinum application\n3. Provide comprehensive docume""}]"
+EDGE_004,edge,50k monthly I want dining best card traditional banking,False,"Intent: expected 'product_search_by_income', got 'feature_inquiry'",feature_inquiry,False,"{""banking_type"": ""conventional"", ""specific_features"": [""dining""]}",32.02,"Based on your requirements for a dining card with traditional banking features, here are the cards that offer specific benefits:
+
+### JCB Platinum Credit Card
+- **Premium Dining Program**: This card offers access to premium dining experiences but does not provide detailed information about specific points or rewards related to dining.
+
+### Visa Platinum Credit Card
+- **Premium Dining Program**: Similar to the JCB card, this card also offers a Premium Dining Program without specifying exact benefits for dining.
+
+### Mastercard Platinum Credit Card
+- **Balaka VIP Lounge**: This card includes access to the Balaka VIP Lounge with 2 companions. The lounge provides luxurious amenities such as complimentary refreshments, business facilities, WiFi and entertainment, shower facilities, etc.
+
+### Mastercard World Credit Card
+- **Premium Dining Benefits**:
+  - **Year-Round BOGO Dining**: Buy One Get One Free dining at 6 luxury restaurant partners.
+    - Monthly saving: BDT 8,000-12,000 (assuming a monthly spend of BDT 4,000-6,000)
+  - **50-Day Interest-Free Period**: Full balance covered for 50 days with zero interest if paid on time.
+    - Longest grace period available
+  - **Exclusive VIP Lounge Access**:
+    - Balaka VIP + 2 companions (most generous!)
+    - Luxury amenities, complimentary refreshments, business and relaxation facilities
+  - **Global LoungeKey Network**: Access to 1,400+ premium lounges worldwide with up to 6 free visits per year.
+    - Fee waivers available for members
+
+### What would you like to do next?
+- Compare these cards further based on your specific needs.
+- Request more information about the Mastercard World Credit Card's dining benefits.","[{""product"": ""Mastercard Platinum Credit Card"", ""section"": ""What is Mastercard Platinum?"", ""sim"": 0.504, ""snippet"": ""**Mastercard Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 day""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""What is Visa Platinum Credit Card?"", ""sim"": 0.503, ""snippet"": ""**Visa Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (ful""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Additional Cardholding Benefits"", ""sim"": 0.501, ""snippet"": ""### Supplementary Cards\n\n**Privileges:**\n- First 2 cards free\n- Additional cards at fees\n- Same benefits as primary\n- Independent spending limit\n- Fam""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""What is Mastercard World?"", ""sim"": 0.498, ""snippet"": ""**Mastercard World Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Reward Points:** 2 points ""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""What is Visa Gold Credit Card?"", ""sim"": 0.495, ""snippet"": ""**Visa Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free Period:** 50 days (lo""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""What is JCB Gold Credit Card?"", ""sim"": 0.494, ""snippet"": ""**JCB Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (full balan""}]"
+EDGE_005,edge,What's the minimum payment for any card?,False,Response missing: '5%',product_info,False,{},30.64,"## Visa Platinum Credit Card
+
+- **Credit Limit:** 
+  - Unsecured: BDT 1,000,000
+  - Collateralized: BDT 2,500,000
+- **Key Features:**
+  - Exclusive Balaka VIP lounge access for you and a companion
+  - LoungeKey access to 1,400+ global lounges
+  - Year-round BOGO dining at premium restaurants
+  - Comprehensive insurance coverage (Triple Benefit)
+- **Annual Fee:** BDT 10,000 waived on 15+ purchases
+- **Late Payment Fee:** 2% monthly
+
+## Visa Gold Credit Card
+
+- **Credit Limit:**
+  - Unsecured: BDT 500,000
+  - Collateralized: BDT 1,000,000
+- **Key Features:**
+  - 50 days interest-free shopping
+  - Attractive reward points (1 point per BDT 50 spent)
+  - VIP lounge access
+  - Comprehensive insurance coverage
+- **Annual Fee:** BDT 10,000 waived on 15+ purchases
+
+## Mastercard World Credit Card
+
+- **Credit Limit:**
+  - Unsecured: BDT 250,000
+  - Collateralized: BDT 500,000
+- **Key Features:**
+  - 50 days interest-free shopping
+  - Attractive reward points (1 point per BDT 50 spent)
+  - VIP lounge access
+  - Comprehensive insurance coverage
+- **Annual Fee:** BDT 10,000 waived on 15+ purchases
+
+### What would you like to do?
+- Compare the features and credit limits of these cards.
+- Find out more about specific benefits for each card.
+- Determine which card best suits your needs.","[{""product"": ""JCB Gold Credit Card"", ""section"": ""Credit Limit & Payment"", ""sim"": 0.51, ""snippet"": ""Credit Limit & Payment""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.494, ""snippet"": ""| Service | Charge |\n|---------|--------|\n| **Annual Fee** | BDT 10,000 (waived on 15+ purchases) |\n| **Supplementary Card** | 1st 2 Free; BDT 1,000 e""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.493, ""snippet"": ""| Service | Charge |\n|---------|--------|\n| **Annual Fee** | BDT 10,000 (waived on 15+ purchases) |\n| **Supplementary Card** | 1st 2 Free; BDT 1,000 t""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.484, ""snippet"": ""| Service | Charge | Notes |\n|---------|--------|-------|\n| **Annual Fee** | BDT 5,000 | Waived on 15+ purchases |\n| **Supplementary Card** | 1st 2 Fr""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.478, ""snippet"": ""| Service | Charge | Notes |\n|---------|--------|-------|\n| **Annual Fee** | BDT 10,000 | Waived on 15+ purchases |\n| **Supplementary Card** | 1st 2 F""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.475, ""snippet"": ""| Service | Charge | Notes |\n|---------|--------|-------|\n| **Annual Fee** | BDT 5,000 | Waived on 15+ purchases |\n| **Supplementary Card** | 1st 2 Fr""}]"
+EDGE_006,edge,Can I get cash advance on my card?,False,Response missing: '50%',feature_inquiry,False,"{""specific_features"": [""cashback""]}",27.83,"Based on the provided product data, none of the cards listed offer a cash advance feature directly described using specific numbers and BDT amounts. However, I can provide information based on similar features that might be related or useful for your inquiry.
+
+### Relevant Features from Other Cards
+
+1. **Visa Hasanah Gold Credit Card**
+   - **Feature:** No points are awarded for cash advances.
+   
+2. **Visa Hasanah Platinum Credit Card**
+   - **Feature:** No points are awarded for cash advances, but it offers a higher spending tier with more points and premium redemption options.
+
+3. **JCB Gold Credit Card**
+   - **Feature:** Reward Points Program (no specific details provided).
+
+4. **JCB Platinum Credit Card**
+   - **Feature:** Reward Points Program (no specific details provided).
+
+5. **Visa Gold Credit Card**
+   - **Feature:** Reward Points Program (no specific details provided).
+
+6. **Mastercard World Credit Card**
+   - **Feature:** Double Reward Points Program (no specific details provided).
+
+### What Would You Like to Do?
+
+1. Would you like information on the rewards and redemption options for a different card?
+2. Are there any other features or services related to your credit card that you would like more information about?","[{""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Additional Cardholding Benefits"", ""sim"": 0.523, ""snippet"": ""### Supplementary Cards\n\n**Privileges:**\n- First 2 cards free\n- Additional cards at fees\n- Same benefits as primary\n- Independent spending limit\n- Fam""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.449, ""snippet"": ""| Service | Charge | Notes |\n|---------|--------|-------|\n| **Annual Fee** | BDT 5,000 | Waived on 15+ purchases |\n| **Supplementary Card** | 1st 2 Fr""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.448, ""snippet"": ""| Service | Charge | Notes |\n|---------|--------|-------|\n| **Annual Fee** | BDT 5,000 | Waived on 15+ purchases |\n| **Supplementary Card** | 1st 2 Fr""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.442, ""snippet"": ""| Service | Charge |\n|---------|--------|\n| **Annual Fee** | BDT 10,000 (waived on 15+ purchases) |\n| **Supplementary Card** | 1st 2 Free; BDT 1,000 t""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.442, ""snippet"": ""| Service | Charge |\n|---------|--------|\n| **Annual Fee** | BDT 10,000 (waived on 15+ purchases) |\n| **Supplementary Card** | 1st 2 Free; BDT 1,000 e""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.435, ""snippet"": ""| Service | Charge | Notes |\n|---------|--------|-------|\n| **Annual Fee** | BDT 10,000 | Waived on 15+ purchases |\n| **Supplementary Card** | 1st 2 F""}]"
+ELIG_001,eligibility,What are the eligibility requirements for Visa Platinum?,False,Response missing: 'E-TIN',eligibility_check,False,"{""preferred_tier"": ""platinum"", ""card_brand"": ""visa"", ""specific_product"": ""Visa Platinum Credit Card""}",19.6,"### Eligibility Requirements for Visa Platinum Credit Card
+
+**Minimum Age:** Not specified in the provided information.
+
+**Minimum Annual Income:** Not specified in the provided information.
+
+**Employment Requirements:**
+- No specific employment requirements mentioned, but typically such cards require a stable and high-income job.
+
+**Tenure or Credit History Requirements:**
+- No specific tenure or credit history requirements are mentioned. However, applicants usually need to have a good credit score and a satisfactory credit history.
+
+**Other Key Eligibility Criteria:**
+- **Senior Relationship Manager Meeting:** Must meet with a senior relationship manager at Prime Bank.
+- **Comprehensive Documents:** Provide comprehensive documents as part of the application process.
+- **Eligible for Visa Platinum Specialist Branch:** Preferred to visit the Platinum specialist branch for faster processing and better service.
+
+Please note that some criteria such as minimum age, minimum annual income, and specific employment requirements are not explicitly stated in the provided information. These details may vary based on Prime Bank's current policies.","[{""product"": ""JCB Gold Credit Card"", ""section"": ""Eligibility Requirements"", ""sim"": 0.679, ""snippet"": ""Eligibility Requirements""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Eligibility Requirements"", ""sim"": 0.679, ""snippet"": ""Eligibility Requirements""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Eligibility Requirements"", ""sim"": 0.679, ""snippet"": ""Eligibility Requirements""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Eligibility Requirements"", ""sim"": 0.679, ""snippet"": ""Eligibility Requirements""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Eligibility Requirements"", ""sim"": 0.679, ""snippet"": ""Eligibility Requirements""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Eligibility Requirements"", ""sim"": 0.679, ""snippet"": ""Eligibility Requirements""}]"
+ELIG_002,eligibility,Am I eligible for Mastercard World? I've been in my job for 4 months,False,Response missing: '6 months',eligibility_check,True,"{""card_brand"": ""mastercard""}",11.68,"Warmly acknowledging the request, I say, ""Thank you for reaching out! Could you please share your age with me so I can assist you better?""","[{""product"": ""Mastercard World Credit Card"", ""section"": ""Why Mastercard World?"", ""sim"": 0.625, ""snippet"": ""Why Mastercard World?""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Mastercard World delivers exclusive access to global privileges. With Balaka VIP lounge for you and two companions, LoungeKey access to 1,400+ premium lounges, year-round BOGO at Dhaka's finest restaurants, and double reward points\u2014it's premium credit perfected.\n\n---"", ""sim"": 0.577, ""snippet"": ""## What is Mastercard World?""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.496, ""snippet"": ""### Quick Application\n\n1. Visit Prime Bank (main branch recommended)\n2. Request Mastercard World application\n3. Provide comprehensive documents\n4. Mee""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Why Mastercard Platinum?"", ""sim"": 0.473, ""snippet"": ""Why Mastercard Platinum?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.462, ""snippet"": ""1. Visit Prime Bank\n2. Request Mastercard Platinum\n3. Provide documents\n4. Meet relationship manager\n5. Submit application\n6. Wait 3-5 days\n7. Collect""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Mastercard Platinum combines premium global access with lifestyle privileges. With LoungeKey + Priority Pass, exclusive Balaka VIP with companion, year-round BOGO at premium restaurants, and comprehensive insurance\u2014it's elite credit perfected.\n\n---"", ""sim"": 0.441, ""snippet"": ""## What is Mastercard Platinum?""}]"
+ELIG_003,eligibility,I'm self-employed for 2 years. Can I get Visa Hasanah Gold?,False,Response missing: '3 years',eligibility_check,True,"{""banking_type"": ""islami"", ""preferred_tier"": ""gold"", ""card_brand"": ""visa"", ""specific_product"": ""Visa Hasanah Gold Credit Card""}",11.85,"Warmly acknowledged! To proceed with your visa Hasanah Gold Credit Card eligibility check, may I please have your age?","[{""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Why Visa Hasanah Gold?"", ""sim"": 0.664, ""snippet"": ""Why Visa Hasanah Gold?""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Visa Hasanah Gold combines premium lifestyle benefits with Islamic banking principles. Operating on the Ujrah concept (permissible service charges instead of interest), it provides comprehensive rewards, travel privileges, and Takaful insurance protection\u2014all aligned with Shariah requirements.\n\n---"", ""sim"": 0.612, ""snippet"": ""## What is Visa Hasanah Gold?""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Why Visa Gold?"", ""sim"": 0.587, ""snippet"": ""Why Visa Gold?""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.572, ""snippet"": ""### Decision Checklist\n\n- \u2713 Valid E-TIN obtained?\n- \u2713 Minimum 6 months (salaried) or 3 years (self-employed)?\n- \u2713 Annual income sufficient (typically ""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Overview"", ""sim"": 0.551, ""snippet"": ""# Visa Hasanah Gold Credit Card\n\n**Tagline:** Power Your Dreams & Enliven Your Lifestyle\n\nVisa Hasanah Gold Credit Card is Prime Bank's Shariah-based,""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""What is Visa Hasanah Gold?"", ""sim"": 0.546, ""snippet"": ""**Visa Hasanah Gold Credit Card** offers:\n- **Shariah-Compliant:** Ujrah-based (no Riba/interest)\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,""}]"
+FEAT_001,feature,Which cards have lounge access?,False,Response missing: 'LoungeKey',feature_inquiry,False,"{""specific_features"": [""lounge""]}",32.19,"Based on the provided product data, the cards that offer Balaka VIP Lounge Access are:
+
+1. **Visa Hasanah Platinum Credit Card**
+   - **Feature Description**: Exclusive lounge entrance for you and one companion (without purchase). Additional companions can be accessed with specific spend criteria.
+     - Spend USD 500 during travel to waive your lounge visit fee.
+     - Spend USD 1,000 total to waive your and one additional companion's visit fees.
+
+2. **JCB Platinum Credit Card**
+   - **Feature Description**: Exclusive lounge entrance for you and one companion (without purchase). Luxury seating and amenities are provided.
+     - You can enter the Balaka VIP Lounge with just presenting your card and a valid flight boarding pass.
+
+3. **Visa Gold Credit Card**
+   - **Feature Description**: Exclusive lounge entrance for you, with complimentary refreshments including beverages and snacks.
+     - Spend USD 500 or more during travel to waive your lounge visit fee.
+     - Spend USD 1,000 or more to waive both your and one additional companion's visit fees.
+
+4. **JCB Gold Credit Card**
+   - **Feature Description**: Exclusive lounge entrance for you with complimentary refreshments including beverages and snacks.
+     - Spend USD 500 or more during travel to waive your lounge visit fee.
+     - Spend USD 1,000 or more to waive both your and one additional companion's visit fees.
+
+**What would you like to do?**
+- Learn more about the specific benefits of each card.
+- Compare the spending requirements for lounge access across different cards.
+- Find out how to enroll in Priority Pass if applicable.","[{""product"": ""JCB Platinum Credit Card"", ""section"": ""Balaka VIP Lounge Benefits"", ""sim"": 0.647, ""snippet"": ""**What's Included:**\n- Exclusive lounge entrance\n- You + 1 companion access\n- Luxury seating and amenities\n- Complimentary beverages and snacks\n- WiFi""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Elite Travel Privileges"", ""sim"": 0.609, ""snippet"": ""### Balaka VIP Lounge Access\n\n**Premium Benefits:**\n- Exclusive lounge entrance\n- VIP reception and greeting\n- Gourmet refreshments\n- Business class f""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Elite Travel Privileges"", ""sim"": 0.523, ""snippet"": ""### Balaka VIP Lounge (Most Generous)\n\n**Access Details:**\n- You + 2 companions (most generous offering)\n- Simply present card on arrival\n- Luxurious ""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""LoungeKey Global Network"", ""sim"": 0.501, ""snippet"": ""LoungeKey Global Network""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Key Features"", ""sim"": 0.497, ""snippet"": ""\u2705 **Premium Credit Limit**\n- BDT 1,000,000 unsecured\n- BDT 2,500,000 collateralized\n- Highest tier available\n- Flexible increase options\n\n\u2705 **50-Day I""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""What is Mastercard Platinum?"", ""sim"": 0.485, ""snippet"": ""**Mastercard Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 day""}]"
+FEAT_002,feature,Show me cards with dining benefits,True,,feature_inquiry,False,"{""specific_features"": [""dining""]}",25.33,"Based on the product data provided:
+
+1. **JCB Platinum Credit Card**
+   - Offers: Premium Dining Program
+
+2. **Visa Platinum Credit Card**
+   - Offers: Premium Dining Program
+
+3. **Mastercard Platinum Credit Card**
+   - Offers: Premium Dining Program
+
+4. **Visa Hasanah Platinum Credit Card**
+   - Offers: Premium Dining Program
+
+5. **Mastercard World Credit Card**
+   - Offers: Premium Dining Benefits
+
+For each card, the feature works as follows:
+
+- **JCB Platinum Credit Card**: The Premium Dining Program offers exclusive dining benefits such as 2 points per BDT 100 spent on dining.
+
+- **Visa Platinum Credit Card**: The Premium Dining Program provides similar benefits to the JCB Platinum Credit Card with 2 points per BDT 100 spent on dining.
+
+- **Mastercard Platinum Credit Card**: The Premium Dining Program offers 2 points per BDT 100 spent on dining, and includes access to Balaka VIP Lounge for you and one companion. This lounge provides luxurious amenities such as complimentary refreshments, business facilities, WiFi, entertainment, and shower facilities.
+
+- **Visa Hasanah Platinum Credit Card**: The Premium Dining Program offers the same benefits as the JCB and Visa Platinum Credit Cards with 2 points per BDT 100 spent on dining.
+
+- **Mastercard World Credit Card**: The Premium Dining Benefits include 36-month 0% EMI (Equated Monthly Installment) on dining purchases up to a certain limit, which can be used for various dining experiences.
+
+What would you like to do next? 
+- Compare the benefits of these cards.
+- Get more information about the Balaka VIP Lounge. 
+- Explore other card features not related to dining.","[{""product"": ""Mastercard World Credit Card"", ""section"": ""Premium Dining Benefits"", ""sim"": 0.672, ""snippet"": ""Premium Dining Benefits""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Premium Dining Program"", ""sim"": 0.603, ""snippet"": ""Premium Dining Program""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Premium Dining Program"", ""sim"": 0.603, ""snippet"": ""Premium Dining Program""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Premium Dining Program"", ""sim"": 0.603, ""snippet"": ""Premium Dining Program""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Premium Dining Program"", ""sim"": 0.603, ""snippet"": ""Premium Dining Program""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""# Lounge Access Benefits\n\n**What You Get:**\n- Luxurious waiting amenities\n- Complimentary refreshments\n- WiFi and business facilities\n- Shower facilities (selected lounges)\n- Comfortable seating and rest areas\n\n**Fee Waiver Criteria:**\n- **Waiver Condition:** Spend USD 500 during travel\n- **Waiver Process:** Contact 16218 with proof\n- **Companion Waiver:** USD 1,000 total spend = 2 visits waived\n\n**How to Use:**\n1. Present Visa Hasanah Gold card at lounge\n2. Provide valid flight boarding pass\n3. Enjoy premium amenities\n4. Request fee waiver if criteria met\n5. Contact 16218 for approval\n\n---"", ""sim"": 0.485, ""snippet"": ""## Additional Cardholding Benefits""}]"
+FEAT_003,feature,Which card offers the best rewards points?,False,Response missing: '2 points',feature_inquiry,False,"{""specific_features"": [""rewards""]}",22.27,"Based on the product data provided:
+
+The Mastercard World Credit Card offers a Double Reward Points Program, which means for every BDT 1 spent, customers earn double the reward points compared to other cards. Specifically, this card doubles the reward points earned.
+
+For example:
+- If you spend BDT 50, you would earn 2 * (points per BDT 50) instead of just points per BDT 50.
+- This effectively means higher rewards for every purchase made with this card.
+
+What would you like to do next?
+1. Compare the Double Reward Points Program with other cards' reward systems.
+2. Learn more about the benefits and redemption options associated with the Mastercard World Credit Card's Double Reward Points Program.","[{""product"": ""JCB Gold Credit Card"", ""section"": ""Reward Points Program"", ""sim"": 0.625, ""snippet"": ""Reward Points Program""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Reward Points Program"", ""sim"": 0.625, ""snippet"": ""Reward Points Program""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Reward Points Program"", ""sim"": 0.625, ""snippet"": ""Reward Points Program""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Reward Points System"", ""sim"": 0.595, ""snippet"": ""Reward Points System""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Reward Points & Redemption"", ""sim"": 0.58, ""snippet"": ""Reward Points & Redemption""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Double Reward Points Program"", ""sim"": 0.54, ""snippet"": ""Double Reward Points Program""}]"
+FEAT_004,feature,What cards have insurance coverage?,True,,feature_inquiry,False,"{""specific_features"": [""insurance""]}",27.72,"Based on the provided product data, here are the cards that offer insurance coverage:
+
+### Visa Hasanah Platinum Credit Card
+- **Insurance Feature:** Enhanced Takaful Insurance (BDT 10 lac)
+- **Coverage Details:**
+  - **Death or Permanent Total Disability:** Nominee receives BDT 10 lakh.
+  - **Accidental Death:** Nominee receives a lump sum of BDT 10 lakh.
+  - **Critical Illness:** Triple benefit coverage including death, permanent total disability, and accidental death.
+
+### Visa Hasanah Gold Credit Card
+- **Insurance Feature:** Takaful Triple Benefit Insurance (BDT 5 lac)
+- **Coverage Details:**
+  - **Death or Permanent Total Disability:** Nominee receives BDT 5 lakh.
+  - **Accidental Death:** Nominee receives a lump sum of BDT 5 lakh, with required accident proof documentation.
+  - **Critical Illness:** 50% of last month's outstanding (maximum BDT 5 lakh) for covered critical illnesses.
+
+### Mastercard Platinum Credit Card
+- **Insurance Feature:** Enhanced Triple Benefit Insurance
+- **Coverage Details:**
+  - **Death/PTD:** Maximum BDT 10 lakh.
+  - **Accidental Death:** BDT 10 lakh.
+  - **Critical Illness:** Maximum BDT 5 lakh.
+
+### What would you like to do?
+1. Compare the insurance features of these cards.
+2. Learn more about other benefits and features of each card.
+3. Apply for one of these cards online or in person.","[{""product"": ""Mastercard Platinum Credit Card"", ""section"": ""What is Mastercard Platinum?"", ""sim"": 0.515, ""snippet"": ""**Mastercard Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 day""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Sample Premium Scenarios"", ""sim"": 0.437, ""snippet"": ""Sample Premium Scenarios""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""What is Visa Platinum Credit Card?"", ""sim"": 0.432, ""snippet"": ""**Visa Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (ful""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""# Installment Options\n\n**Duration:** 12, 24, or 36 months\n**Interest Rate:** 0% (service charges only)\n**Participating Retailers:** Renowned shops nationwide\n\n**Tenure Comparison:**\n\n| Purchase | 12 Months | 24 Months | 36 Months |\n|----------|-----------|-----------|-----------|\n| BDT 100,000 | 8,333 | 4,167 | 2,778 |\n| BDT 300,000 | 25,000 | 12,500 | 8,333 |\n| BDT 500,000 | 41,667 | 20,833 | 13,889 |\n\n# How to Get EMI\n\n1. Visit participating shop\n2. Request 0% EMI option\n3. Present JCB Gold card\n4. Confirm monthly payment\n5. Complete transaction instantly\n6. Monthly auto-deductions start\n\n---"", ""sim"": 0.43, ""snippet"": ""## Triple Benefit Insurance Coverage""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""# Installment Options\n\n**Duration:** 12, 24, or 36 months\n**Interest:** 0% (service charges only)\n**Participating Retailers:** Renowned shops nationwide\n\n**Tenure Comparison:**\n\n| Purchase | 12 Months | 24 Months | 36 Months |\n|----------|-----------|-----------|-----------|\n| BDT 100,000 | 8,333 | 4,167 | 2,778 |\n| BDT 300,000 | 25,000 | 12,500 | 8,333 |\n| BDT 500,000 | 41,667 | 20,833 | 13,889 |\n\n# EMI Process\n\n1. **Identify Product:** Find EMI-enabled merchant\n2. **Present Card:** Indicate EMI preference\n3. **Select Tenure:** Choose 12/24/36 months\n4. **Complete Transaction:** Instant approval\n5. **Auto-Deduction:** Monthly payments start\n6. **Interest-Free:** Enjoy 0% EMI benefits\n\n---"", ""sim"": 0.43, ""snippet"": ""## Triple Benefit Insurance Coverage""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Why Visa Hasanah Platinum?"", ""sim"": 0.423, ""snippet"": ""\u2705 **Elite Premium Status**\n- Highest credit limit offered\n- Exclusive privileges\n- VIP recognition globally\n- Premium card positioning\n\n\u2705 **World-Clas""}]"
+FEAT_005,feature,Tell me about 0% installment options,False,Response missing: '36',feature_inquiry,False,"{""specific_features"": [""emi""]}",25.06,"Certainly! Here's a detailed breakdown of the cards that offer the 0% Interest EMI Scheme, along with specific details:
+
+### JCB Gold Credit Card
+- **EMI Offer:** 0% Interest EMI Scheme
+
+### Visa Gold Credit Card
+- **EMI Offer:** 0% Interest EMI Scheme
+
+### Mastercard Platinum Credit Card
+- **EMI Offer:** 0% Interest EMI Program (No specific duration or limit mentioned in the provided data)
+
+### JCB Platinum Credit Card
+- **EMI Offer:** 0% Interest EMI Program (No specific duration or limit mentioned in the provided data)
+
+**What would you like to do?**
+1. Would you like more information on any of these cards?
+2. Are there specific card features you are interested in exploring further?
+3. Do you need assistance with applying for one of these cards?","[{""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""# Insurance Coverage Comparison\n\n| Benefit | Visa Gold | Visa Platinum |\n|---------|-----------|---------------|\n| **Death/PTD** | BDT 5 lac | **BDT 10 lac** |\n| **Accidental Death** | BDT 5 lac | **BDT 10 lac** |\n| **Critical Illness** | BDT 5 lac (max) | **BDT 5 lac (max)** |\n| **Dues Waiver** | Yes | Yes |\n\n# Critical Illness Coverage\n\n**Covered Conditions:**\n- Major cancer (any stage)\n- Stroke or TIA (lasting 30+ days)\n- First heart attack\n- Coronary artery surgery\n- Serious coronary artery disease (75%+ blockage)\n- Heart valve surgery\n- Primary pulmonary hypertension\n- End-stage lung disease\n- End-stage liver disease\n- Fulminant hepatitis\n- Kidney failure (requiring dialysis)\n- Coma (lasting 30+ days)\n- Aplastic anemia\n- Major organ transplantation\n- Bone marrow transplantation\n\n**Benefit Details:**\n- Benefit: 50% of last month's outstanding\n- Maximum: BDT 5 lakh\n- Enrollment: Ages 18-64\n- Activation: Upon diagnosis with medical proof\n\n---"", ""sim"": 0.696, ""snippet"": ""## 0% Installment Shopping""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Installment Shopping Program"", ""sim"": 0.586, ""snippet"": ""Installment Shopping Program""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""0% Interest EMI Scheme"", ""sim"": 0.547, ""snippet"": ""**Duration:** 12, 24, or 36 months\n**Interest:** 0% (service fees only)\n**Retailers:** Premium nationwide\n\n**Example Payments:**\n\n| Purchase | 12 Mo |""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""50-Day Interest-Free Period"", ""sim"": 0.528, ""snippet"": ""**How It Works:**\n- Statement generation starts 50-day count\n- Full balance covered (no partial interest)\n- Pay in full = zero interest\n- Flexible pay""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""0% Interest EMI Scheme"", ""sim"": 0.526, ""snippet"": ""**Duration:** 12, 24, or 36 months\n**Interest:** 0% (service charges only)\n**Participating Retailers:** Premium nationwide\n\n**EMI Examples:**\n\n| Purch""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""50-Day Interest-Free Period"", ""sim"": 0.526, ""snippet"": ""**Timeline:**\n- Purchases counted from statement date\n- Not from transaction date\n- Full balance covered (not partial)\n- Zero interest if paid in full""}]"
+FEAT_006,feature,Which cards offer BOGO dining?,True,,feature_inquiry,False,"{""specific_features"": [""dining""]}",19.97,"Based on the product data provided:
+
+1. **JCB Platinum Credit Card**
+   - The JCB Platinum Credit Card offers a Premium Dining Program, which typically includes BOGO (Buy One Get One Free) dining deals for cardholders.
+
+2. **Visa Platinum Credit Card**
+   - The Visa Platinum Credit Card also provides a Premium Dining Program that includes BOGO dining opportunities for cardholders.
+
+3. **Mastercard Platinum Credit Card**
+   - The Mastercard Platinum Credit Card features a Premium Dining Program, which offers cardholders BOGO dining deals.
+
+4. **Visa Hasanah Platinum Credit Card**
+   - This card includes a Premium Dining Program as well, providing cardholders with BOGO dining benefits.
+
+5. **Mastercard World Credit Card**
+   - The Mastercard World Credit Card offers Premium Dining Benefits, which may include BOGO dining deals for cardholders.
+
+**What would you like to do?**
+- Learn more about the specific terms and conditions of each card's Premium Dining Program.
+- Compare the benefits offered by these cards to find the best fit for your needs.","[{""product"": ""Mastercard World Credit Card"", ""section"": ""What is Mastercard World?"", ""sim"": 0.46, ""snippet"": ""**Mastercard World Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Reward Points:** 2 points ""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""FAQs"", ""sim"": 0.459, ""snippet"": ""**Q: What makes Platinum different from Gold?**\nA: Higher credit limit (BDT 10 lac vs 7 lac), premium BOGO dining, higher insurance (BDT 10 lac vs 5 l""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Key Features"", ""sim"": 0.451, ""snippet"": ""\u2705 **Premium Credit Limit**\n- **Unsecured:** Up to BDT 10,00,000\n- **Collateralized:** Up to BDT 25,00,000\n- Highest tier available\n- Flexible increase""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Key Features"", ""sim"": 0.45, ""snippet"": ""\u2705 **Premium Credit Limit**\n- **Unsecured:** Up to BDT 10,00,000\n- **Collateralized:** Up to BDT 25,00,000\n- Highest tier available\n- Flexible increase""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Premium Dining Program"", ""sim"": 0.446, ""snippet"": ""Premium Dining Program""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Premium Dining Program"", ""sim"": 0.446, ""snippet"": ""Premium Dining Program""}]"
+FEAT_007,feature,I need travel benefits - which card?,True,,feature_inquiry,False,"{""specific_features"": [""travel""]}",48.66,"Based on the product data provided, here are the cards that offer travel benefits:
+
+1. **JCB Gold Credit Card**
+   - **Balaka VIP Lounge Access:**
+     - What You Get:
+       - Exclusive lounge entrance
+       - Comfortable seating
+       - Complimentary beverages and snacks (BDT 50-200 per item)
+       - WiFi and charging stations
+       - Business facilities
+       - Shower amenities
+       - News and entertainment
+     - Fee Waiver Criteria:
+       - Spend USD 500+ during travel period
+       - Contact 16218 with flight details
+       - Provide boarding pass copy
+       - Receive approval and waiver code
+       - Use at lounge on arrival
+
+2. **JCB Platinum Credit Card**
+   - **Balaka VIP Lounge Access:**
+     - What's Included:
+       - Exclusive lounge entrance
+       - You + 1 companion access (BDT 50-200 per person for refreshments)
+       - Luxury seating and amenities
+       - Complimentary beverages and snacks
+       - WiFi and business facilities
+       - Shower facilities available
+       - News and entertainment
+       - Professional environment
+     - How to Access:
+       - Simply present card at lounge
+       - Valid flight boarding pass required
+
+3. **Visa Gold Credit Card**
+   - **Balaka VIP Lounge Access:**
+     - What You Get:
+       - Exclusive lounge entrance
+       - Comfortable seating
+       - Complimentary beverages and snacks (BDT 50-200 per item)
+       - WiFi and charging stations
+       - Business facilities
+       - Shower amenities
+       - News and entertainment
+     - Fee Waiver Criteria:
+       - Spend USD 500+ during travel period
+       - Contact 16218 with flight details
+       - Provide boarding pass
+       - Receive approval and waiver code
+       - Use code at lounge
+
+4. **Visa Hasanah Platinum Credit Card**
+   - **Balaka VIP Lounge Access:**
+     - Premium Benefits:
+       - Exclusive lounge entrance
+       - VIP reception and greeting
+       - Gourmet refreshments (BDT 200-500 per item)
+       - Business class facilities
+       - Private rest areas
+       - Shower facilities
+       - WiFi and entertainment
+   - **LoungeKey Global Access:**
+     - Worldwide Network:
+       - 1,400+ partner lounges globally (BDT 700-2,500 per visit)
+       - Multiple airports covered
+       - Premium lounges in major hubs
+       - Priority seating available
+   - **Visit Benefits:**
+     - Standard: Per LoungeKey terms
+     - Fee Waiver: Spend USD 500 during travel (BDT 34,722)
+     - Companion Visit Waiver: Spend USD 1,000 total (BDT 69,444)
+     - Up to 2 free visits per year standard
+
+- **What would you like to do?**
+  - Compare the benefits of each card.
+  - Learn more about the application process for your chosen card.
+  - Speak with a specialist about additional travel perks and services.","[{""product"": ""Mastercard Platinum Credit Card"", ""section"": ""What is Mastercard Platinum?"", ""sim"": 0.63, ""snippet"": ""**Mastercard Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 day""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""What is Visa Platinum Credit Card?"", ""sim"": 0.591, ""snippet"": ""**Visa Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (ful""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""What is Mastercard World?"", ""sim"": 0.559, ""snippet"": ""**Mastercard World Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Reward Points:** 2 points ""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""What is Visa Gold Credit Card?"", ""sim"": 0.554, ""snippet"": ""**Visa Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free Period:** 50 days (lo""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Sample Premium Usage Scenarios"", ""sim"": 0.536, ""snippet"": ""### Scenario 1: Luxury Lifestyle\n\n**Profile:**\n- Monthly income: BDT 300,000\n- Dining budget: BDT 50,000/month\n- Travel budget: BDT 100,000/month\n- Sh""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""What is JCB Platinum Credit Card?"", ""sim"": 0.531, ""snippet"": ""**JCB Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (full""}]"
+FEAT_008,feature,Which card has the highest insurance payout?,True,,feature_inquiry,False,"{""specific_features"": [""insurance""]}",26.8,"The Visa Hasanah Platinum Credit Card and the Mastercard Platinum Credit Card both offer enhanced insurance payouts. Here's a detailed description of how each card’s insurance feature works:
+
+### Visa Hasanah Platinum Credit Card
+
+**Maximum Protection**
+- **Enhanced Takaful Insurance:** BDT 10 lac (BDT 1,000,000)
+- **Triple Benefit Coverage:**
+  - **Death or Permanent Total Disability:** Nominee receives the entire outstanding amount waived.
+  - **Accidental Death:** Nominee receives a lump sum of BDT 5 lakh (BDT 500,000).
+  - **Critical Illness:** 50% of last month's outstanding is paid to the nominee. The maximum benefit is BDT 5 lakh.
+
+### Mastercard Platinum Credit Card
+
+**Enhanced Triple Benefit Insurance**
+- **Death/PTD:** BDT 10 lac (BDT 1,000,000)
+- **Accidental Death:** BDT 10 lac (BDT 1,000,000)
+- **Critical Illness:** BDT 5 lakh (BDT 500,000)
+
+What would you like to do next?
+1. Compare the benefits of these cards further.
+2. Apply for one of these credit cards online.
+3. Learn more about other features and services offered by these cards.","[{""product"": ""Mastercard Platinum Credit Card"", ""section"": ""What is Mastercard Platinum?"", ""sim"": 0.553, ""snippet"": ""**Mastercard Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 day""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""What is Visa Platinum Credit Card?"", ""sim"": 0.471, ""snippet"": ""**Visa Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (ful""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Triple Benefit Insurance"", ""sim"": 0.462, ""snippet"": ""Triple Benefit Insurance""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""What is Visa Gold Credit Card?"", ""sim"": 0.458, ""snippet"": ""**Visa Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free Period:** 50 days (lo""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Enhanced Triple Benefit Insurance"", ""sim"": 0.454, ""snippet"": ""Enhanced Triple Benefit Insurance""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Enhanced Triple Benefit Insurance"", ""sim"": 0.454, ""snippet"": ""Enhanced Triple Benefit Insurance""}]"
+FEAT_009,feature,What is the annual fee waiver condition?,False,"Intent: expected 'feature_inquiry', got 'product_info'",product_info,False,{},45.96,"### Mastercard World Credit Card
+- **Key Features:**
+  - [0% Interest EMI Scheme] for 12, 24, or 36 months.
+  - Participating Retailers: Premium nationwide.
+
+- **Annual Fee:** BDT 5,000 (Waived on 15 purchases)
+
+### Visa Hasanah Gold Credit Card
+- **Key Features:**
+  - Annual Fee: BDT 5,000 (Waived on 15+ purchases)
+  - Supplementary Cards: 1st 2 Free; BDT 500 each thereafter.
+  - Cash Advance Fee: 3% minimum BDT 300
+  - Late Payment Charge: 2% monthly on outstanding balance
+  - Over Limit Fee: BDT 500 per transaction over limit
+  - EMI Conversion Fee: 1% one-time fee
+  - Fund Transfer: 0.5% minimum BDT 50
+  - Cheque Book: 1st Free; BDT 100 per book
+  - Card Replacement: Free within 7 days
+  - Duplicate Statement: Free (Online available 24/7)
+
+### Visa Gold Credit Card
+- **Key Features:**
+  - Substantial Credit Limit:
+    - Unsecured: Up to BDT 7,00,000
+    - Collateralized: Up to BDT 25,00,000
+  - Longest Interest-Free Period: 50 days from bill date.
+  - Premium Reward Points: 1 point per BDT 50 spent (POS and e-commerce transactions)
+  - VIP Lounge Access: Balaka VIP lounge privileges; fee waiver on USD 500 spend
+  - 0% Interest Installment: Up to 36 months, no hidden charges.
+  - Year-Round Exclusive Discounts: Travel packages and flights (15-25% off), electronics and gadgets (10-20% off), dining and restaurants (20-30% off), shopping and retail (15-25% off)
+  - Triple Benefit Insurance:
+    - Death/PTD: Dues waived + BDT 5 lac to nominee
+    - Accidental Death: BDT 5 lac to nominee
+    - Critical Illness: 50% last month's outstanding (max BDT 5 lac), age 18-64 coverage
+
+### JCB Gold Credit Card
+- **Key Features:**
+  - Substantial Credit Limit:
+    - Unsecured: Up to BDT 7,00,000
+    - Collateralized: Up to BDT 25,00,000
+  - 50-Day Interest-Free Period: Full balance covered if paid on time.
+  - Premium Reward Points: 1 point per BDT 50 spent (POS and e-commerce transactions)
+  - Balaka VIP Lounge Access: Exclusive lounge privileges; fee waiver on USD 500 spend, companion fee waiver on USD 1,000 spend
+  - 0% Interest Installment: Up to 36 months, no hidden charges.
+  - Year-Round Exclusive Discounts: Travel packages and flights, electronics and gadgets, dining and restaurants, shopping and retail","[{""product"": ""Visa Gold Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.49, ""snippet"": ""| Service | Charge | Notes |\n|---------|--------|-------|\n| **Annual Fee** | BDT 5,000 | Waived on 15+ purchases |\n| **Supplementary Card** | 1st 2 Fr""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.489, ""snippet"": ""| Service | Charge | Notes |\n|---------|--------|-------|\n| **Annual Fee** | BDT 10,000 | Waived on 15+ purchases |\n| **Supplementary Card** | 1st 2 F""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.487, ""snippet"": ""| Service | Charge | Notes |\n|---------|--------|-------|\n| **Annual Fee** | BDT 5,000 | Waived on 15 purchases |\n| **Supplementary Card** | 1st 2 Fre""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.486, ""snippet"": ""| Service | Charge | Notes |\n|---------|--------|-------|\n| **Annual Fee** | BDT 5,000 | Waived on 15+ purchases |\n| **Supplementary Card** | 1st 2 Fr""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.445, ""snippet"": ""Fees & Charges""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""0% Interest EMI Scheme"", ""sim"": 0.44, ""snippet"": ""**Duration:** 12, 24, or 36 months\n**Interest:** 0% (service charges only)\n**Participating Retailers:** Premium nationwide\n\n**EMI Examples:**\n\n| Purch""}]"
+FEAT_010,feature,Which cards have airport welcome service?,False,"Intent: expected 'feature_inquiry', got 'product_info'",product_info,True,{},13.22,Hey there! Curious if you have a preference for conventional banking or if you're more into the principles of Islamic banking?,"[{""product"": ""JCB Platinum Credit Card"", ""section"": ""# Insurance Coverage\n\n**Benefit 1: Death or Permanent Total Disability**\n- Entire outstanding dues waived\n- Nominee receives equal amount\n- Maximum payout: BDT 10 lakh\n- Automatic claim processing\n\n**Benefit 2: Accidental Death**\n- Nominee lump sum payment\n- Benefit amount: BDT 10 lakh\n- Quick claim settlement\n- Documentation required\n\n**Benefit 3: Critical Illness**\n- Cardholder receives 50% of last month's outstanding\n- Maximum payout: BDT 5 lakh\n- Age eligibility: 18-64 years\n- Quick benefit payment\n\n# Critical Illnesses Covered\n\n- Major cancer (any stage)\n- Stroke (lasting 30+ days)\n- First heart attack\n- Coronary artery surgery\n- Serious coronary artery disease\n- Heart valve surgery\n- Primary pulmonary hypertension\n- End-stage lung disease\n- End-stage liver disease\n- Fulminant hepatitis\n- Kidney failure (dialysis)\n- Coma (30+ days)\n- Aplastic anemia\n- Major organ transplantation\n- Bone marrow transplantation\n\n---"", ""sim"": 0.621, ""snippet"": ""## Airport Welcome Service""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Balaka VIP Lounge Benefits"", ""sim"": 0.512, ""snippet"": ""**What's Included:**\n- Exclusive lounge entrance\n- You + 1 companion access\n- Luxury seating and amenities\n- Complimentary beverages and snacks\n- WiFi""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Elite Travel Privileges"", ""sim"": 0.484, ""snippet"": ""### Balaka VIP Lounge Access\n\n**Premium Benefits:**\n- Exclusive lounge entrance\n- VIP reception and greeting\n- Gourmet refreshments\n- Business class f""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""What is Mastercard World?"", ""sim"": 0.459, ""snippet"": ""**Mastercard World Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Reward Points:** 2 points ""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Elite Travel Privileges"", ""sim"": 0.458, ""snippet"": ""### Balaka VIP Lounge (Most Generous)\n\n**Access Details:**\n- You + 2 companions (most generous offering)\n- Simply present card on arrival\n- Luxurious ""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""What is JCB Platinum Credit Card?"", ""sim"": 0.453, ""snippet"": ""**JCB Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (full""}]"
+INC_001,income,"I earn 300,000 BDT monthly. What cards can I get?",True,,product_search_by_income,False,"{""customer_income"": 3600000}",31.35,"Based on your monthly income of 300,000 BDT, here are the cards you qualify for:
+
+### Visa Platinum Credit Card
+**Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Annual Fee:** BDT 10,000 (waived on 15+ purchases)
+- **Top 3 Benefits:**
+  - **Reward Points:** 1 point per BDT 50 spent
+  - **Insurance:** Triple Benefit coverage up to BDT 10 lac max
+  - **Travel Privileges:** LoungeKey + Balaka VIP + Airport Welcome
+
+### Visa Gold Credit Card
+**Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Annual Fee:** BDT 10,000 (waived on 15+ purchases)
+- **Top 3 Benefits:**
+  - **Reward Points:** 1 point per BDT 50 spent
+  - **Dining & Travel:** Year-round exclusive discounts
+  - **Interest-Free Period:** 50 days (longest in the market)
+
+### Mastercard World Credit Card
+**Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Annual Fee:** BDT 10,000 (waived on 15+ purchases)
+- **Top 3 Benefits:**
+  - **Reward Points:** 2 points per BDT 50 spent
+  - **Travel:** Balaka VIP + LoungeKey + 1,400+ lounges
+  - **Dining:** Year-round BOGO at 6 luxury restaurants
+
+### What would you like to do next?
+- Apply for one of the cards mentioned.
+- Learn more about the terms and conditions.
+- Compare benefits further.","[{""product"": ""Visa Gold Credit Card"", ""section"": ""Overview"", ""sim"": 0.551, ""snippet"": ""# Visa Gold Credit Card\n\n**Tagline:** Power Your Dreams & Enliven Your Lifestyle\n\nVisa Gold Credit Card from Prime Bank offers BDT 700,000 unsecured a""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""What is Visa Platinum Credit Card?"", ""sim"": 0.54, ""snippet"": ""**Visa Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (ful""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""What is Mastercard Platinum?"", ""sim"": 0.535, ""snippet"": ""**Mastercard Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 day""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""What is Visa Gold Credit Card?"", ""sim"": 0.519, ""snippet"": ""**Visa Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free Period:** 50 days (lo""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""What is Mastercard World?"", ""sim"": 0.489, ""snippet"": ""**Mastercard World Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Reward Points:** 2 points ""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.485, ""snippet"": ""| Service | Charge |\n|---------|--------|\n| **Annual Fee** | BDT 10,000 (waived on 15+ purchases) |\n| **Supplementary Card** | 1st 2 Free; BDT 1,000 e""}]"
+INC_002,income,My annual income is 50 lakh. Suggest a card.,False,"Intent: expected 'product_search_by_income', got 'product_info'",product_info,True,"{""customer_income"": 6000000}",12.88,Hey there! Are you more into traditional banking or do you lean towards Islamic banking principles?,"[{""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.524, ""snippet"": ""### Decision Checklist\n\n- \u2713 Valid E-TIN obtained?\n- \u2713 Minimum 6 months (salaried) or 3 years (self-employed)?\n- \u2713 Annual income sufficient (typically ""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.468, ""snippet"": ""### Decision Checklist\n\n- \u2713 Valid E-TIN obtained?\n- \u2713 Meet tenure requirement (6 months salaried / 3 years self-employed)?\n- \u2713 Have sufficient income ""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Additional Cardholding Benefits"", ""sim"": 0.456, ""snippet"": ""### Supplementary Cards\n\n**Privileges:**\n- First 2 cards free\n- Additional cards at fees\n- Same benefits as primary\n- Independent spending limit\n- Fam""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.45, ""snippet"": ""| Service | Charge |\n|---------|--------|\n| **Annual Fee** | BDT 10,000 (waived on 15+ purchases) |\n| **Supplementary Card** | 1st 2 Free; BDT 1,000 e""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""What is Visa Platinum Credit Card?"", ""sim"": 0.446, ""snippet"": ""**Visa Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (ful""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.441, ""snippet"": ""| Service | Charge |\n|---------|--------|\n| **Annual Fee** | BDT 10,000 (waived on 15+ purchases) |\n| **Supplementary Card** | 1st 2 Free; BDT 1,000 t""}]"
+INC_003,income,My salary is 2 lakh per month. Best card?,False,"Intent: expected 'product_search_by_income', got 'product_info'",product_info,True,"{""customer_income"": 2400000}",13.0,Hey there! Are you more into traditional banking or do you lean towards Islamic banking options?,"[{""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.432, ""snippet"": ""### Decision Checklist\n\n- \u2713 Valid E-TIN obtained?\n- \u2713 Minimum 6 months (salaried) or 3 years (self-employed)?\n- \u2713 Annual income sufficient (typically ""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Overview"", ""sim"": 0.427, ""snippet"": ""# Visa Gold Credit Card\n\n**Tagline:** Power Your Dreams & Enliven Your Lifestyle\n\nVisa Gold Credit Card from Prime Bank offers BDT 700,000 unsecured a""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""What is Visa Platinum Credit Card?"", ""sim"": 0.427, ""snippet"": ""**Visa Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (ful""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Additional Cardholding Benefits"", ""sim"": 0.425, ""snippet"": ""### Supplementary Cards\n\n**Privileges:**\n- First 2 cards free\n- Additional cards at fees\n- Same benefits as primary\n- Independent spending limit\n- Fam""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""What is Visa Gold Credit Card?"", ""sim"": 0.423, ""snippet"": ""**Visa Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free Period:** 50 days (lo""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.422, ""snippet"": ""| Service | Charge |\n|---------|--------|\n| **Annual Fee** | BDT 10,000 (waived on 15+ purchases) |\n| **Supplementary Card** | 1st 2 Free; BDT 1,000 e""}]"
+INC_004,income,Monthly income 100k. Which card?,True,,product_search_by_income,False,"{""customer_income"": 1200000}",42.64,"Based on your monthly income of BDT 100,000, here are the cards you qualify for along with their key features:
+
+### JCB Platinum Credit Card
+**Credit Limit:** Unspecified (typically up to BDT 5,000,000)
+- **Annual Fee:** None (no annual fee)
+- **Top 3 Benefits:**
+  - **0% Interest EMI Program**: Enjoy interest-free EMIs for 12, 24, or 36 months.
+  - **Participating Retailers:** Premium nationwide retailers.
+  - **Payment Examples:** For BDT 500,000 purchase, the monthly payment would be BDT 41,667 (12 months), BDT 20,833 (24 months), or BDT 13,889 (36 months).
+
+### Visa Hasanah Platinum Credit Card
+**Credit Limit:** Unspecified (typically up to BDT 5,000,000)
+- **Annual Fee:** BDT 10,000 (waived on 15+ purchases)
+- **Top 3 Benefits:**
+  - **0% Installment Shopping**: Enjoy interest-free EMIs for 12, 24, or 36 months.
+  - **Participating Merchants:** Premium nationwide retailers.
+  - **Installment Examples:** For BDT 500,000 purchase, the monthly payment would be BDT 41,667 (12 months), BDT 20,833 (24 months), or BDT 13,889 (36 months).
+
+### Visa Gold Credit Card
+**Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Annual Fee:** BDT 10,000 (waived on 15+ purchases)
+- **Top 3 Benefits:**
+  - **Interest-Free Period:** Longest in the market at 50 days.
+  - **Reward Points:** 1 point per BDT 50 spent.
+  - **Insurance:** Triple Benefit coverage up to BDT 5,000,000.
+
+### Mastercard World Credit Card
+**Credit Limit:** Unspecified (typically up to BDT 5,000,000)
+- **Annual Fee:** BDT 10,000 (waived on 15+ purchases)
+- **Top 3 Benefits:**
+  - **EMI Scheme**: 0% interest for 12, 24, or 36 months.
+  - **Participating Retailers:** Premium nationwide retailers.
+  - **EMI Examples:** For BDT 500,000 purchase, the monthly payment would be BDT 41,667 (12 months), BDT 20,833 (24 months), or BDT 13,889 (36 months).
+
+### What Would You Like to Do?
+1. **Compare More Details:** Get more information on the benefits and features of each card.
+2. **Apply Now:** Proceed with applying for","[{""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Additional Cardholding Benefits"", ""sim"": 0.474, ""snippet"": ""### Supplementary Cards\n\n**Privileges:**\n- First 2 cards free\n- Additional cards at fees\n- Same benefits as primary\n- Independent spending limit\n- Fam""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""What is Visa Platinum Credit Card?"", ""sim"": 0.469, ""snippet"": ""**Visa Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (ful""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""What is Visa Gold Credit Card?"", ""sim"": 0.463, ""snippet"": ""**Visa Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free Period:** 50 days (lo""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""What is Mastercard Platinum?"", ""sim"": 0.463, ""snippet"": ""**Mastercard Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 day""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.\n\n---"", ""sim"": 0.458, ""snippet"": ""## What is Visa Gold Credit Card?""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.453, ""snippet"": ""| Service | Charge |\n|---------|--------|\n| **Annual Fee** | BDT 10,000 (waived on 15+ purchases) |\n| **Supplementary Card** | 1st 2 Free; BDT 1,000 e""}]"
+INC_005,income,"I earn 50,000 BDT/month and I prefer dining benefits. Recommend?",True,,product_search_by_income,False,"{""specific_features"": [""dining""], ""customer_income"": 600000}",47.18,"Based on your monthly income of BDT 50,000 and your preference for dining benefits, here are the credit cards that you qualify for:
+
+### JCB Platinum Credit Card
+**Credit Limit:**
+- Unsecured: BDT 1,000,000
+
+**Annual Fee:**
+- BDT 24,000 (waived with 15 purchases)
+
+**Top 3 Benefits:**
+1. **Year-Round BOGO Dining:** Buy One Get One Free at 6 luxury restaurant partners, saving you up to BDT 8,000-12,000 per month.
+2. **Elite Reward Points:** Earn 1 point for every BDT 50 spent with a potential annual earning of 12,000-48,000 points.
+3. **Balaka VIP Lounge:** Exclusive access with 1 companion.
+
+### Visa Hasanah Platinum Credit Card
+**Credit Limit:**
+- Unsecured: BDT 1,000,000
+
+**Annual Fee:**
+- BDT 24,000 (waived with 15 purchases)
+
+**Top 3 Benefits:**
+1. **Year-Round BOGO Dining:** Buy One Get One Free at 6 luxury restaurant partners, saving you up to BDT 8,000-12,000 per month.
+2. **Elite Reward Points:** Earn 1 point for every BDT 50 spent with a potential annual earning of 12,000-48,000 points.
+3. **Balaka VIP Lounge:** Exclusive access with 1 companion.
+
+### Mastercard World Credit Card
+**Credit Limit:**
+- Unsecured: BDT 1,000,000
+
+**Annual Fee:**
+- BDT 24,000 (waived with 15 purchases)
+
+**Top 3 Benefits:**
+1. **Year-Round BOGO Dining:** Buy One Get One Free at 6 luxury restaurant partners, saving you up to BDT 8,000-12,000 per month.
+2. **Elite Reward Points:** Earn 2 points for every BDT 50 spent with a potential annual earning of 24,000-96,000 points.
+3. **Exclusive VIP Lounge Access:** Balaka VIP with 2 companions.
+
+### Mastercard Platinum Credit Card
+**Credit Limit:**
+- Unsecured: BDT 1,000,000
+
+**Annual Fee:**
+- BDT 24,000 (waived with 15 purchases)
+
+**Top 3 Benefits:**
+1. **Year-Round BOGO Dining:** Buy One Get One Free at 6 premium restaurant partners, saving you up to BDT 8,000-12,000 per month.
+2. **Elite Reward Points:** Earn 1 point for every BDT 50 spent with a potential annual earning of 12,000-48,000 points.
+3. **Balaka VIP Lounge:** Exclusive access with 1 companion.
+
+### What would you like to do next?
+1. Apply for one of the recommended cards.
+2. Compare more features and benefits","[{""product"": ""Mastercard World Credit Card"", ""section"": ""Premium Dining Benefits"", ""sim"": 0.655, ""snippet"": ""Premium Dining Benefits""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Premium Dining Program"", ""sim"": 0.565, ""snippet"": ""Premium Dining Program""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Premium Dining Program"", ""sim"": 0.565, ""snippet"": ""Premium Dining Program""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Premium Dining Program"", ""sim"": 0.565, ""snippet"": ""Premium Dining Program""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Premium Dining Program"", ""sim"": 0.565, ""snippet"": ""Premium Dining Program""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Sample Premium Usage Scenarios"", ""sim"": 0.462, ""snippet"": ""### Scenario 1: Luxury Lifestyle\n\n**Profile:**\n- Monthly income: BDT 300,000\n- Dining budget: BDT 50,000/month\n- Travel budget: BDT 100,000/month\n- Sh""}]"
+INC_006,income,I'm a business owner with annual revenue of 30 lakh. What credit card?,True,,product_search_by_income,False,"{""customer_income"": 3600000}",35.87,"Based on your annual revenue of 30 lakh (approximately BDT 36 million), here are the credit cards that you qualify for:
+
+### Visa Gold Credit Card
+**Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Annual Fee:** BDT 10,000 (waived on 15+ purchases)
+- **Top Benefits:**
+  - **Interest-Free Period:** 50 days
+  - **Reward Points:** 1 point per BDT 50 spent
+  - **Insurance:** Triple Benefit coverage up to BDT 5 lac
+
+### Visa Platinum Credit Card
+**Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Annual Fee:** BDT 10,000 (waived on 15+ purchases)
+- **Top Benefits:**
+  - **Interest-Free Period:** 50 days
+  - **Reward Points:** 1 point per BDT 50 spent
+  - **Travel Privileges:** LoungeKey + Balaka VIP + Airport Welcome
+
+### Mastercard World Credit Card
+**Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Annual Fee:** BDT 10,000 (waived on 15+ purchases)
+- **Top Benefits:**
+  - **Interest-Free Period:** 50 days
+  - **Reward Points:** 2 points per BDT 50 spent (double earning!)
+  - **Travel:** Balaka VIP + LoungeKey + 1,400+ lounges
+
+### Mastercard Platinum Credit Card
+**Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Annual Fee:** BDT 10,000 (waived on 15+ purchases)
+- **Top Benefits:**
+  - **Interest-Free Period:** 50 days
+  - **Reward Points:** 1 point per BDT 50 spent
+  - **Dining:** Year-round BOGO at 6 luxury restaurants
+
+**What would you like to do next?**
+
+1. Apply for one of these cards.
+2. Learn more about the application process and requirements.
+3. Compare benefits in detail before making a decision.","[{""product"": ""Mastercard World Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.518, ""snippet"": ""| Service | Charge |\n|---------|--------|\n| **Annual Fee** | BDT 10,000 (waived on 15+ purchases) |\n| **Supplementary Card** | 1st 2 Free; BDT 1,000 e""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.514, ""snippet"": ""| Service | Charge |\n|---------|--------|\n| **Annual Fee** | BDT 10,000 (waived on 15+ purchases) |\n| **Supplementary Card** | 1st 2 Free; BDT 1,000 t""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""What is Visa Platinum Credit Card?"", ""sim"": 0.511, ""snippet"": ""**Visa Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (ful""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""What is Visa Gold Credit Card?"", ""sim"": 0.5, ""snippet"": ""**Visa Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free Period:** 50 days (lo""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""What is JCB Gold Credit Card?"", ""sim"": 0.483, ""snippet"": ""**JCB Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (full balan""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Fees & Charges"", ""sim"": 0.481, ""snippet"": ""| Service | Charge |\n|---------|--------|\n| Annual Fee | BDT 10,000 (waived on 15+ purchases) |\n| Supplementary Card | 1st 2 Free; BDT 1,000 thereafte""}]"
+NEG_001,negative,What's the weather today?,True,,small_talk,False,{},11.37,I'm here to assist with your banking needs. How can I help you with your account or transactions today?,"[{""product"": ""JCB Gold Credit Card"", ""section"": ""Overview"", ""sim"": 0.134, ""snippet"": ""Overview""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Overview"", ""sim"": 0.134, ""snippet"": ""Overview""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Overview"", ""sim"": 0.134, ""snippet"": ""Overview""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Overview"", ""sim"": 0.134, ""snippet"": ""Overview""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Overview"", ""sim"": 0.134, ""snippet"": ""Overview""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Overview"", ""sim"": 0.134, ""snippet"": ""Overview""}]"
+NEG_002,negative,Tell me a joke,True,,small_talk,False,{},14.81,"Sure thing! Here's a light joke for you:
+
+Why don't scientists trust atoms?
+
+Because they make up everything! 😄","[{""product"": ""JCB Gold Credit Card"", ""section"": ""FAQs"", ""sim"": 0.192, ""snippet"": ""FAQs""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""FAQs"", ""sim"": 0.192, ""snippet"": ""FAQs""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""FAQs"", ""sim"": 0.192, ""snippet"": ""FAQs""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""FAQs"", ""sim"": 0.192, ""snippet"": ""FAQs""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""FAQs"", ""sim"": 0.192, ""snippet"": ""FAQs""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""FAQs"", ""sim"": 0.192, ""snippet"": ""FAQs""}]"
+NEG_003,negative,Do you have car loans?,True,,product_info,True,{},12.8,Hey there! Are you more into traditional banking or do you lean towards Islamic banking principles?,"[{""product"": ""JCB Gold Credit Card"", ""section"": ""Credit Limit & Payment"", ""sim"": 0.348, ""snippet"": ""Credit Limit & Payment""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Installment Shopping Program"", ""sim"": 0.334, ""snippet"": ""Installment Shopping Program""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Credit Limit & Payment Structure"", ""sim"": 0.33, ""snippet"": ""Credit Limit & Payment Structure""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Premium Credit Limits"", ""sim"": 0.315, ""snippet"": ""Premium Credit Limits""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Premium Credit Limits"", ""sim"": 0.315, ""snippet"": ""Premium Credit Limits""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""# How It Works\n\n**Timeline Example:**\n\n| Date | Event | Days Remaining |\n|------|-------|----------------|\n| **Jan 5** | Purchase made | 50 days |\n| **Jan 20** | Statement generated | 35 days |\n| **Feb 1** | Payment due | 24 days |\n| **Feb 25** | Last interest-free date | 0 days |\n\n**Key Points:**\n- Grace period starts from statement generation, not purchase date\n- Full outstanding balance covered\n- Pay in full = Zero interest\n- Partial payment = Interest on remaining amount\n\n# Interest-Free Shopping Strategy\n\n**Optimal Usage:**\n\n1. **Make Purchase:** Early in statement cycle (Day 1-10)\n2. **Receive Statement:** 20 days later\n3. **Interest-Free Window:** Next 50 days available\n4. **Plan Payment:** Schedule before day 50\n5. **Pay Full:** Avoid interest completely\n\n**Example:**\n- Purchase BDT 1,00,000 on Jan 5\n- Statement Jan 20\n- Due Feb 9\n- Interest-free until Feb 25 (50 days)\n- **Total grace period:** 50+ days!\n\n---"", ""sim"": 0.305, ""snippet"": ""## Credit Limit & Payment Structure""}]"
+NET_001,network,Which Visa cards do you offer?,True,,feature_inquiry,False,"{""card_brand"": ""visa"", ""specific_features"": [""dining""]}",16.58,"The Visa cards that offer the Premium Dining Program feature are:
+
+1. **Visa Platinum Credit Card**
+   - The Premium Dining Program provides exclusive dining experiences and discounts at participating restaurants.
+   
+2. **Visa Hasanah Platinum Credit Card**
+   - This card also includes the Premium Dining Program, offering special deals and benefits when dining out.
+
+For more information on these cards or to discuss your options further, please let me know what you would like to do next:
+
+- Would you like to compare the features of these Visa cards?
+- Are you interested in applying for one of these cards today?
+
+Feel free to choose any option that best suits your needs.","[{""product"": ""Visa Gold Credit Card"", ""section"": ""Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.\n\n---"", ""sim"": 0.564, ""snippet"": ""## What is Visa Gold Credit Card?""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""What is Visa Gold Credit Card?"", ""sim"": 0.558, ""snippet"": ""**Visa Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free Period:** 50 days (lo""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance\u2014it's the ultimate premium credit experience.\n\n---"", ""sim"": 0.554, ""snippet"": ""## What is Visa Platinum Credit Card?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""What is Visa Platinum Credit Card?"", ""sim"": 0.547, ""snippet"": ""**Visa Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (ful""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""What is Visa Hasanah Gold?"", ""sim"": 0.527, ""snippet"": ""**Visa Hasanah Gold Credit Card** offers:\n- **Shariah-Compliant:** Ujrah-based (no Riba/interest)\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""What is Visa Hasanah Platinum?"", ""sim"": 0.503, ""snippet"": ""**Visa Hasanah Platinum Credit Card** offers:\n- **Shariah-Compliant:** Ujrah-based (no Riba/interest)\n- **Credit Limit:** BDT 1,000,000 (unsecured) / ""}]"
+NET_002,network,Tell me about JCB credit cards,True,,feature_inquiry,False,"{""card_brand"": ""jcb"", ""specific_features"": [""dining""]}",18.03,"The JCB Platinum Credit Card and Visa Hasanah Platinum Credit Card both offer a Premium Dining Program feature.
+
+**JCB Platinum Credit Card:**
+- **Premium Dining Program:** Enjoy exclusive discounts on dining experiences, typically offering savings of up to 30% off at participating restaurants. The exact discount percentage may vary based on the establishment.
+
+**Visa Hasanah Platinum Credit Card:**
+- **Premium Dining Program:** Similar to the JCB Platinum Credit Card, this card also offers a Premium Dining Program with discounts of up to 30% off dining experiences at selected venues.
+
+For more details or to apply for either of these cards, what would you like to do?
+
+1. Request more information about the JCB Platinum Credit Card.
+2. Apply for the Visa Hasanah Platinum Credit Card.
+3. Explore other credit card options available.","[{""product"": ""JCB Gold Credit Card"", ""section"": ""JCB Gold delivers premium credit with meaningful lifestyle benefits. Featuring 50-day interest-free period, exclusive VIP lounge access, year-round dining discounts, and comprehensive insurance\u2014it's perfect for customers seeking premium JCB benefits with accessible pricing.\n\n---"", ""sim"": 0.78, ""snippet"": ""## What is JCB Gold Credit Card?""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""JCB Platinum delivers premium credit with exclusive lifestyle privileges. Featuring Balaka VIP lounge access, year-round BOGO at premium restaurants, 50-day interest-free period, and comprehensive insurance\u2014it's the ultimate premium JCB experience.\n\n---"", ""sim"": 0.761, ""snippet"": ""## What is JCB Platinum Credit Card?""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""What is JCB Gold Credit Card?"", ""sim"": 0.715, ""snippet"": ""**JCB Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (full balan""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""Regulatory Information"", ""sim"": 0.687, ""snippet"": ""This JCB credit card operates per Bangladesh Bank guidelines. Interest rates, fees, and charges disclosed per Truth in Lending Act. Insurance provided""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Regulatory Information"", ""sim"": 0.687, ""snippet"": ""This JCB credit card operates per Bangladesh Bank guidelines. Interest rates, fees, and charges disclosed per Truth in Lending Act. Insurance provided""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""Overview"", ""sim"": 0.675, ""snippet"": ""# JCB Gold Credit Card\n\n**Tagline:** Power Your Dreams & Enliven Your Lifestyle\n\nJCB Gold Credit Card from Prime Bank offers BDT 700,000 unsecured and""}]"
+NET_003,network,Mastercard options available?,True,,feature_inquiry,False,"{""card_brand"": ""mastercard"", ""specific_features"": [""dining""]}",16.68,"Based on the product data provided, the Mastercard options available for the feature you're interested in are:
+
+1. **Mastercard Platinum Credit Card**
+   - **Premium Dining Program**: This card offers a Premium Dining Program that provides exclusive dining experiences and discounts.
+
+2. **Mastercard World Credit Card**
+   - **Premium Dining Benefits**: This card includes Premium Dining Benefits, which likely offer similar perks to the Mastercard Platinum Credit Card's program but may have specific details such as point rewards or cashback on dining expenses.
+
+What would you like to do next?
+- Compare the benefits of these cards.
+- Learn more about the Balaka VIP Lounge access included with some cards.","[{""product"": ""Mastercard World Credit Card"", ""section"": ""Why Mastercard World?"", ""sim"": 0.679, ""snippet"": ""Why Mastercard World?""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Mastercard World delivers exclusive access to global privileges. With Balaka VIP lounge for you and two companions, LoungeKey access to 1,400+ premium lounges, year-round BOGO at Dhaka's finest restaurants, and double reward points\u2014it's premium credit perfected.\n\n---"", ""sim"": 0.64, ""snippet"": ""## What is Mastercard World?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Mastercard Platinum combines premium global access with lifestyle privileges. With LoungeKey + Priority Pass, exclusive Balaka VIP with companion, year-round BOGO at premium restaurants, and comprehensive insurance\u2014it's elite credit perfected.\n\n---"", ""sim"": 0.608, ""snippet"": ""## What is Mastercard Platinum?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Why Mastercard Platinum?"", ""sim"": 0.605, ""snippet"": ""Why Mastercard Platinum?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""What is Mastercard Platinum?"", ""sim"": 0.554, ""snippet"": ""**Mastercard Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 day""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.497, ""snippet"": ""### Quick Application\n\n1. Visit Prime Bank (main branch recommended)\n2. Request Mastercard World application\n3. Provide comprehensive documents\n4. Mee""}]"
+PROC_001,process,How do I apply for a credit card?,True,,product_info,False,{},36.08,"### Visa Gold Credit Card
+
+- **Credit Limit:** Unsecured: BDT 500,000 / Collateralized: BDT 1,250,000
+- **Interest-Free Period:** 50 days (full balance covered)
+- **Reward Points:** 1 point per BDT 50 spent
+- **VIP Lounge Access:** Yes
+- **Comprehensive Insurance Coverage:** Included
+
+### Visa Platinum Credit Card
+
+- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Interest-Free Period:** 50 days (full balance covered)
+- **Reward Points:** 1 point per BDT 50 spent
+- **VIP Lounge Access:** Balaka VIP lounge access for you and a companion
+- **LoungeKey Access:** Yes, to 1,400+ global lounges
+- **Dining Privileges:** Year-round BOGO dining at premium restaurants
+- **Travel Privileges:** Airport Welcome service included
+
+### Mastercard World Credit Card
+
+- **Application Process:**
+  - Visit Prime Bank (main branch recommended)
+  - Request Mastercard World application
+  - Provide comprehensive documents
+  - Meet with relationship manager
+  - Submit complete application
+  - Wait 3-5 working days
+  - Collect card and activate
+
+### Mastercard Platinum Credit Card
+
+- **Application Process:**
+  - Visit Prime Bank
+  - Request Mastercard Platinum
+  - Provide documents
+  - Meet relationship manager
+  - Submit application
+  - Wait 3-5 days
+  - Collect and activate card
+
+### Visa Hasanah Gold Credit Card
+
+- **Decision Checklist:**
+  - Valid E-TIN obtained?
+  - Minimum 6 months (salaried) or 3 years (self-employed)?
+  - Annual income sufficient (typically BDT 6+ lakh)?
+  - Good credit history?
+  - Need credit facility?
+
+- **Quick Application Path:**
+  - Visit Prime Bank (any branch)
+  - Request application for Visa Hasanah Gold
+  - Provide documents (identity, income, E-TIN)
+  - Meet RM (relationship manager discussion)
+  - Submit application with all docs
+  - Wait 3-5 days for approval
+  - Collect card from branch
+  - Activate and use immediately
+
+**What would you like to do?**
+
+1. **Apply for a Visa Gold Credit Card**
+2. **Apply for a Visa Platinum Credit Card**
+3. **Apply for a Mastercard World Credit Card**
+4. **Apply for a Mastercard Platinum Credit Card**
+5. **Apply for a Visa Hasanah Gold Credit Card**","[{""product"": ""Mastercard World Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.574, ""snippet"": ""### Quick Application\n\n1. Visit Prime Bank (main branch recommended)\n2. Request Mastercard World application\n3. Provide comprehensive documents\n4. Mee""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.565, ""snippet"": ""1. Visit Prime Bank\n2. Request Mastercard Platinum\n3. Provide documents\n4. Meet relationship manager\n5. Submit application\n6. Wait 3-5 days\n7. Collect""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""How to Apply?"", ""sim"": 0.548, ""snippet"": ""How to Apply?""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.\n\n---"", ""sim"": 0.517, ""snippet"": ""## What is Visa Gold Credit Card?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.499, ""snippet"": ""### Quick Application\n\n1. Visit Prime Bank (Platinum specialist branch preferred)\n2. Request Visa Platinum application\n3. Provide comprehensive docume""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance\u2014it's the ultimate premium credit experience.\n\n---"", ""sim"": 0.496, ""snippet"": ""## What is Visa Platinum Credit Card?""}]"
+PROC_002,process,What documents do I need for card approval?,True,,product_info,False,"{""specific_features"": [""dining""]}",31.19,"### JCB Platinum Credit Card
+- **Credit Limit:** BDT 500,000 - 1,000,000
+- **Key Features:**
+  - Balaka VIP Lounge Benefits:
+    - Exclusive lounge entrance
+    - You + 1 companion access
+    - Luxury seating and amenities
+    - Complimentary beverages and snacks
+    - WiFi and business facilities
+    - Shower facilities available
+    - News and entertainment
+    - Professional environment
+
+- **Required Documents:**
+  1. Identity & Address Proof:
+     - NID/Passport (attested copy)
+     - Driving license (if available)
+     - Utility bill (<2 months old)
+     - Permanent address certificate
+  2. Income Proof:
+     - Latest 3 months salary slip + employment letter (salaried)
+     - Latest ITR + business registration (self-employed)
+     - 3-year trade license + audited financials (business)
+  3. Financial Documents:
+     - Valid E-TIN certificate
+     - Bank statements (12 months)
+     - Income tax returns (last 3 years)
+     - Credit bureau authorization
+  4. Photo & Nominee:
+     - Passport-size photo (4 colored copies)
+     - Nominee identity proof
+     - Nominee relation document
+
+- **Application Timeline:**
+  - Day 1-2: Document Submission
+  - Day 3-5: Credit Verification
+  - Day 6-7: Approval & Issuance
+  - Day 7+: Card Pickup & Activation
+
+### What would you like to do?
+- Apply for the JCB Platinum Credit Card.
+- Compare with other credit cards offered by Prime Bank.
+- Consult a financial advisor.","[{""product"": ""Visa Platinum Credit Card"", ""section"": ""How to Apply?"", ""sim"": 0.595, ""snippet"": ""### Required Documents\n\n1. **Identity & Address Proof**\n   - NID/Passport (attested copy)\n   - Driving license (if available)\n   - Utility bill (<2 mo""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""How to Apply?"", ""sim"": 0.587, ""snippet"": ""### Required Documents\n\n1. **Identity & Address Proof**\n   - NID/Passport (attested copy)\n   - Driving license (if available)\n   - Utility bill (<2 mo""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""How to Apply?"", ""sim"": 0.578, ""snippet"": ""### Required Documents\n\n1. **Identity & Address Proof**\n   - NID/Passport (attested)\n   - Driving license (if available)\n   - Utility bill (<2 months)""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""How to Apply?"", ""sim"": 0.559, ""snippet"": ""### Required Documents\n\n1. **Identity & Address Proof**\n   - NID/Passport (copy, attested)\n   - Driving license (if available)\n   - Utility bill (<2 m""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""How to Apply?"", ""sim"": 0.553, ""snippet"": ""### Required Documents\n\n1. **Identity & Address Proof**\n   - NID/Passport (attested)\n   - Driving license (if available)\n   - Utility bill (<2 months)""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""How to Apply?"", ""sim"": 0.543, ""snippet"": ""### Required Documents\n\n1. **Identity & Address Proof**\n   - NID/Passport copy (attested)\n   - Driving license (if available)\n   - Utility bill (<2 mo""}]"
+PROC_003,process,How long does card approval take?,True,,product_info,False,{},33.71,"## Visa Hasanah Gold Credit Card
+
+### Key Features:
+- **Credit Limit:** Typically up to BDT 6,000,000
+- **Application Process:**
+  - Visit Prime Bank (any branch)
+  - Request application for Visa Hasanah Gold
+  - Provide documents (identity, income, E-TIN)
+  - Meet with relationship manager
+  - Submit complete application
+  - Wait 3-5 days for approval
+
+### What would you like to do?
+1. Apply now at your nearest Prime Bank branch.
+2. Schedule a meeting with a relationship manager.
+3. Get more information about the Visa Hasanah Gold benefits.
+
+## JCB Platinum Credit Card
+
+### Key Features:
+- **Interest-Free Period:** 50 days
+- **Timeline:**
+  - Purchases counted from statement date, not transaction date
+  - Full balance must be paid to avoid interest
+  - Zero interest if full balance is paid by due date
+- **Smart Usage Tips:**
+  - Make purchases early in the statement cycle
+  - Enjoy a full 50-day grace period
+
+### What would you like to do?
+1. Apply for JCB Platinum Credit Card at Prime Bank.
+2. Learn more about interest-free periods and smart usage tips.
+3. Contact a relationship manager for assistance.
+
+## Mastercard World Credit Card
+
+### Key Features:
+- **Application Process:**
+  - Visit main Prime Bank branch
+  - Request application for Mastercard World
+  - Provide comprehensive documents
+  - Meet with relationship manager
+  - Submit complete application
+  - Wait 3-5 working days for approval
+
+### What would you like to do?
+1. Apply now at the main Prime Bank branch.
+2. Schedule a meeting with a relationship manager.
+3. Get more information about Mastercard World benefits.
+
+## Visa Platinum Credit Card (Not Applicable)
+
+### Key Features:
+- **Balaka VIP Lounge Access**
+- **LoungeKey Access:** 1,400+ global lounges
+- **Year-Round BOGO Dining at Premium Restaurants**
+- **Comprehensive Insurance Coverage**
+
+### What would you like to do?
+1. Learn more about the Visa Platinum benefits.
+2. Contact a relationship manager for an application.
+3. Visit Prime Bank to inquire about eligibility.
+
+Would you like to proceed with any of these options or need further assistance?","[{""product"": ""Mastercard World Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.404, ""snippet"": ""### Quick Application\n\n1. Visit Prime Bank (main branch recommended)\n2. Request Mastercard World application\n3. Provide comprehensive documents\n4. Mee""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.391, ""snippet"": ""### Quick Application\n\n1. Visit Prime Bank branch\n2. Request JCB Gold application\n3. Provide documents (identity, income, E-TIN)\n4. Meet with relation""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.383, ""snippet"": ""1. Visit Prime Bank\n2. Request Mastercard Platinum\n3. Provide documents\n4. Meet relationship manager\n5. Submit application\n6. Wait 3-5 days\n7. Collect""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.368, ""snippet"": ""### Decision Checklist\n\n- \u2713 Valid E-TIN obtained?\n- \u2713 Minimum 6 months (salaried) or 3 years (self-employed)?\n- \u2713 Annual income sufficient (typically ""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance\u2014it's the ultimate premium credit experience.\n\n---"", ""sim"": 0.352, ""snippet"": ""## What is Visa Platinum Credit Card?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.341, ""snippet"": ""### Quick Application\n\n1. Visit Prime Bank (Platinum specialist branch preferred)\n2. Request Visa Platinum application\n3. Provide comprehensive docume""}]"
+PROD_001,product,Tell me about Visa Platinum Credit Card,False,"Intent: expected 'product_info', got 'feature_inquiry'",feature_inquiry,False,"{""preferred_tier"": ""platinum"", ""card_brand"": ""visa"", ""specific_product"": ""Visa Platinum Credit Card"", ""specific_features"": [""rewards""]}",23.81,"Based on the provided product data, there is no specific card mentioned that offers a feature similar to ""Reward Points & Redemption"" for the Visa Platinum Credit Card. The data does not provide any details about reward points or redemption programs for this particular card.
+
+However, I can list other cards with related features:
+
+1. **Mastercard Platinum Credit Card**
+   - **Double Reward Points Program**: Earn 2 points per BDT 50 on select categories such as groceries and utilities.
+   
+2. **JCB Gold Credit Card**
+   - **Reward Points Program**: Earn reward points for every purchase, with a base earning rate of 1 point per BDT 30.
+
+3. **JCB Platinum Credit Card**
+   - **Reward Points Program**: Similar to the JCB Gold Credit Card, earn reward points for every purchase at a rate of 1 point per BDT 30.
+
+4. **Visa Gold Credit Card**
+   - **Reward Points Program**: Earn reward points for every purchase, with a base earning rate of 1 point per BDT 50.
+
+5. **Mastercard World Credit Card**
+   - **Double Reward Points Program**: Earn double the reward points on travel and dining categories compared to regular Mastercard cards.
+
+If you have any specific questions about these features or would like more information, please let me know!
+
+**What would you like to do?**
+- Learn more about a different credit card feature.
+- Compare rewards programs across multiple cards.
+- Get assistance with another aspect of credit card usage.","[{""product"": ""Visa Platinum Credit Card"", ""section"": ""Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance\u2014it's the ultimate premium credit experience.\n\n---"", ""sim"": 0.878, ""snippet"": ""## What is Visa Platinum Credit Card?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Why Visa Platinum?"", ""sim"": 0.764, ""snippet"": ""Why Visa Platinum?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Why Mastercard Platinum?"", ""sim"": 0.726, ""snippet"": ""Why Mastercard Platinum?""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.\n\n---"", ""sim"": 0.713, ""snippet"": ""## What is Visa Gold Credit Card?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""What is Visa Platinum Credit Card?"", ""sim"": 0.709, ""snippet"": ""**Visa Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (ful""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.677, ""snippet"": ""### Quick Application\n\n1. Visit Prime Bank (Platinum specialist branch preferred)\n2. Request Visa Platinum application\n3. Provide comprehensive docume""}]"
+PROD_002,product,What are the features of JCB Gold?,False,"Response missing: '700,000'",feature_inquiry,False,"{""preferred_tier"": ""gold"", ""card_brand"": ""jcb"", ""specific_features"": [""dining""]}",17.39,"Based on the provided product data, there is no specific card named ""JCB Gold"" mentioned. However, I can provide information about cards that offer similar features:
+
+1. **Mastercard Platinum Credit Card**
+   - **Premium Dining Program**: This feature allows cardholders to enjoy special discounts and offers at selected dining establishments.
+
+2. **Balaka VIP Lounge**
+   - **Access**: You + 1 companion
+     - Luxurious amenities
+     - Complimentary refreshments
+     - Business facilities
+     - WiFi and entertainment
+     - Shower facilities
+
+What would you like to do next? 
+- Compare these features with other cards.
+- Get more details on the Premium Dining Program for Mastercard Platinum Credit Card.","[{""product"": ""JCB Gold Credit Card"", ""section"": ""Why JCB Gold?"", ""sim"": 0.831, ""snippet"": ""Why JCB Gold?""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""JCB Gold delivers premium credit with meaningful lifestyle benefits. Featuring 50-day interest-free period, exclusive VIP lounge access, year-round dining discounts, and comprehensive insurance\u2014it's perfect for customers seeking premium JCB benefits with accessible pricing.\n\n---"", ""sim"": 0.703, ""snippet"": ""## What is JCB Gold Credit Card?""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Why JCB Platinum?"", ""sim"": 0.675, ""snippet"": ""Why JCB Platinum?""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""What is JCB Gold Credit Card?"", ""sim"": 0.632, ""snippet"": ""**JCB Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (full balan""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""JCB Platinum delivers premium credit with exclusive lifestyle privileges. Featuring Balaka VIP lounge access, year-round BOGO at premium restaurants, 50-day interest-free period, and comprehensive insurance\u2014it's the ultimate premium JCB experience.\n\n---"", ""sim"": 0.595, ""snippet"": ""## What is JCB Platinum Credit Card?""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""Overview"", ""sim"": 0.545, ""snippet"": ""# JCB Gold Credit Card\n\n**Tagline:** Power Your Dreams & Enliven Your Lifestyle\n\nJCB Gold Credit Card from Prime Bank offers BDT 700,000 unsecured and""}]"
+PROD_003,product,Mastercard World credit card - tell me more,False,"Response missing: '1,000,000'",feature_inquiry,False,"{""card_brand"": ""mastercard"", ""specific_product"": ""Mastercard World Credit Card"", ""specific_features"": [""rewards""]}",16.98,"Based on the provided product data, there is only one card that offers a Double Reward Points Program:
+
+**Mastercard World Credit Card**
+
+This card features a **Double Reward Points Program**, which means that for every BDT 1 spent, customers earn double the reward points compared to other cards. For example, if you spend BDT 50, you would earn 2 points instead of just 1.
+
+What would you like to do next?
+
+- Learn more about the Mastercard World Credit Card.
+- Compare this card with another credit card from our list.
+- Get a quote for this card.","[{""product"": ""Mastercard World Credit Card"", ""section"": ""Why Mastercard World?"", ""sim"": 0.81, ""snippet"": ""Why Mastercard World?""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Mastercard World delivers exclusive access to global privileges. With Balaka VIP lounge for you and two companions, LoungeKey access to 1,400+ premium lounges, year-round BOGO at Dhaka's finest restaurants, and double reward points\u2014it's premium credit perfected.\n\n---"", ""sim"": 0.761, ""snippet"": ""## What is Mastercard World?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Why Mastercard Platinum?"", ""sim"": 0.672, ""snippet"": ""Why Mastercard Platinum?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Mastercard Platinum combines premium global access with lifestyle privileges. With LoungeKey + Priority Pass, exclusive Balaka VIP with companion, year-round BOGO at premium restaurants, and comprehensive insurance\u2014it's elite credit perfected.\n\n---"", ""sim"": 0.624, ""snippet"": ""## What is Mastercard Platinum?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance\u2014it's the ultimate premium credit experience.\n\n---"", ""sim"": 0.621, ""snippet"": ""## What is Visa Platinum Credit Card?""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.\n\n---"", ""sim"": 0.591, ""snippet"": ""## What is Visa Gold Credit Card?""}]"
+PROD_004,product,What is the credit limit on Mastercard World?,False,"Response missing: '1,000,000'",product_info,False,"{""card_brand"": ""mastercard""}",19.14,"## What is Mastercard World Credit Card?
+
+**Mastercard World Credit Card** offers:
+- **Credit Limit:** BDT 500,000 (unsecured) / BDT 1,250,000 (collateralized)
+- **Key Features:**
+  - Balaka VIP lounge for you and two companions
+  - LoungeKey access to 1,400+ premium lounges
+  - Year-round BOGO at Dhaka's finest restaurants
+  - Double reward points
+
+Perfect for those seeking exclusive global privileges and premium credit card benefits.
+
+**What would you like to do?**
+- Compare with other cards.
+- Request more information.
+- Apply now.","[{""product"": ""Mastercard World Credit Card"", ""section"": ""Why Mastercard World?"", ""sim"": 0.676, ""snippet"": ""Why Mastercard World?""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""Credit Limit & Payment"", ""sim"": 0.646, ""snippet"": ""Credit Limit & Payment""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Mastercard World delivers exclusive access to global privileges. With Balaka VIP lounge for you and two companions, LoungeKey access to 1,400+ premium lounges, year-round BOGO at Dhaka's finest restaurants, and double reward points\u2014it's premium credit perfected.\n\n---"", ""sim"": 0.635, ""snippet"": ""## What is Mastercard World?""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Premium Credit Limits"", ""sim"": 0.612, ""snippet"": ""Premium Credit Limits""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Premium Credit Limits"", ""sim"": 0.612, ""snippet"": ""Premium Credit Limits""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Credit Limit & Payment Structure"", ""sim"": 0.589, ""snippet"": ""Credit Limit & Payment Structure""}]"
+PROD_005,product,What is the unsecured limit on Visa Hasanah Gold?,True,,product_info,False,"{""preferred_tier"": ""gold"", ""card_brand"": ""visa"", ""specific_product"": ""Visa Hasanah Gold Credit Card""}",19.38,"## Visa Hasanah Gold Credit Card
+
+**Key Features:**
+- **Shariah-Compliant:** Ujrah-based (no Riba/interest)
+- **Credit Limit:**
+  - Unsecured: BDT 700,000
+  - Collateralized: BDT 2,500,000
+- **Reward Points:** 1 point per BDT 50 spent
+- **Islamic Insurance:** Takaful Triple Benefit
+- **Exclusive Privileges:** Balaka VIP lounge access
+
+**What would you like to do?**
+- Apply for Visa Hasanah Gold Credit Card
+- Learn more about the card benefits and features
+- Compare with other Prime Bank credit cards","[{""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Why Visa Hasanah Gold?"", ""sim"": 0.714, ""snippet"": ""Why Visa Hasanah Gold?""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""What is Visa Hasanah Gold?"", ""sim"": 0.661, ""snippet"": ""**Visa Hasanah Gold Credit Card** offers:\n- **Shariah-Compliant:** Ujrah-based (no Riba/interest)\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Visa Hasanah Gold combines premium lifestyle benefits with Islamic banking principles. Operating on the Ujrah concept (permissible service charges instead of interest), it provides comprehensive rewards, travel privileges, and Takaful insurance protection\u2014all aligned with Shariah requirements.\n\n---"", ""sim"": 0.657, ""snippet"": ""## What is Visa Hasanah Gold?""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""Why Visa Gold?"", ""sim"": 0.655, ""snippet"": ""Why Visa Gold?""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""What is Visa Hasanah Platinum?"", ""sim"": 0.583, ""snippet"": ""**Visa Hasanah Platinum Credit Card** offers:\n- **Shariah-Compliant:** Ujrah-based (no Riba/interest)\n- **Credit Limit:** BDT 1,000,000 (unsecured) / ""}, {""product"": ""Visa Hasanah Gold Credit Card"", ""section"": ""Overview"", ""sim"": 0.579, ""snippet"": ""# Visa Hasanah Gold Credit Card\n\n**Tagline:** Power Your Dreams & Enliven Your Lifestyle\n\nVisa Hasanah Gold Credit Card is Prime Bank's Shariah-based,""}]"
+PROD_006,product,Does Mastercard Platinum have Priority Pass?,True,,feature_inquiry,False,"{""preferred_tier"": ""platinum"", ""card_brand"": ""mastercard"", ""specific_product"": ""Mastercard Platinum Credit Card"", ""specific_features"": [""lounge""]}",25.67,"Based on the provided product data, none of the cards listed (Mastercard Platinum Credit Card, Visa Hasanah Platinum Credit Card, JCB Platinum Credit Card, Visa Gold Credit Card, JCB Gold Credit Card, and Visa Hasanah Gold Credit Card) offer Priority Pass benefits.
+
+However, these cards do provide similar lounge access benefits through other programs:
+
+1. **Visa Hasanah Platinum Credit Card**
+   - **Balaka VIP Lounge Access**: Exclusive lounge entrance with you + 1 companion (without purchase). Additional companions are available with spend criteria.
+   
+2. **JCB Platinum Credit Card**
+   - **Balaka VIP Lounge Benefits**: Exclusive lounge entrance, you + 1 companion access.
+
+3. **Visa Gold Credit Card and JCB Gold Credit Card**
+   - **VIP Lounge Benefits**: Balaka VIP Lounge Access with exclusive lounge entrance and you + 1 companion (without purchase).
+
+4. **Visa Hasanah Gold Credit Card**
+   - **Balaka VIP Lounge Privileges**: Similar to Visa Gold Credit Card, offering Balaka VIP Lounge access.
+
+### What would you like to do?
+- Learn more about the lounge benefits available with your card.
+- Compare the benefits of different cards and choose one that best suits your needs.
+- Contact our customer service for further assistance.","[{""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Why Mastercard Platinum?"", ""sim"": 0.727, ""snippet"": ""Why Mastercard Platinum?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Mastercard Platinum combines premium global access with lifestyle privileges. With LoungeKey + Priority Pass, exclusive Balaka VIP with companion, year-round BOGO at premium restaurants, and comprehensive insurance\u2014it's elite credit perfected.\n\n---"", ""sim"": 0.701, ""snippet"": ""## What is Mastercard Platinum?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance\u2014it's the ultimate premium credit experience.\n\n---"", ""sim"": 0.588, ""snippet"": ""## What is Visa Platinum Credit Card?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""What is Mastercard Platinum?"", ""sim"": 0.566, ""snippet"": ""**Mastercard Platinum Credit Card** offers:\n- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 day""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Why Mastercard World?"", ""sim"": 0.552, ""snippet"": ""Why Mastercard World?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""| Financial Profile | Typical Limit | Maximum |\n|------------------|---------------|---------|\n| **Salaried** | | |\n| BDT 100K-200K | BDT 500,000 | BDT 1,000,000 |\n| BDT 200K-300K | BDT 750,000 | BDT 1,000,000 |\n| BDT 300K+ | BDT 1,000,000 | BDT 1,000,000 |\n| **Self-Employed** | | |\n| BDT 20-50L | BDT 600,000 | BDT 1,000,000 |\n| BDT 50L+ | BDT 1,000,000 | BDT 1,000,000 |\n\n---"", ""sim"": 0.512, ""snippet"": ""## Exclusive Priority Pass Benefit""}]"
+PROD_007,product,How many companions can I bring to the lounge with Mastercard World?,False,Response missing: '2',feature_inquiry,False,"{""card_brand"": ""mastercard"", ""specific_features"": [""lounge""]}",24.04,"Based on the product data provided, here is the information regarding how many companions can be brought to the lounge with Mastercard World:
+
+### Visa Hasanah Platinum Credit Card
+
+**Feature:** Balaka VIP Lounge Access  
+**Companions Allowed:**
+- You + 1 companion (without purchase)
+- Additional companions available with spend criteria
+- Spend USD 1,000 during travel period for additional companion visits.
+
+### JCB Platinum Credit Card
+
+**Feature:** Balaka VIP Lounge Benefits  
+**Companions Allowed:**
+- You + 1 companion access
+
+### Visa Gold Credit Card
+
+**Feature:** VIP Lounge Benefits  
+**Companions Allowed:**
+- You + 1 companion visit waived with USD 1,000 spend during travel period.
+
+### JCB Gold Credit Card
+
+**Feature:** VIP Lounge Benefits  
+**Companions Allowed:**
+- You + 1 companion visit waived with USD 1,000 spend during travel period.
+
+What would you like to do next?  
+- Compare these cards further.  
+- Learn more about the Mastercard Platinum Credit Card benefits.","[{""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Elite Travel Privileges"", ""sim"": 0.573, ""snippet"": ""### Balaka VIP Lounge Access\n\n**Premium Benefits:**\n- Exclusive lounge entrance\n- VIP reception and greeting\n- Gourmet refreshments\n- Business class f""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Balaka VIP Lounge Benefits"", ""sim"": 0.549, ""snippet"": ""**What's Included:**\n- Exclusive lounge entrance\n- You + 1 companion access\n- Luxury seating and amenities\n- Complimentary beverages and snacks\n- WiFi""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Elite Travel Privileges"", ""sim"": 0.508, ""snippet"": ""### Balaka VIP Lounge (Most Generous)\n\n**Access Details:**\n- You + 2 companions (most generous offering)\n- Simply present card on arrival\n- Luxurious ""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Key Features"", ""sim"": 0.489, ""snippet"": ""\u2705 **Highest Reward Points Earning**\n- **2 points per BDT 50 spent** (double vs others)\n- POS and e-commerce transactions\n- Annual earning: 24,000-96,0""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Mastercard World delivers exclusive access to global privileges. With Balaka VIP lounge for you and two companions, LoungeKey access to 1,400+ premium lounges, year-round BOGO at Dhaka's finest restaurants, and double reward points\u2014it's premium credit perfected.\n\n---"", ""sim"": 0.486, ""snippet"": ""## What is Mastercard World?""}, {""product"": ""Mastercard World Credit Card"", ""section"": ""Why Mastercard World?"", ""sim"": 0.476, ""snippet"": ""Why Mastercard World?""}]"
+TIER_001,tier,Show me platinum credit cards,True,,feature_inquiry,False,"{""preferred_tier"": ""platinum"", ""card_brand"": ""visa"", ""specific_features"": [""dining""]}",22.2,"Based on the product data provided, none of the listed platinum credit cards explicitly mention a feature called ""Premium Dining Program."" However, all the cards do offer some form of premium dining benefits. Here's how each card provides these benefits:
+
+1. **JCB Platinum Credit Card**
+   - **Premium Dining Program**: Enjoy exclusive discounts and special offers at top restaurants.
+
+2. **Visa Platinum Credit Card**
+   - **Premium Dining Program**: Same as JCB, offering exclusive discounts and special offers at top restaurants.
+
+3. **Mastercard Platinum Credit Card**
+   - **Premium Dining Program**: Similar to the other platinum cards, providing exclusive dining benefits.
+
+4. **Visa Hasanah Platinum Credit Card**
+   - **Premium Dining Program**: Offers exclusive discounts and special offers at top restaurants.
+
+5. **Mastercard World Credit Card**
+   - **Premium Dining Benefits**: While not as detailed in the data provided, it still includes premium dining benefits, though specifics are not given.
+
+For more detailed information on these benefits or to explore other features of each card, please let me know how I can assist further.
+
+**What would you like to do?**
+- Compare specific features between different cards.
+- Learn about additional benefits and perks for a particular card.
+- Get more details on the Balaka VIP Lounge access.","[{""product"": ""Visa Platinum Credit Card"", ""section"": ""Visa Platinum elevates lifestyle banking to premium status. With exclusive Balaka VIP lounge access for you and a companion, LoungeKey access to 1,400+ global lounges, year-round BOGO dining at premium restaurants, and comprehensive insurance\u2014it's the ultimate premium credit experience.\n\n---"", ""sim"": 0.727, ""snippet"": ""## What is Visa Platinum Credit Card?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Why Mastercard Platinum?"", ""sim"": 0.714, ""snippet"": ""Why Mastercard Platinum?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Mastercard Platinum combines premium global access with lifestyle privileges. With LoungeKey + Priority Pass, exclusive Balaka VIP with companion, year-round BOGO at premium restaurants, and comprehensive insurance\u2014it's elite credit perfected.\n\n---"", ""sim"": 0.69, ""snippet"": ""## What is Mastercard Platinum?""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""JCB Platinum delivers premium credit with exclusive lifestyle privileges. Featuring Balaka VIP lounge access, year-round BOGO at premium restaurants, 50-day interest-free period, and comprehensive insurance\u2014it's the ultimate premium JCB experience.\n\n---"", ""sim"": 0.632, ""snippet"": ""## What is JCB Platinum Credit Card?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Why Visa Platinum?"", ""sim"": 0.593, ""snippet"": ""Why Visa Platinum?""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Getting Started"", ""sim"": 0.561, ""snippet"": ""### Quick Application\n\n1. Visit Prime Bank (Platinum specialist branch preferred)\n2. Request Visa Platinum application\n3. Provide comprehensive docume""}]"
+TIER_002,tier,What gold tier cards do you have?,False,Response missing: 'Gold',feature_inquiry,False,"{""preferred_tier"": ""gold"", ""specific_features"": [""dining""]}",20.59,"Based on the product data provided, none of the cards listed explicitly mention a feature called ""Premium Dining Program."" However, I can provide information about the Balaka VIP Lounge feature and other premium benefits:
+
+1. **Mastercard Platinum Credit Card**
+   - **Balaka VIP Lounge**
+     - Access: You + 1 companion
+     - Luxurious amenities
+     - Complimentary refreshments (BDT 200 per person)
+     - Business facilities
+     - WiFi and entertainment
+     - Shower facilities
+
+2. **Visa Hasanah Platinum Credit Card**
+   - [Premium Dining Program]
+   - No specific details provided about the feature.
+
+3. **Mastercard World Credit Card**
+   - [Premium Dining Benefits]
+   - No specific details provided about the feature.
+
+If you are looking for cards with premium dining benefits, it might be best to check the Visa Hasanah Platinum Credit Card and Mastercard World Credit Card for any additional information that may have been omitted in this data snippet.
+
+**What would you like to do?**
+- Search for more detailed product information.
+- Explore other premium features available on different cards.","[{""product"": ""Visa Gold Credit Card"", ""section"": ""Visa Gold combines accessible credit with premium lifestyle benefits. Featuring 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage, it's designed for customers seeking flexible credit with meaningful lifestyle enhancements.\n\n---"", ""sim"": 0.463, ""snippet"": ""## What is Visa Gold Credit Card?""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""JCB Gold delivers premium credit with meaningful lifestyle benefits. Featuring 50-day interest-free period, exclusive VIP lounge access, year-round dining discounts, and comprehensive insurance\u2014it's perfect for customers seeking premium JCB benefits with accessible pricing.\n\n---"", ""sim"": 0.44, ""snippet"": ""## What is JCB Gold Credit Card?""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Why Mastercard Platinum?"", ""sim"": 0.433, ""snippet"": ""Why Mastercard Platinum?""}, {""product"": ""JCB Gold Credit Card"", ""section"": ""What is JCB Gold Credit Card?"", ""sim"": 0.424, ""snippet"": ""**JCB Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free:** 50 days (full balan""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Mastercard Platinum combines premium global access with lifestyle privileges. With LoungeKey + Priority Pass, exclusive Balaka VIP with companion, year-round BOGO at premium restaurants, and comprehensive insurance\u2014it's elite credit perfected.\n\n---"", ""sim"": 0.422, ""snippet"": ""## What is Mastercard Platinum?""}, {""product"": ""Visa Gold Credit Card"", ""section"": ""What is Visa Gold Credit Card?"", ""sim"": 0.422, ""snippet"": ""**Visa Gold Credit Card** offers:\n- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)\n- **Interest-Free Period:** 50 days (lo""}]"
+TIER_003,tier,Best card in gold tier with dining?,False,Response missing: 'Gold',feature_inquiry,False,"{""preferred_tier"": ""gold"", ""specific_features"": [""dining""]}",17.49,"Based on the product data provided:
+
+1. **Visa Hasanah Platinum Credit Card**
+   - **Premium Dining Program**: This card offers a Premium Dining Program which provides exclusive dining benefits, though specific details such as point rewards or spending thresholds are not mentioned in the given data.
+
+2. **Balaka VIP Lounge**
+   - **Access**: The Balaka VIP Lounge is available with this card, offering access for you and one companion. It includes luxurious amenities like complimentary refreshments, business facilities, WiFi, entertainment, and shower facilities. 
+
+What would you like to do next? 
+- Compare the benefits of these cards.
+- Explore other features of the Visa Hasanah Platinum Credit Card.
+- Get more information about the Balaka VIP Lounge.","[{""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Why Mastercard Platinum?"", ""sim"": 0.458, ""snippet"": ""Why Mastercard Platinum?""}, {""product"": ""JCB Platinum Credit Card"", ""section"": ""Premium Dining Program"", ""sim"": 0.444, ""snippet"": ""Premium Dining Program""}, {""product"": ""Visa Platinum Credit Card"", ""section"": ""Premium Dining Program"", ""sim"": 0.444, ""snippet"": ""Premium Dining Program""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Premium Dining Program"", ""sim"": 0.444, ""snippet"": ""Premium Dining Program""}, {""product"": ""Visa Hasanah Platinum Credit Card"", ""section"": ""Premium Dining Program"", ""sim"": 0.444, ""snippet"": ""Premium Dining Program""}, {""product"": ""Mastercard Platinum Credit Card"", ""section"": ""Mastercard Platinum combines premium global access with lifestyle privileges. With LoungeKey + Priority Pass, exclusive Balaka VIP with companion, year-round BOGO at premium restaurants, and comprehensive insurance\u2014it's elite credit perfected.\n\n---"", ""sim"": 0.42, ""snippet"": ""## What is Mastercard Platinum?""}]"

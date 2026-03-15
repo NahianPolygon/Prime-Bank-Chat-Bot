@@ -1,0 +1,78 @@
+"customer_query","full_bot_response","rag_chunks"
+"Show me all the Mastercards you have","PRODUCT: Mastercard World Credit Card
+
+[Premium Dining Benefits]
+
+Would you like to know more about any of these cards?",""
+"What Visa cards do you offer?","Visa Gold Credit Card:
+- 50 days interest-free shopping
+- Attractive reward points
+- VIP lounge access
+- Comprehensive insurance coverage
+
+Would you like to know more about any of these cards?",""
+"Tell me about your JCB credit cards","Based on the provided product data, there are no specific feature descriptions for JCB credit cards related to Premium Dining Programs or similar benefits. 
+
+Would you like to know more about any of the other cards mentioned in the data?",""
+"List all your Mastercards","## What is Mastercard World?
+
+Mastercard World:
+- Balaka VIP lounge for you and two companions
+- LoungeKey access to 1,400+ premium lounges
+- Year-round BOGO at Dhaka's finest restaurants
+- Double reward points
+
+Would you like to know more about any of these cards?",""
+"I want to see all your Visa credit cards","Based on the provided product data, there is one Visa credit card mentioned:
+
+PRODUCT: Visa Gold Credit Card
+
+Visa Gold Credit Card features:
+- 50 days interest-free shopping
+- Attractive reward points
+- VIP lounge access
+- Comprehensive insurance coverage
+
+Would you like to know more about any of these cards?",""
+"Show me all the gold cards","**Visa Gold Credit Card**
+- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Interest-Free Period:** 50 days (longest in market)
+- **Reward Points:** 1 point per BDT 50 spent
+- **Insurance:** Triple Benefit coverage (BDT 5 lac max)
+- **Dining & Travel:** Year-round exclusive discounts
+
+Would you like to know more about any of these cards?",""
+"What platinum cards are available?","Visa Platinum Credit Card:
+- **LoungeKey access to 1,400+ global lounges**
+- **Balaka VIP lounge access for you and a companion**
+- **Year-round BOGO dining at premium restaurants**
+- **Comprehensive insurance**
+
+Would you like to know more about any of these cards?",""
+"Show me your World credit cards","The card that has the Premium Dining Program feature is:
+
+- Mastercard World Credit Card
+
+The exact benefit description for this card is:
+""Premium Dining Benefits""
+
+Would you like to know more about any of these cards?",""
+"List all gold tier cards","**Visa Gold Credit Card**
+- **Interest-Free Period:** 50 days (longest in market)
+- **Reward Points:** 1 point per BDT 50 spent
+- **Dining & Travel:** Year-round exclusive discounts
+
+**JCB Gold Credit Card**
+- **Interest-Free:** 50 days (full balance covered)
+- **VIP Access:** Balaka lounge with fee waiver option
+- **Dining:** Year-round exclusive discounts
+- **Insurance:** Triple Benefit coverage (BDT 5 lac max)
+
+Would you like to know more about any of these cards?",""
+"Do you have any premium platinum cards?","Mastercard Platinum Credit Card offers:
+- **Travel Access:** LoungeKey + Priority Pass + Balaka VIP with companion
+
+Visa Platinum Credit Card offers:
+- **Travel Privileges:** LoungeKey + Balaka VIP + Airport Welcome
+
+Would you like to know more about any of these cards?",""

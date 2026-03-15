@@ -22,18 +22,73 @@ from utils.ollama import ollama_chat
 
 def _format_products(raw: str, query: str, intent_type: str) -> str:
     """Convert raw RAG text to clean customer-facing response."""
+
+    # Trim raw to avoid token overflow while keeping key sections
+    if intent_type == "search_by_category":
+        raw_trimmed = raw[:6000] if len(raw) > 6000 else raw
+    else:
+        raw_trimmed = raw[:3500] if len(raw) > 3500 else raw
+
     instructions = {
-        "product_info":              "Present each card with name, key features, BDT amounts. Bullet points.",
-        "feature_inquiry":           "Name cards offering the feature. For each, describe exactly how it works with specific details and numbers.",
-        "product_search_by_income":  "Show which cards the customer qualifies for. Include credit limit, annual fee, key benefits.",
-        "comparison":                "Markdown table: Credit Limit | Annual Fee | Interest-Free | Lounge | Rewards | EMI. Fill every cell from the data.",
-        "eligibility_check":         "State eligible or not, why, requirements met/missed, next steps.",
+        "product_info": (
+            "Present each PRODUCT found in the data above. "
+            "For each: state its exact name as written after 'PRODUCT:', "
+            "then list credit limit (exact BDT figure), annual fee, interest-free period, "
+            "and top 3-4 benefits using the exact names and numbers from the data. "
+            "If the data says BDT 700,000 write BDT 700,000 — never round or change. "
+            "End by asking: Would you like details on any of these cards?"
+        ),
+        "feature_inquiry": (
+            "The customer asked about a specific feature. "
+            "List ONLY the cards in the data that have this feature. "
+            "For each card: write its exact name, then quote the exact benefit description "
+            "including numbers (e.g. '2 points per BDT 50', 'up to 36 months', "
+            "'BDT 700,000 unsecured', 'Balaka VIP + 2 companions'). "
+            "Copy numbers directly from the data — never paraphrase or omit them. "
+            "End by asking: Would you like to know more about any of these cards?"
+        ),
+        "product_search_by_income": (
+            "Based on the customer's income, show which cards they qualify for. "
+            "For each card in the data: exact name, exact unsecured credit limit in BDT, "
+            "annual fee (and waiver condition), interest-free period, and top 3 benefits "
+            "with specific numbers from the data. "
+            "End by asking: Would you like to apply for or learn more about any of these?"
+        ),
     }
-    rule = instructions.get(intent_type, "Present the product information clearly with all features and BDT amounts.")
+
+    try:
+        import os
+        prompt_path = os.path.join(os.path.dirname(__file__), '..', '..', 'prompts', 'search_by_category.txt')
+        with open(prompt_path, 'r', encoding='utf-8') as f:
+            instructions["search_by_category"] = f.read().strip()
+    except Exception as e:
+        instructions["search_by_category"] = "List the exact names of the products found. Do not include detailed features. End by asking if they want details."
+
+    rule = instructions.get(intent_type, instructions["product_info"])
+
+    system = (
+        "You are a Prime Bank product specialist. "
+        "CRITICAL: Your response must be grounded 100% in the PRODUCT DATA below. "
+        "If a number appears in the data, reproduce it exactly. "
+        "If a product name appears after 'PRODUCT:', use that exact name. "
+        "NEVER say 'not specified' or 'not mentioned' if the data contains the value. "
+        "NEVER invent numbers, limits, or features not in the data. "
+        "NEVER ignore a product that appears in the data."
+    )
+
+    user = (
+        f"PRODUCT DATA (ground truth — use only this):\n"
+        f"{raw_trimmed}\n\n"
+        f"---\n"
+        f"Customer asked: \"{query}\"\n\n"
+        f"Task: {rule}"
+    )
+
     return ollama_chat(
-        system="You are a Prime Bank specialist. Use only the product data given. Include specific numbers and named features. No vague placeholders.",
-        user=f'Customer asked: "{query}"\n\nProduct data:\n{raw}\n\nTask: {rule}\n\nEnd with 2-3 "What would you like to do?" options.',
-        temperature=0.3, max_tokens=700,
+        system=system,
+        user=user,
+        temperature=0.1,
+        max_tokens=800,
     ) or raw
 
 
@@ -61,7 +116,7 @@ class BankChatbotCrew:
 
         # ── Retrieve products ────────────────────────────────────────────────
         raw = ""
-        product_types = ("product_info", "comparison", "feature_inquiry", "product_search_by_income")
+        product_types = ("product_info", "comparison", "feature_inquiry", "product_search_by_income", "search_by_category")
 
         if intent_type in product_types:
             if intent_type == "comparison" and state.has_products():
@@ -71,15 +126,19 @@ class BankChatbotCrew:
                 if intent_type == "feature_inquiry":
                     features = intent.get("specific_features", [])
                     if features:
-                        expanded = expand_feature_query(features, banking_type=intent.get("banking_type"))
-                        if expanded:
-                            search_q = expanded
+                        # Use short focused query: feature names + card type
+                        # Avoid over-expanded queries that confuse the embedder
+                        feature_str = " ".join(features)
+                        bt = intent.get("banking_type", "")
+                        bt_str = "islami hasanah" if bt == "islami" else ("conventional" if bt == "conventional" else "")
+                        tier_str = intent.get("preferred_tier", "") if intent.get("preferred_tier") not in ("unknown", "") else ""
+                        search_q = " ".join(filter(None, [feature_str, bt_str, tier_str, "credit card"]))
                 try:
                     raw = rag_search_impl(
                         query=search_q,
                         banking_type=intent.get("banking_type", ""),
                         tier=intent.get("tier", ""),
-                        top_k=10 if needs_comparison else 6,
+                        top_k=15 if intent_type == "search_by_category" else (10 if needs_comparison else 6),
                         customer_income=intent.get("customer_income"),
                     )
                 except Exception as e:
@@ -99,7 +158,7 @@ class BankChatbotCrew:
         cleaned = clean_response(raw) if raw else ""
 
         # ── Direct LLM format for simple product display ─────────────────────
-        if intent_type in ("product_info", "feature_inquiry", "product_search_by_income"):
+        if intent_type in ("product_info", "feature_inquiry", "product_search_by_income", "search_by_category"):
             if not raw or not raw.strip():
                 return "I couldn't find matching products. Could you rephrase or tell me more about what you're looking for?", None
             # Extract original customer question from enriched block

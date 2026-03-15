@@ -1,0 +1,138 @@
+"customer_query","intent_detected","full_bot_response","rag_chunks"
+"Show me all the Mastercards you have","product_info","PRODUCT: Mastercard Platinum Credit Card
+
+- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Interest-Free Period:** 50 days (full balance covered)
+- **Top Benefits:**
+  - LoungeKey + Priority Pass
+  - Exclusive Balaka VIP with companion
+  - Year-round BOGO at premium restaurants
+  - Comprehensive insurance (BDT 10 lac max)
+
+Would you like details on any of these cards?",""
+"What Visa cards do you offer?","feature_inquiry","Based on the provided product data, the Visa cards that offer a specific feature are:
+
+- **Visa Gold Credit Card**
+  - Combines accessible credit with premium lifestyle benefits.
+  - Features 50 days interest-free shopping, attractive reward points, VIP lounge access, and comprehensive insurance coverage.
+
+Would you like to know more about any of these cards?",""
+"Tell me about your JCB credit cards","product_info","PRODUCT: JCB Platinum Credit Card
+
+- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Annual Fee:** Not specified in the data
+- **Interest-Free Period:** 50 days
+- **Top Benefits:**
+  - Balaka VIP lounge access with companion
+  - Year-round BOGO at premium restaurants
+  - Comprehensive insurance
+
+PRODUCT: JCB Gold Credit Card
+
+- **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Annual Fee:** Not specified in the data
+- **Interest-Free Period:** 50 days
+- **Top Benefits:**
+  - Balaka lounge with fee waiver option
+  - Year-round exclusive dining discounts
+  - Triple Benefit coverage (BDT 5 lac max)
+
+Would you like details on any of these cards?",""
+"List all your Mastercards","feature_inquiry","Mastercard World Credit Card:
+- Mastercard World delivers exclusive access to global privileges. With Balaka VIP lounge for you and two companions, LoungeKey access to 1,400+ premium lounges, year-round BOGO at Dhaka's finest restaurants, and double reward points—it's premium credit perfected.
+
+Would you like to know more about any of these cards?",""
+"I want to see all your Visa credit cards","feature_inquiry","Based on the provided product data, the Visa credit cards that offer a specific feature are:
+
+- **Visa Gold Credit Card**
+  - ""50 days interest-free shopping""
+
+Would you like to know more about any of these cards?",""
+"Show me all the gold cards","product_info","Certainly! Here are the gold credit card options available:
+
+1. **Visa Gold Credit Card**
+   - **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+   - **Interest-Free Period:** 50 days
+   - **Benefits:**
+     - Triple Benefit coverage (BDT 5 lac max)
+     - Year-round exclusive discounts on dining & travel
+
+2. **JCB Gold Credit Card**
+   - **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+   - **Interest-Free Period:** 50 days
+   - **Benefits:**
+     - Triple Benefit coverage (BDT 5 lac max)
+     - Year-round exclusive discounts on dining
+     - VIP Access to Balaka lounge with fee waiver option
+
+Would you like details on any of these cards?",""
+"What platinum cards are available?","product_info","Certainly! Here are the platinum cards available:
+
+1. **Mastercard Platinum Credit Card**
+   - **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+   - **Interest-Free Period:** 50 days
+   - **Top Benefits:**
+     - Travel Access: LoungeKey + Priority Pass + Balaka VIP
+     - Dining: Year-round BOGO at 6 luxury restaurants
+     - Insurance: Enhanced Triple Benefit coverage (BDT 10 lac max)
+
+2. **Visa Platinum Credit Card**
+   - **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+   - **Interest-Free Period:** 50 days
+   - **Top Benefits:**
+     - Travel Privileges: LoungeKey + Balaka VIP + Airport Welcome
+     - Dining: Year-round BOGO at luxury restaurants
+     - Insurance: Triple Benefit coverage (BDT 10 lac max)
+
+Would you like details on any of these cards?",""
+"Show me your World credit cards","feature_inquiry","Based on the provided product data, there is no World credit card mentioned that has the specific feature requested. However, I can provide information on other products:
+
+- **Visa Gold Credit Card**
+  - **50 days interest-free shopping** (full balance covered)
+  
+- **Mastercard World Credit Card**
+  - **Balaka VIP lounge for you and two companions**
+  - **LoungeKey access to 1,400+ premium lounges**
+  - **Year-round BOGO at Dhaka's finest restaurants**
+  - **Double reward points**
+
+Would you like to know more about any of these cards?",""
+"List all gold tier cards","product_info","Certainly! Here are the gold tier credit cards available:
+
+1. **JCB Gold Credit Card**
+   - **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+   - **Annual Fee:** Not specified
+   - **Interest-Free Period:** 50 days (full balance covered)
+   - **Top Benefits:**
+     - Reward Points: 1 point per BDT 50 spent
+     - VIP Access: Balaka lounge with fee waiver option
+     - Dining: Year-round exclusive discounts
+     - Insurance: Triple Benefit coverage (BDT 5 lac max)
+
+2. **Visa Gold Credit Card**
+   - **Credit Limit:** BDT 700,000 (unsecured) / BDT 2,500,000 (collateralized)
+   - **Annual Fee:** Not specified
+   - **Interest-Free Period:** 50 days (longest in market)
+   - **Top Benefits:**
+     - Reward Points: 1 point per BDT 50 spent
+     - Insurance: Triple Benefit coverage (BDT 5 lac max)
+     - Dining & Travel: Year-round exclusive discounts
+
+Would you like details on any of these cards?",""
+"Do you have any premium platinum cards?","feature_inquiry","Visa Platinum Credit Card:
+- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Interest-Free:** 50 days (full balance covered)
+- **Reward Points:** 1 point per BDT 50 spent
+- **Insurance:** Triple Benefit coverage (BDT 10 lac max)
+- **Travel Privileges:** LoungeKey + Balaka VIP + Airport Welcome
+- **Dining:** Year-round BOGO at premium restaurants
+
+Mastercard Platinum Credit Card:
+- **Credit Limit:** BDT 1,000,000 (unsecured) / BDT 2,500,000 (collateralized)
+- **Interest-Free:** 50 days (full balance covered)
+- **Reward Points:** 1 point per BDT 50 spent
+- **Travel Access:** LoungeKey + Priority Pass + Balaka VIP with companion
+- **Dining:** Year-round BOGO at 6 luxury restaurants
+- **Insurance:** Enhanced Triple Benefit coverage (BDT 10 lac max)
+
+Would you like to know more about any of these cards?",""
