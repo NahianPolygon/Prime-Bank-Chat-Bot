@@ -20,19 +20,54 @@ from utils.cleanup import clean_response
 from utils.ollama import ollama_chat
 
 
+def _is_ranking_query(query: str) -> bool:
+    """Detect if customer is asking for a ranking across all cards."""
+    q = query.lower()
+    return any(s in q for s in (
+        "highest", "lowest", "best", "worst", "most rewards", "least",
+        "which has the most", "which has the least", "which card has the highest",
+        "which card has the lowest", "which gives more", "compare interest",
+        "compare reward", "compare limit", "highest interest", "lowest interest",
+        "most points", "highest credit limit", "lowest fee",
+    ))
+
+
 def _format_products(raw: str, query: str, intent_type: str) -> str:
     """Convert raw RAG text to clean customer-facing response."""
 
-    # Trim raw to avoid token overflow while keeping key sections
-    raw_trimmed = raw[:3500] if len(raw) > 3500 else raw
+    # Detect ranking queries — need all cards, override to ranking instruction
+    if _is_ranking_query(query) and intent_type in ("feature_inquiry", "product_info"):
+        intent_type = "ranking"
+
+    # Larger trim for ranking/category so all cards fit
+    if intent_type in ("ranking", "search_by_category"):
+        raw_trimmed = raw[:6000] if len(raw) > 6000 else raw
+    else:
+        raw_trimmed = raw[:3500] if len(raw) > 3500 else raw
 
     instructions = {
+        "ranking": (
+            "The customer is asking which card is BEST or WORST for a specific attribute. "
+            "Look through ALL products in the data and find the actual values for that attribute. "
+            "Then rank them from best to worst. Show ALL cards with their exact values. "
+            "Example format:\n"
+            "Cards ranked by [attribute]:\n"
+            "1. **[Card name]** — [exact value from data]\n"
+            "2. **[Card name]** — [exact value from data]\n"
+            "... and so on for every card.\n"
+            "If all cards have the same value, say so explicitly. "
+            "Never show just one card for a ranking question."
+        ),
         "search_by_category": (
-            "The customer wants to see ALL cards in a category (brand, tier, or banking type). "
-            "List EVERY product found in the data. For each: write its exact name as after 'PRODUCT:', "
-            "then give credit limit, annual fee, and 2-3 key highlights in one line. "
-            "Show ALL products — do not skip any. "
-            "End by asking: Would you like full details on any of these cards?"
+            "The customer is browsing a category — they want a clean list, NOT full details. "
+            "Format your response exactly like this:\n"
+            "Here are the [category] cards we offer:\n\n"
+            "1. **[Exact product name from PRODUCT: line]** — [one sentence: the single most distinctive feature]\n"
+            "2. **[Exact product name]** — [one sentence]\n"
+            "... and so on for every product in the data.\n\n"
+            "List ALL products found — do not skip any. "
+            "Keep each line to one sentence maximum. No bullet sub-points. No BDT amounts unless it is the key differentiator. "
+            "End with: Which of these would you like to know more about?"
         ),
         "product_info": (
             "Present each PRODUCT found in the data above. "
@@ -139,12 +174,14 @@ class BankChatbotCrew:
                         bt_str = "islami hasanah" if bt == "islami" else ("conventional" if bt == "conventional" else "")
                         tier_str = intent.get("preferred_tier", "") if intent.get("preferred_tier") not in ("unknown", "") else ""
                         search_q = " ".join(filter(None, [feature_str, bt_str, tier_str, "credit card"]))
+                # Ranking queries need all cards to compare across
+                _needs_all_cards = (intent_type == "search_by_category") or _is_ranking_query(enriched_query)
                 try:
                     raw = rag_search_impl(
                         query=search_q,
                         banking_type=intent.get("banking_type", ""),
                         tier=intent.get("preferred_tier") or intent.get("tier", ""),
-                        top_k=15 if intent_type == "search_by_category" else (10 if needs_comparison else 6),
+                        top_k=15 if _needs_all_cards else (10 if needs_comparison else 6),
                         customer_income=intent.get("customer_income"),
                     )
                 except Exception as e:

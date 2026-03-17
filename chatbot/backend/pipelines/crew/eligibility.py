@@ -41,8 +41,9 @@ def _extract_single_field(field: str, user_input: str, collected: dict):
     prompts = {
         "age": (
             f'Extract the age number from this text: "{user_input}"\n'
-            f'Examples: "32" → 32 | "i am 32" → 32 | "thirty two" → 32 | "32 years old" → 32\n'
-            f'Return ONLY: {{"value": <integer between 15 and 80, or null if no age mentioned>}}'
+            f'Examples: "32" → 32 | "i am 32" → 32 | "umm 88" → 88 | "100" → 100 | "thirty two" → 32\n'
+            f'Any number said by the customer is their age — extract it even if it seems high or low.\n'
+            f'Return ONLY: {{"value": <integer, or null if no number mentioned>}}'
         ),
         "employment_type": (
             f'Extract employment type from: "{user_input}"\n'

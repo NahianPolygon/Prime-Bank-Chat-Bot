@@ -279,9 +279,6 @@ OUTPUT — raw JSON only, no markdown:
             intent_type = "product_info"
         if banking_type not in ("conventional", "islami", "unknown"):
             banking_type = "unknown"
-        # Force clear features for search_by_category
-        if intent_type == "search_by_category":
-            specific_features = []
         if preferred_tier not in ("platinum", "gold", "silver", "unknown"):
             preferred_tier = "unknown"
         if card_brand not in ("visa", "mastercard", "jcb", "unknown"):

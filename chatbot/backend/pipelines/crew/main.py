@@ -160,6 +160,56 @@ class CrewPipeline:
         _is_apply_query = any(s in query.lower() for s in
             ("apply", "application", "how to get", "sign up", "sign-up", "register", "enroll"))
 
+        # ── Disambiguation: multiple products shown, customer refers to "it/that/this" ──
+        # If 2+ products were shown and the current query is a follow-up about a specific
+        # action (details, eligibility, apply) but no product is named — ask which one.
+        _is_followup_action = (
+            intent_type in ("eligibility_check", "product_info")
+            or _is_apply_query
+        )
+        _refers_to_shown = not intent.get("specific_product")
+        _multiple_shown = len(
+            ([state.recommended_product] if state.recommended_product else [])
+            + (state.alternative_products or [])
+        ) > 1
+
+        if _is_followup_action and _refers_to_shown and _multiple_shown:
+            all_shown = (
+                ([state.recommended_product] if state.recommended_product else [])
+                + (state.alternative_products or [])
+            )
+            choices = "\n".join(f"{i+1}. **{p}**" for i, p in enumerate(all_shown))
+            action = (
+                "check eligibility for" if intent_type == "eligibility_check"
+                else "apply for" if _is_apply_query
+                else "get details on"
+            )
+            return self._respond(
+                f"Which card would you like to {action}?\n\n{choices}",
+                ["Intent Classifier"], intent, needs_clarification=True
+            )
+
+        # ── Multi-product resolver ────────────────────────────────────────────
+        # If multiple products are in session and the customer's query targets a
+        # specific one (eligibility, apply, details) without naming it — ask which one.
+        _all_shown = ([state.recommended_product] if state.recommended_product else []) + (state.alternative_products or [])
+        _targets_specific = (
+            intent_type in ("eligibility_check", "product_info") or _is_apply_query
+        )
+        _no_product_named = not intent.get("specific_product")
+        _query_is_referential = any(w in query.lower() for w in
+            ("it", "this", "that", "the card", "which one", "details", "more", "tell me more",
+             "eligible", "qualify", "apply", "application"))
+
+        if len(_all_shown) > 1 and _targets_specific and _no_product_named and _query_is_referential:
+            choices = "\n".join(f"{i+1}. **{p}**" for i, p in enumerate(_all_shown))
+            return self._respond(
+                f"Which card are you referring to?\n\n{choices}",
+                ["Intent Classifier"], intent, needs_clarification=True
+            )
+
+
+
         # ── How-to-apply: intent classifier already detects this as product_info
         # with a how-to-apply flavour via specific_product. We check the LLM intent
         # rather than keyword-scanning the query.
